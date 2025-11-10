@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import PatientDetail from "./pages/PatientDetail";
 import Analytics from "./pages/Analytics";
 import ReportGenerator from "./pages/ReportGenerator";
+import AuditLog from "./pages/AuditLog";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Loader2 } from "lucide-react";
 
@@ -32,6 +33,7 @@ function Router() {
           <Route path="/patient/:patientId" component={PatientDetail} />
           <Route path="/analytics" component={Analytics} />
           <Route path="/reports" component={ReportGenerator} />
+          <Route path="/audit" component={AuditLog} />
         </>
       )}
       <Route path="/404" component={NotFound} />

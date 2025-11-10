@@ -191,6 +191,262 @@ IMPORTANT: These are suggestions only. The final diagnosis and treatment decisio
       ),
   }),
 
+  // AI Explanations
+  explanations: router({
+    create: protectedProcedure
+      .input(z.object({
+        suggestionId: z.number(),
+        reasoning: z.string(),
+        keyFactors: z.string().optional(),
+        evidenceLinks: z.string().optional(),
+        alternativeOptions: z.string().optional(),
+      }))
+      .mutation(({ input }) => db.createAIExplanation(input)),
+    
+    get: protectedProcedure
+      .input(z.object({ suggestionId: z.number() }))
+      .query(({ input }) => db.getAIExplanationBySuggestion(input.suggestionId)),
+  }),
+
+  // Suggestion Feedback
+  feedback: router({
+    create: protectedProcedure
+      .input(z.object({
+        suggestionId: z.number(),
+        approved: z.boolean(),
+        feedback: z.string().optional(),
+        clinicalRelevance: z.number().min(1).max(5).optional(),
+        accuracy: z.number().min(1).max(5).optional(),
+        usefulness: z.number().min(1).max(5).optional(),
+      }))
+      .mutation(({ ctx, input }) => 
+        db.createSuggestionFeedback({
+          ...input,
+          doctorId: ctx.user.id,
+        })
+      ),
+    
+    get: protectedProcedure
+      .input(z.object({ suggestionId: z.number() }))
+      .query(({ input }) => db.getSuggestionFeedback(input.suggestionId)),
+  }),
+
+  // Patient Consent Management
+  consent: router({
+    create: protectedProcedure
+      .input(z.object({
+        patientId: z.number(),
+        consentType: z.enum(["data_processing", "ai_analysis", "research", "data_sharing"]),
+        consentGiven: z.boolean(),
+        expiryDate: z.date().optional(),
+        documentUrl: z.string().optional(),
+      }))
+      .mutation(({ ctx, input }) =>
+        db.createPatientConsent({
+          ...input,
+          consentDate: new Date(),
+          ipAddress: ctx.req.ip || "unknown",
+        })
+      ),
+    
+    get: protectedProcedure
+      .input(z.object({ patientId: z.number(), consentType: z.string() }))
+      .query(({ input }) => db.getPatientConsent(input.patientId, input.consentType)),
+    
+    getAll: protectedProcedure
+      .input(z.object({ patientId: z.number() }))
+      .query(({ input }) => db.getAllPatientConsents(input.patientId)),
+  }),
+
+  // Data Retention Policy
+  retention: router({
+    create: protectedProcedure
+      .input(z.object({
+        patientId: z.number(),
+        retentionPeriodMonths: z.number().default(36),
+      }))
+      .mutation(({ input }) => db.createDataRetentionPolicy(input)),
+    
+    get: protectedProcedure
+      .input(z.object({ patientId: z.number() }))
+      .query(({ input }) => db.getDataRetentionPolicy(input.patientId)),
+    
+    update: protectedProcedure
+      .input(z.object({
+        patientId: z.number(),
+        deletionScheduledDate: z.date().optional(),
+        deletionCompletedDate: z.date().optional(),
+        deletionReason: z.string().optional(),
+      }))
+      .mutation(({ input }) => {
+        const { patientId, ...data } = input;
+        return db.updateDataRetentionPolicy(patientId, data);
+      }),
+  }),
+
+  // Medical Images
+  images: router({
+    create: protectedProcedure
+      .input(z.object({
+        consultationId: z.number(),
+        patientId: z.number(),
+        imageType: z.string(),
+        imageUrl: z.string(),
+        imageKey: z.string(),
+        description: z.string().optional(),
+      }))
+      .mutation(({ input }) => db.createMedicalImage(input)),
+    
+    list: protectedProcedure
+      .input(z.object({ consultationId: z.number() }))
+      .query(({ input }) => db.getMedicalImagesByConsultation(input.consultationId)),
+    
+    get: protectedProcedure
+      .input(z.object({ imageId: z.number() }))
+      .query(({ input }) => db.getMedicalImageById(input.imageId)),
+    
+    analyzeImage: protectedProcedure
+      .input(z.object({
+        imageId: z.number(),
+        analysisPrompt: z.string().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const image = await db.getMedicalImageById(input.imageId);
+        if (!image) throw new Error("Image not found");
+
+        const prompt = input.analysisPrompt || `Analyze this medical image (${image.imageType}) and provide:
+1. Key findings
+2. Abnormalities detected (if any)
+3. Recommendations for further investigation
+4. Confidence level in findings
+
+Remember this is for physician review only, not a substitute for professional diagnosis.`;
+
+        try {
+          const response = await invokeLLM({
+            messages: [
+              {
+                role: "system",
+                content: "You are a medical imaging AI assistant. Provide detailed analysis of medical images for physician review.",
+              },
+              {
+                role: "user",
+                content: prompt,
+              },
+            ],
+          });
+
+          const analysisResult = typeof response.choices[0]?.message?.content === 'string'
+            ? response.choices[0].message.content
+            : "";
+
+          if (analysisResult) {
+            await db.updateMedicalImageAnalysis(input.imageId, analysisResult);
+          }
+
+          return {
+            success: true,
+            analysis: analysisResult,
+          };
+        } catch (error) {
+          console.error("[Image Analysis] Error:", error);
+          return {
+            success: false,
+            error: "Failed to analyze image",
+          };
+        }
+      }),
+  }),
+
+  // Research Protocols
+  research: router({
+    createProtocol: protectedProcedure
+      .input(z.object({
+        protocolName: z.string(),
+        description: z.string().optional(),
+        principalInvestigator: z.string(),
+        institution: z.string().optional(),
+        startDate: z.date(),
+        endDate: z.date().optional(),
+        ethicsApprovalNumber: z.string().optional(),
+        ethicsApprovalDate: z.date().optional(),
+      }))
+      .mutation(({ input }) => db.createResearchProtocol(input)),
+    
+    getProtocol: protectedProcedure
+      .input(z.object({ protocolId: z.number() }))
+      .query(({ input }) => db.getResearchProtocolById(input.protocolId)),
+    
+    listProtocols: protectedProcedure.query(() => db.getAllResearchProtocols()),
+    
+    updateProtocol: protectedProcedure
+      .input(z.object({
+        protocolId: z.number(),
+        status: z.enum(["draft", "active", "completed", "suspended"]).optional(),
+        ethicsApprovalNumber: z.string().optional(),
+        ethicsApprovalDate: z.date().optional(),
+      }))
+      .mutation(({ input }) => {
+        const { protocolId, ...data } = input;
+        return db.updateResearchProtocol(protocolId, data);
+      }),
+    
+    enrollParticipant: protectedProcedure
+      .input(z.object({
+        protocolId: z.number(),
+        patientId: z.number(),
+        consentDocumentUrl: z.string().optional(),
+        consentGiven: z.boolean(),
+      }))
+      .mutation(({ input }) => db.enrollResearchParticipant(input)),
+    
+    getParticipants: protectedProcedure
+      .input(z.object({ protocolId: z.number() }))
+      .query(({ input }) => db.getResearchParticipantsByProtocol(input.protocolId)),
+    
+    updateParticipant: protectedProcedure
+      .input(z.object({
+        participantId: z.number(),
+        status: z.enum(["enrolled", "active", "completed", "withdrawn"]).optional(),
+        withdrawalDate: z.date().optional(),
+      }))
+      .mutation(({ input }) => {
+        const { participantId, ...data } = input;
+        return db.updateResearchParticipant(participantId, data);
+      }),
+  }),
+
+  // EHR Integration
+  ehr: router({
+    mapFhirData: protectedProcedure
+      .input(z.object({
+        patientId: z.number(),
+        externalEhrId: z.string(),
+        ehrSystem: z.string(),
+        fhirResourceType: z.string().optional(),
+        fhirData: z.string(),
+      }))
+      .mutation(({ input }) => db.createHL7FhirMapping(input)),
+    
+    getEhrMapping: protectedProcedure
+      .input(z.object({ patientId: z.number() }))
+      .query(({ input }) => db.getHL7FhirMappingByPatient(input.patientId)),
+    
+    syncEhrData: protectedProcedure
+      .input(z.object({
+        mappingId: z.number(),
+        fhirData: z.string(),
+      }))
+      .mutation(({ input }) => {
+        const { mappingId, ...data } = input;
+        return db.updateHL7FhirMapping(mappingId, {
+          ...data,
+          lastSyncDate: new Date(),
+          syncStatus: "synced",
+        });
+      }),
+  }),
+
   // Notifications
   notifications: router({
     list: protectedProcedure.query(({ ctx }) =>

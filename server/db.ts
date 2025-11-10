@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, patients, InsertPatient, consultations, InsertConsultation, examResults, InsertExamResult, aiSuggestions, InsertAISuggestion, auditLogs, InsertAuditLog, notifications, InsertNotification } from "../drizzle/schema";
+import { InsertUser, users, patients, InsertPatient, consultations, InsertConsultation, examResults, InsertExamResult, aiSuggestions, InsertAISuggestion, auditLogs, InsertAuditLog, notifications, InsertNotification, aiExplanations, InsertAIExplanation, suggestionFeedback, InsertSuggestionFeedback, patientConsent, InsertPatientConsent, dataRetentionPolicy, InsertDataRetentionPolicy, medicalImages, InsertMedicalImage, researchProtocol, InsertResearchProtocol, researchParticipant, InsertResearchParticipant, hl7FhirMapping, InsertHL7FhirMapping } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -234,4 +234,174 @@ export async function getAISuggestionStats(doctorId: number) {
     pending: result.filter(r => r.aiSuggestions.reviewed === 0).length,
   };
   return stats;
+}
+
+
+// AI Explanation queries
+export async function createAIExplanation(data: InsertAIExplanation) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.insert(aiExplanations).values(data);
+}
+
+export async function getAIExplanationBySuggestion(suggestionId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const result = await db.select().from(aiExplanations).where(eq(aiExplanations.suggestionId, suggestionId)).limit(1);
+  return result[0];
+}
+
+// Suggestion Feedback queries
+export async function createSuggestionFeedback(data: InsertSuggestionFeedback) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.insert(suggestionFeedback).values(data);
+}
+
+export async function getSuggestionFeedback(suggestionId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const result = await db.select().from(suggestionFeedback).where(eq(suggestionFeedback.suggestionId, suggestionId));
+  return result;
+}
+
+// Patient Consent queries
+export async function createPatientConsent(data: InsertPatientConsent) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.insert(patientConsent).values(data);
+}
+
+export async function getPatientConsent(patientId: number, consentType: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { and } = require('drizzle-orm');
+  const result = await db.select().from(patientConsent)
+    .where(eq(patientConsent.patientId, patientId));
+  return result.find(r => r.consentType === consentType);
+}
+
+export async function getAllPatientConsents(patientId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.select().from(patientConsent).where(eq(patientConsent.patientId, patientId));
+}
+
+// Data Retention Policy queries
+export async function createDataRetentionPolicy(data: InsertDataRetentionPolicy) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.insert(dataRetentionPolicy).values(data);
+}
+
+export async function getDataRetentionPolicy(patientId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const result = await db.select().from(dataRetentionPolicy).where(eq(dataRetentionPolicy.patientId, patientId)).limit(1);
+  return result[0];
+}
+
+export async function updateDataRetentionPolicy(patientId: number, data: Partial<InsertDataRetentionPolicy>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.update(dataRetentionPolicy).set(data).where(eq(dataRetentionPolicy.patientId, patientId));
+}
+
+
+// Medical Images queries
+export async function createMedicalImage(data: InsertMedicalImage) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.insert(medicalImages).values(data);
+}
+
+export async function getMedicalImagesByConsultation(consultationId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.select().from(medicalImages).where(eq(medicalImages.consultationId, consultationId));
+}
+
+export async function getMedicalImageById(imageId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const result = await db.select().from(medicalImages).where(eq(medicalImages.id, imageId)).limit(1);
+  return result[0];
+}
+
+export async function updateMedicalImageAnalysis(imageId: number, analysisResult: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.update(medicalImages)
+    .set({ aiAnalysisResult: analysisResult, analyzedAt: new Date() })
+    .where(eq(medicalImages.id, imageId));
+}
+
+// Research Protocol queries
+export async function createResearchProtocol(data: InsertResearchProtocol) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.insert(researchProtocol).values(data);
+}
+
+export async function getResearchProtocolById(protocolId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const result = await db.select().from(researchProtocol).where(eq(researchProtocol.id, protocolId)).limit(1);
+  return result[0];
+}
+
+export async function getAllResearchProtocols() {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.select().from(researchProtocol);
+}
+
+export async function updateResearchProtocol(protocolId: number, data: Partial<InsertResearchProtocol>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.update(researchProtocol).set(data).where(eq(researchProtocol.id, protocolId));
+}
+
+// Research Participant queries
+export async function enrollResearchParticipant(data: InsertResearchParticipant) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.insert(researchParticipant).values(data);
+}
+
+export async function getResearchParticipantsByProtocol(protocolId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.select().from(researchParticipant).where(eq(researchParticipant.protocolId, protocolId));
+}
+
+export async function getResearchParticipantByPatient(patientId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.select().from(researchParticipant).where(eq(researchParticipant.patientId, patientId));
+}
+
+export async function updateResearchParticipant(participantId: number, data: Partial<InsertResearchParticipant>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.update(researchParticipant).set(data).where(eq(researchParticipant.id, participantId));
+}
+
+// HL7/FHIR Integration queries
+export async function createHL7FhirMapping(data: InsertHL7FhirMapping) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.insert(hl7FhirMapping).values(data);
+}
+
+export async function getHL7FhirMappingByPatient(patientId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.select().from(hl7FhirMapping).where(eq(hl7FhirMapping.patientId, patientId));
+}
+
+export async function updateHL7FhirMapping(mappingId: number, data: Partial<InsertHL7FhirMapping>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.update(hl7FhirMapping).set(data).where(eq(hl7FhirMapping.id, mappingId));
 }

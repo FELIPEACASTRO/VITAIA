@@ -137,3 +137,147 @@ export const notifications = mysqlTable("notifications", {
 
 export type Notification = typeof notifications.$inferSelect;
 export type InsertNotification = typeof notifications.$inferInsert;
+
+/**
+ * AI Explanation table - stores detailed reasoning for AI suggestions
+ */
+export const aiExplanations = mysqlTable("aiExplanations", {
+  id: int("id").autoincrement().primaryKey(),
+  suggestionId: int("suggestionId").notNull().references(() => aiSuggestions.id),
+  reasoning: text("reasoning").notNull(), // Step-by-step reasoning
+  keyFactors: text("keyFactors"), // JSON array of key factors considered
+  evidenceLinks: text("evidenceLinks"), // JSON array of evidence/references
+  alternativeOptions: text("alternativeOptions"), // JSON array of alternatives
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type AIExplanation = typeof aiExplanations.$inferSelect;
+export type InsertAIExplanation = typeof aiExplanations.$inferInsert;
+
+/**
+ * Suggestion Feedback table - stores doctor feedback on AI suggestions
+ */
+export const suggestionFeedback = mysqlTable("suggestionFeedback", {
+  id: int("id").autoincrement().primaryKey(),
+  suggestionId: int("suggestionId").notNull().references(() => aiSuggestions.id),
+  doctorId: int("doctorId").notNull().references(() => users.id),
+  approved: boolean("approved").notNull(), // true = approved, false = rejected
+  feedback: text("feedback"), // Doctor's feedback/justification
+  clinicalRelevance: int("clinicalRelevance"), // 1-5 scale
+  accuracy: int("accuracy"), // 1-5 scale
+  usefulness: int("usefulness"), // 1-5 scale
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type SuggestionFeedback = typeof suggestionFeedback.$inferSelect;
+export type InsertSuggestionFeedback = typeof suggestionFeedback.$inferInsert;
+
+/**
+ * Patient Consent table - stores patient consent for data processing
+ */
+export const patientConsent = mysqlTable("patientConsent", {
+  id: int("id").autoincrement().primaryKey(),
+  patientId: int("patientId").notNull().references(() => patients.id),
+  consentType: mysqlEnum("consentType", ["data_processing", "ai_analysis", "research", "data_sharing"]).notNull(),
+  consentGiven: boolean("consentGiven").notNull(),
+  consentDate: timestamp("consentDate").notNull(),
+  expiryDate: timestamp("expiryDate"), // Optional expiry date
+  documentUrl: varchar("documentUrl", { length: 500 }), // URL to consent document
+  ipAddress: varchar("ipAddress", { length: 45 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type PatientConsent = typeof patientConsent.$inferSelect;
+export type InsertPatientConsent = typeof patientConsent.$inferInsert;
+
+/**
+ * Data Retention Policy table - stores data retention and deletion records
+ */
+export const dataRetentionPolicy = mysqlTable("dataRetentionPolicy", {
+  id: int("id").autoincrement().primaryKey(),
+  patientId: int("patientId").notNull().references(() => patients.id),
+  retentionPeriodMonths: int("retentionPeriodMonths").default(36), // Default 3 years
+  deletionScheduledDate: timestamp("deletionScheduledDate"),
+  deletionCompletedDate: timestamp("deletionCompletedDate"),
+  deletionReason: varchar("deletionReason", { length: 255 }), // e.g., "patient_request", "retention_expired"
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type DataRetentionPolicy = typeof dataRetentionPolicy.$inferSelect;
+export type InsertDataRetentionPolicy = typeof dataRetentionPolicy.$inferInsert;
+
+/**
+ * Medical Images table - stores medical imaging data
+ */
+export const medicalImages = mysqlTable("medicalImages", {
+  id: int("id").autoincrement().primaryKey(),
+  consultationId: int("consultationId").notNull().references(() => consultations.id),
+  patientId: int("patientId").notNull().references(() => patients.id),
+  imageType: varchar("imageType", { length: 100 }).notNull(), // e.g., "X-Ray", "CT Scan", "MRI"
+  imageUrl: varchar("imageUrl", { length: 500 }).notNull(), // S3 URL
+  imageKey: varchar("imageKey", { length: 255 }).notNull(), // S3 key for retrieval
+  description: text("description"),
+  uploadedAt: timestamp("uploadedAt").defaultNow().notNull(),
+  analyzedAt: timestamp("analyzedAt"),
+  aiAnalysisResult: text("aiAnalysisResult"), // JSON with AI findings
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type MedicalImage = typeof medicalImages.$inferSelect;
+export type InsertMedicalImage = typeof medicalImages.$inferInsert;
+
+/**
+ * Research Protocol table - stores clinical trial/study information
+ */
+export const researchProtocol = mysqlTable("researchProtocol", {
+  id: int("id").autoincrement().primaryKey(),
+  protocolName: varchar("protocolName", { length: 255 }).notNull(),
+  description: text("description"),
+  principalInvestigator: varchar("principalInvestigator", { length: 255 }).notNull(),
+  institution: varchar("institution", { length: 255 }),
+  startDate: timestamp("startDate").notNull(),
+  endDate: timestamp("endDate"),
+  status: mysqlEnum("status", ["draft", "active", "completed", "suspended"]).default("draft"),
+  ethicsApprovalNumber: varchar("ethicsApprovalNumber", { length: 100 }),
+  ethicsApprovalDate: timestamp("ethicsApprovalDate"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type ResearchProtocol = typeof researchProtocol.$inferSelect;
+export type InsertResearchProtocol = typeof researchProtocol.$inferInsert;
+
+/**
+ * Research Participant table - tracks patients enrolled in studies
+ */
+export const researchParticipant = mysqlTable("researchParticipant", {
+  id: int("id").autoincrement().primaryKey(),
+  protocolId: int("protocolId").notNull().references(() => researchProtocol.id),
+  patientId: int("patientId").notNull().references(() => patients.id),
+  enrollmentDate: timestamp("enrollmentDate").defaultNow().notNull(),
+  withdrawalDate: timestamp("withdrawalDate"),
+  consentDocumentUrl: varchar("consentDocumentUrl", { length: 500 }),
+  consentGiven: boolean("consentGiven").default(false),
+  status: mysqlEnum("status", ["enrolled", "active", "completed", "withdrawn"]).default("enrolled"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type ResearchParticipant = typeof researchParticipant.$inferSelect;
+export type InsertResearchParticipant = typeof researchParticipant.$inferInsert;
+
+/**
+ * HL7/FHIR Integration table - stores external EHR data mappings
+ */
+export const hl7FhirMapping = mysqlTable("hl7FhirMapping", {
+  id: int("id").autoincrement().primaryKey(),
+  patientId: int("patientId").notNull().references(() => patients.id),
+  externalEhrId: varchar("externalEhrId", { length: 255 }).notNull(), // ID from external EHR
+  ehrSystem: varchar("ehrSystem", { length: 100 }).notNull(), // e.g., "Epic", "Cerner", "OpenEMR"
+  fhirResourceType: varchar("fhirResourceType", { length: 100 }), // e.g., "Patient", "Observation"
+  fhirData: text("fhirData"), // JSON FHIR resource
+  lastSyncDate: timestamp("lastSyncDate"),
+  syncStatus: mysqlEnum("syncStatus", ["pending", "synced", "failed"]).default("pending"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type HL7FhirMapping = typeof hl7FhirMapping.$inferSelect;
+export type InsertHL7FhirMapping = typeof hl7FhirMapping.$inferInsert;

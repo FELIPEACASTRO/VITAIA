@@ -22,6 +22,20 @@
       "when": 1762774568946,
       "tag": "0002_simple_captain_midlands",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1762775113096,
+      "tag": "0003_dapper_the_phantom",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1762775311434,
+      "tag": "0004_lazy_james_howlett",
+      "breakpoints": true
     }
   ]
 }
