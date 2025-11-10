@@ -281,3 +281,129 @@ export const hl7FhirMapping = mysqlTable("hl7FhirMapping", {
 
 export type HL7FhirMapping = typeof hl7FhirMapping.$inferSelect;
 export type InsertHL7FhirMapping = typeof hl7FhirMapping.$inferInsert;
+
+/**
+ * Medical Specialties table - stores medical specialties
+ */
+export const medicalSpecialties = mysqlTable("medicalSpecialties", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 100 }).notNull().unique(), // e.g., "Cardiologia", "Oncologia"
+  englishName: varchar("englishName", { length: 100 }).notNull(),
+  description: text("description"),
+  icd10Code: varchar("icd10Code", { length: 10 }), // ICD-10 code for specialty
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type MedicalSpecialty = typeof medicalSpecialties.$inferSelect;
+export type InsertMedicalSpecialty = typeof medicalSpecialties.$inferInsert;
+
+/**
+ * Doctor Specialties junction table - links doctors to their specialties
+ */
+export const doctorSpecialties = mysqlTable("doctorSpecialties", {
+  id: int("id").autoincrement().primaryKey(),
+  doctorId: int("doctorId").notNull().references(() => users.id),
+  specialtyId: int("specialtyId").notNull().references(() => medicalSpecialties.id),
+  licenseNumber: varchar("licenseNumber", { length: 100 }), // CRM number
+  yearsOfExperience: int("yearsOfExperience"),
+  isPrimary: boolean("isPrimary").default(false), // Primary specialty
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type DoctorSpecialty = typeof doctorSpecialties.$inferSelect;
+export type InsertDoctorSpecialty = typeof doctorSpecialties.$inferInsert;
+
+/**
+ * Clinical Guidelines table - stores evidence-based guidelines for each specialty
+ */
+export const clinicalGuidelines = mysqlTable("clinicalGuidelines", {
+  id: int("id").autoincrement().primaryKey(),
+  specialtyId: int("specialtyId").notNull().references(() => medicalSpecialties.id),
+  condition: varchar("condition", { length: 255 }).notNull(), // e.g., "Hipertensão Arterial"
+  guidelineContent: text("guidelineContent").notNull(), // Full guideline text
+  source: varchar("source", { length: 255 }), // e.g., "SBC", "SBPT", "ASCO"
+  publicationYear: int("publicationYear"),
+  version: varchar("version", { length: 50 }),
+  isActive: boolean("isActive").default(true),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type ClinicalGuideline = typeof clinicalGuidelines.$inferSelect;
+export type InsertClinicalGuideline = typeof clinicalGuidelines.$inferInsert;
+
+/**
+ * Specialty-specific Medications table - stores medications relevant to each specialty
+ */
+export const specialtyMedications = mysqlTable("specialtyMedications", {
+  id: int("id").autoincrement().primaryKey(),
+  specialtyId: int("specialtyId").notNull().references(() => medicalSpecialties.id),
+  medicationName: varchar("medicationName", { length: 255 }).notNull(),
+  activeIngredient: varchar("activeIngredient", { length: 255 }),
+  dosageForm: varchar("dosageForm", { length: 100 }), // e.g., "tablet", "injection"
+  recommendedDose: varchar("recommendedDose", { length: 255 }),
+  indications: text("indications"),
+  contraindications: text("contraindications"),
+  sideEffects: text("sideEffects"),
+  interactions: text("interactions"),
+  atcCode: varchar("atcCode", { length: 10 }), // ATC classification
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type SpecialtyMedication = typeof specialtyMedications.$inferSelect;
+export type InsertSpecialtyMedication = typeof specialtyMedications.$inferInsert;
+
+/**
+ * Specialty-specific Diagnostic Tests table - stores tests relevant to each specialty
+ */
+export const specialtyDiagnosticTests = mysqlTable("specialtyDiagnosticTests", {
+  id: int("id").autoincrement().primaryKey(),
+  specialtyId: int("specialtyId").notNull().references(() => medicalSpecialties.id),
+  testName: varchar("testName", { length: 255 }).notNull(),
+  testCode: varchar("testCode", { length: 100 }),
+  description: text("description"),
+  normalRange: varchar("normalRange", { length: 255 }),
+  interpretationGuidelines: text("interpretationGuidelines"),
+  commonIndications: text("commonIndications"),
+  sampleType: varchar("sampleType", { length: 100 }), // e.g., "blood", "urine"
+  turnaroundTime: varchar("turnaroundTime", { length: 100 }), // e.g., "24 hours"
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type SpecialtyDiagnosticTest = typeof specialtyDiagnosticTests.$inferSelect;
+export type InsertSpecialtyDiagnosticTest = typeof specialtyDiagnosticTests.$inferInsert;
+
+/**
+ * Specialty-specific Procedures table - stores procedures relevant to each specialty
+ */
+export const specialtyProcedures = mysqlTable("specialtyProcedures", {
+  id: int("id").autoincrement().primaryKey(),
+  specialtyId: int("specialtyId").notNull().references(() => medicalSpecialties.id),
+  procedureName: varchar("procedureName", { length: 255 }).notNull(),
+  procedureCode: varchar("procedureCode", { length: 100 }), // CPT or TUSS code
+  description: text("description"),
+  indications: text("indications"),
+  contraindications: text("contraindications"),
+  complications: text("complications"),
+  estimatedDuration: varchar("estimatedDuration", { length: 100 }), // e.g., "30-45 minutes"
+  recoveryTime: varchar("recoveryTime", { length: 100 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type SpecialtyProcedure = typeof specialtyProcedures.$inferSelect;
+export type InsertSpecialtyProcedure = typeof specialtyProcedures.$inferInsert;
+
+/**
+ * Consultation Specialty table - links consultations to specific specialties
+ */
+export const consultationSpecialty = mysqlTable("consultationSpecialty", {
+  id: int("id").autoincrement().primaryKey(),
+  consultationId: int("consultationId").notNull().references(() => consultations.id),
+  specialtyId: int("specialtyId").notNull().references(() => medicalSpecialties.id),
+  primaryDiagnosis: varchar("primaryDiagnosis", { length: 255 }),
+  icdCode: varchar("icdCode", { length: 20 }), // ICD-10 code
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type ConsultationSpecialty = typeof consultationSpecialty.$inferSelect;
+export type InsertConsultationSpecialty = typeof consultationSpecialty.$inferInsert;

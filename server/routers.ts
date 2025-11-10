@@ -493,6 +493,247 @@ Remember this is for physician review only, not a substitute for professional di
         };
       }),
   }),
+
+  // Medical Specialties
+  specialties: router({
+    list: publicProcedure.query(() => db.getAllMedicalSpecialties()),
+    
+    get: publicProcedure
+      .input(z.object({ specialtyId: z.number() }))
+      .query(({ input }) => db.getMedicalSpecialtyById(input.specialtyId)),
+    
+    create: protectedProcedure
+      .input(z.object({
+        name: z.string(),
+        englishName: z.string(),
+        description: z.string().optional(),
+        icd10Code: z.string().optional(),
+      }))
+      .mutation(({ input }) => db.createMedicalSpecialty(input)),
+    
+    getDoctorSpecialties: protectedProcedure
+      .input(z.object({ doctorId: z.number() }))
+      .query(({ input }) => db.getDoctorSpecialties(input.doctorId)),
+    
+    addDoctorSpecialty: protectedProcedure
+      .input(z.object({
+        doctorId: z.number(),
+        specialtyId: z.number(),
+        licenseNumber: z.string().optional(),
+        yearsOfExperience: z.number().optional(),
+        isPrimary: z.boolean().optional(),
+      }))
+      .mutation(({ input }) => db.addDoctorSpecialty(input)),
+  }),
+
+  // Clinical Guidelines
+  guidelines: router({
+    list: publicProcedure
+      .input(z.object({ specialtyId: z.number() }))
+      .query(({ input }) => db.getGuidelinesBySpecialty(input.specialtyId)),
+    
+    getByCondition: publicProcedure
+      .input(z.object({ specialtyId: z.number(), condition: z.string() }))
+      .query(({ input }) => db.getGuidelineByCondition(input.specialtyId, input.condition)),
+    
+    create: protectedProcedure
+      .input(z.object({
+        specialtyId: z.number(),
+        condition: z.string(),
+        guidelineContent: z.string(),
+        source: z.string().optional(),
+        publicationYear: z.number().optional(),
+        version: z.string().optional(),
+      }))
+      .mutation(({ input }) => db.createClinicalGuideline(input)),
+  }),
+
+  // Specialty Medications
+  medications: router({
+    listBySpecialty: publicProcedure
+      .input(z.object({ specialtyId: z.number() }))
+      .query(({ input }) => db.getMedicationsBySpecialty(input.specialtyId)),
+    
+    create: protectedProcedure
+      .input(z.object({
+        specialtyId: z.number(),
+        medicationName: z.string(),
+        activeIngredient: z.string().optional(),
+        dosageForm: z.string().optional(),
+        recommendedDose: z.string().optional(),
+        indications: z.string().optional(),
+        contraindications: z.string().optional(),
+        sideEffects: z.string().optional(),
+        interactions: z.string().optional(),
+        atcCode: z.string().optional(),
+      }))
+      .mutation(({ input }) => db.createSpecialtyMedication(input)),
+  }),
+
+  // Specialty Diagnostic Tests
+  diagnosticTests: router({
+    listBySpecialty: publicProcedure
+      .input(z.object({ specialtyId: z.number() }))
+      .query(({ input }) => db.getTestsBySpecialty(input.specialtyId)),
+    
+    create: protectedProcedure
+      .input(z.object({
+        specialtyId: z.number(),
+        testName: z.string(),
+        testCode: z.string().optional(),
+        description: z.string().optional(),
+        normalRange: z.string().optional(),
+        interpretationGuidelines: z.string().optional(),
+        commonIndications: z.string().optional(),
+        sampleType: z.string().optional(),
+        turnaroundTime: z.string().optional(),
+      }))
+      .mutation(({ input }) => db.createSpecialtyDiagnosticTest(input)),
+  }),
+
+  // Specialty Procedures
+  procedures: router({
+    listBySpecialty: publicProcedure
+      .input(z.object({ specialtyId: z.number() }))
+      .query(({ input }) => db.getProceduresBySpecialty(input.specialtyId)),
+    
+    create: protectedProcedure
+      .input(z.object({
+        specialtyId: z.number(),
+        procedureName: z.string(),
+        procedureCode: z.string().optional(),
+        description: z.string().optional(),
+        indications: z.string().optional(),
+        contraindications: z.string().optional(),
+        complications: z.string().optional(),
+        estimatedDuration: z.string().optional(),
+        recoveryTime: z.string().optional(),
+      }))
+      .mutation(({ input }) => db.createSpecialtyProcedure(input)),
+  }),
+
+  // Consultation Specialty - REMOVED DUPLICATE, KEEPING ONLY MULTI-SPECIALTY
+  /*consultationSpecialties: router({
+    get: protectedProcedure
+      .input(z.object({ consultationId: z.number() }))
+      .query(({ input }) => db.getConsultationSpecialty(input.consultationId)),
+    
+    create: protectedProcedure
+      .input(z.object({
+        consultationId: z.number(),
+        specialtyId: z.number(),
+        primaryDiagnosis: z.string().optional(),
+        icdCode: z.string().optional(),
+      }))
+      .mutation(({ input }) => db.createConsultationSpecialty(input)),
+  }),*/
+
+  // Multi-Specialty AI Suggestions
+  aiMultiSpecialty: router({
+    generateSpecialtySpecificSuggestions: protectedProcedure
+      .input(z.object({
+        consultationId: z.number(),
+        patientId: z.number(),
+        specialtyId: z.number(),
+        symptoms: z.string(),
+        examResults: z.string().optional(),
+        medicalHistory: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        // Get specialty information
+        const specialty = await db.getMedicalSpecialtyById(input.specialtyId);
+        if (!specialty) throw new Error("Specialty not found");
+
+        // Get relevant guidelines
+        const guidelines = await db.getGuidelinesBySpecialty(input.specialtyId);
+        const guidelinesText = guidelines.map(g => `${g.condition}: ${g.guidelineContent}`).join("\n\n");
+
+        // Get relevant medications
+        const medications = await db.getMedicationsBySpecialty(input.specialtyId);
+        const medicationsText = medications.map(m => `${m.medicationName} (${m.recommendedDose}): ${m.indications}`).join("\n");
+
+        // Get relevant tests
+        const tests = await db.getTestsBySpecialty(input.specialtyId);
+        const testsText = tests.map(t => `${t.testName}: ${t.commonIndications}`).join("\n");
+
+        const prompt = `You are a specialist AI assistant in ${specialty.name} (${specialty.englishName}).
+Analyze the following patient information using specialty-specific guidelines and provide diagnostic and treatment suggestions.
+
+SPECIALTY: ${specialty.name}
+
+PATIENT INFORMATION:
+Symptoms: ${input.symptoms}
+${input.examResults ? `Exam Results: ${input.examResults}` : ""}
+${input.medicalHistory ? `Medical History: ${input.medicalHistory}` : ""}
+
+SPECIALTY-SPECIFIC GUIDELINES:
+${guidelinesText}
+
+COMMONLY USED MEDICATIONS IN THIS SPECIALTY:
+${medicationsText}
+
+COMMONLY ORDERED TESTS IN THIS SPECIALTY:
+${testsText}
+
+Provide your response in the following format:
+1. SPECIALTY-SPECIFIC DIFFERENTIAL DIAGNOSIS: List 3-5 possible diagnoses relevant to ${specialty.name}
+2. RECOMMENDED SPECIALTY TESTS: Suggest tests specific to ${specialty.name}
+3. SPECIALTY-SPECIFIC TREATMENT OPTIONS: Suggest medications and therapies commonly used in ${specialty.name}
+4. FOLLOW-UP PLAN: Recommend follow-up schedule specific to this specialty
+5. SPECIALIST REFERRALS: Suggest other specialists if needed
+
+IMPORTANT: These are suggestions only. The final diagnosis and treatment decisions must be made by the treating physician.`;
+
+        try {
+          const response = await invokeLLM({
+            messages: [
+              {
+                role: "system",
+                content: `You are a specialist AI assistant in ${specialty.name}. Provide clinical decision support based on specialty-specific guidelines and best practices. Always emphasize that your suggestions are for physician review only.`,
+              },
+              {
+                role: "user",
+                content: prompt,
+              },
+            ],
+          });
+
+          const content = typeof response.choices[0]?.message?.content === 'string'
+            ? response.choices[0].message.content
+            : "";
+
+          if (content) {
+            // Create consultation specialty link
+            await db.createConsultationSpecialty({
+              consultationId: input.consultationId,
+              specialtyId: input.specialtyId,
+            });
+
+            // Create AI suggestion
+            await db.createAISuggestion({
+              consultationId: input.consultationId,
+              patientId: input.patientId,
+              suggestionType: "diagnosis",
+              content: content,
+              model: "gemini",
+              confidence: 80,
+            });
+          }
+
+          return {
+            success: true,
+            specialty: specialty.name,
+            suggestion: content,
+          };
+        } catch (error) {
+          console.error("[Multi-Specialty AI] Error:", error);
+          return {
+            success: false,
+            error: "Failed to generate specialty-specific suggestions",
+          };
+        }
+      }),
+  }),
 });
 
 export type AppRouter = typeof appRouter;

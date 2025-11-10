@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, patients, InsertPatient, consultations, InsertConsultation, examResults, InsertExamResult, aiSuggestions, InsertAISuggestion, auditLogs, InsertAuditLog, notifications, InsertNotification, aiExplanations, InsertAIExplanation, suggestionFeedback, InsertSuggestionFeedback, patientConsent, InsertPatientConsent, dataRetentionPolicy, InsertDataRetentionPolicy, medicalImages, InsertMedicalImage, researchProtocol, InsertResearchProtocol, researchParticipant, InsertResearchParticipant, hl7FhirMapping, InsertHL7FhirMapping } from "../drizzle/schema";
+import { InsertUser, users, patients, InsertPatient, consultations, InsertConsultation, examResults, InsertExamResult, aiSuggestions, InsertAISuggestion, auditLogs, InsertAuditLog, notifications, InsertNotification, aiExplanations, InsertAIExplanation, suggestionFeedback, InsertSuggestionFeedback, patientConsent, InsertPatientConsent, dataRetentionPolicy, InsertDataRetentionPolicy, medicalImages, InsertMedicalImage, researchProtocol, InsertResearchProtocol, researchParticipant, InsertResearchParticipant, hl7FhirMapping, InsertHL7FhirMapping, medicalSpecialties, InsertMedicalSpecialty, doctorSpecialties, InsertDoctorSpecialty, clinicalGuidelines, InsertClinicalGuideline, specialtyMedications, InsertSpecialtyMedication, specialtyDiagnosticTests, InsertSpecialtyDiagnosticTest, specialtyProcedures, InsertSpecialtyProcedure, consultationSpecialty, InsertConsultationSpecialty } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -404,4 +404,113 @@ export async function updateHL7FhirMapping(mappingId: number, data: Partial<Inse
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   return db.update(hl7FhirMapping).set(data).where(eq(hl7FhirMapping.id, mappingId));
+}
+
+
+// Medical Specialties queries
+export async function createMedicalSpecialty(data: InsertMedicalSpecialty) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.insert(medicalSpecialties).values(data);
+}
+
+export async function getAllMedicalSpecialties() {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.select().from(medicalSpecialties);
+}
+
+export async function getMedicalSpecialtyById(specialtyId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const result = await db.select().from(medicalSpecialties).where(eq(medicalSpecialties.id, specialtyId)).limit(1);
+  return result[0];
+}
+
+// Doctor Specialties queries
+export async function addDoctorSpecialty(data: InsertDoctorSpecialty) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.insert(doctorSpecialties).values(data);
+}
+
+export async function getDoctorSpecialties(doctorId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.select().from(doctorSpecialties).where(eq(doctorSpecialties.doctorId, doctorId));
+}
+
+// Clinical Guidelines queries
+export async function createClinicalGuideline(data: InsertClinicalGuideline) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.insert(clinicalGuidelines).values(data);
+}
+
+export async function getGuidelinesBySpecialty(specialtyId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.select().from(clinicalGuidelines).where(eq(clinicalGuidelines.specialtyId, specialtyId));
+}
+
+export async function getGuidelineByCondition(specialtyId: number, condition: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const result = await db.select().from(clinicalGuidelines)
+    .where(eq(clinicalGuidelines.specialtyId, specialtyId) && eq(clinicalGuidelines.condition, condition))
+    .limit(1);
+  return result[0];
+}
+
+// Specialty Medications queries
+export async function createSpecialtyMedication(data: InsertSpecialtyMedication) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.insert(specialtyMedications).values(data);
+}
+
+export async function getMedicationsBySpecialty(specialtyId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.select().from(specialtyMedications).where(eq(specialtyMedications.specialtyId, specialtyId));
+}
+
+// Specialty Diagnostic Tests queries
+export async function createSpecialtyDiagnosticTest(data: InsertSpecialtyDiagnosticTest) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.insert(specialtyDiagnosticTests).values(data);
+}
+
+export async function getTestsBySpecialty(specialtyId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.select().from(specialtyDiagnosticTests).where(eq(specialtyDiagnosticTests.specialtyId, specialtyId));
+}
+
+// Specialty Procedures queries
+export async function createSpecialtyProcedure(data: InsertSpecialtyProcedure) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.insert(specialtyProcedures).values(data);
+}
+
+export async function getProceduresBySpecialty(specialtyId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.select().from(specialtyProcedures).where(eq(specialtyProcedures.specialtyId, specialtyId));
+}
+
+// Consultation Specialty queries
+export async function createConsultationSpecialty(data: InsertConsultationSpecialty) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.insert(consultationSpecialty).values(data);
+}
+
+export async function getConsultationSpecialty(consultationId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const result = await db.select().from(consultationSpecialty).where(eq(consultationSpecialty.consultationId, consultationId)).limit(1);
+  return result[0];
 }
