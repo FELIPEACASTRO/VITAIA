@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, users, patients, InsertPatient, consultations, InsertConsultation, examResults, InsertExamResult, aiSuggestions, InsertAISuggestion, auditLogs, InsertAuditLog } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -89,4 +89,101 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+export async function getUserById(userId: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(users).where(eq(users.id, userId)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+// Patient queries
+export async function createPatient(data: InsertPatient) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const result = await db.insert(patients).values(data);
+  return result;
+}
+
+export async function getPatientsByDoctor(doctorId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.select().from(patients).where(eq(patients.doctorId, doctorId));
+}
+
+export async function getPatientById(patientId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const result = await db.select().from(patients).where(eq(patients.id, patientId)).limit(1);
+  return result[0];
+}
+
+export async function updatePatient(patientId: number, data: Partial<InsertPatient>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.update(patients).set(data).where(eq(patients.id, patientId));
+}
+
+// Consultation queries
+export async function createConsultation(data: InsertConsultation) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.insert(consultations).values(data);
+}
+
+export async function getConsultationsByPatient(patientId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.select().from(consultations).where(eq(consultations.patientId, patientId));
+}
+
+export async function getConsultationById(consultationId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const result = await db.select().from(consultations).where(eq(consultations.id, consultationId)).limit(1);
+  return result[0];
+}
+
+// Exam Results queries
+export async function createExamResult(data: InsertExamResult) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.insert(examResults).values(data);
+}
+
+export async function getExamResultsByConsultation(consultationId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.select().from(examResults).where(eq(examResults.consultationId, consultationId));
+}
+
+// AI Suggestions queries
+export async function createAISuggestion(data: InsertAISuggestion) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.insert(aiSuggestions).values(data);
+}
+
+export async function getAISuggestionsByConsultation(consultationId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.select().from(aiSuggestions).where(eq(aiSuggestions.consultationId, consultationId));
+}
+
+export async function reviewAISuggestion(suggestionId: number, reviewed: number, reviewedBy: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.update(aiSuggestions)
+    .set({ reviewed, reviewedBy, reviewedAt: new Date() })
+    .where(eq(aiSuggestions.id, suggestionId));
+}
+
+// Audit Log queries
+export async function logAuditEvent(data: InsertAuditLog) {
+  const db = await getDb();
+  if (!db) return; // Silently fail if DB not available
+  try {
+    await db.insert(auditLogs).values(data);
+  } catch (error) {
+    console.error("[Audit] Failed to log event:", error);
+  }
+}
