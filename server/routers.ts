@@ -149,7 +149,6 @@ IMPORTANT: These are suggestions only. The final diagnosis and treatment decisio
             ? response.choices[0].message.content 
             : "";
 
-          // Save AI suggestion to database
           if (content) {
             await db.createAISuggestion({
               consultationId: input.consultationId,
@@ -190,6 +189,53 @@ IMPORTANT: These are suggestions only. The final diagnosis and treatment decisio
           ctx.user.id
         )
       ),
+  }),
+
+  // Notifications
+  notifications: router({
+    list: protectedProcedure.query(({ ctx }) =>
+      db.getNotificationsByUser(ctx.user.id)
+    ),
+    markAsRead: protectedProcedure
+      .input(z.object({ notificationId: z.number() }))
+      .mutation(({ input }) => db.markNotificationAsRead(input.notificationId)),
+  }),
+
+  // Statistics
+  stats: router({
+    overview: protectedProcedure.query(async ({ ctx }) => {
+      const patientCount = await db.getPatientCountByDoctor(ctx.user.id);
+      const consultationCount = await db.getConsultationCountByDoctor(ctx.user.id);
+      const aiStats = await db.getAISuggestionStats(ctx.user.id);
+      
+      return {
+        patientCount,
+        consultationCount,
+        aiStats,
+      };
+    }),
+  }),
+
+  // Reports
+  reports: router({
+    generateConsultationReport: protectedProcedure
+      .input(z.object({ consultationId: z.number() }))
+      .query(async ({ input }) => {
+        const consultation = await db.getConsultationById(input.consultationId);
+        const patient = consultation ? await db.getPatientById(consultation.patientId) : null;
+        const examResults = consultation ? await db.getExamResultsByConsultation(input.consultationId) : [];
+        const aiSuggestions = consultation ? await db.getAISuggestionsByConsultation(input.consultationId) : [];
+        
+        return {
+          success: true,
+          data: {
+            consultation,
+            patient,
+            examResults,
+            aiSuggestions,
+          },
+        };
+      }),
   }),
 });
 

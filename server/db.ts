@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, patients, InsertPatient, consultations, InsertConsultation, examResults, InsertExamResult, aiSuggestions, InsertAISuggestion, auditLogs, InsertAuditLog } from "../drizzle/schema";
+import { InsertUser, users, patients, InsertPatient, consultations, InsertConsultation, examResults, InsertExamResult, aiSuggestions, InsertAISuggestion, auditLogs, InsertAuditLog, notifications, InsertNotification } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -186,4 +186,52 @@ export async function logAuditEvent(data: InsertAuditLog) {
   } catch (error) {
     console.error("[Audit] Failed to log event:", error);
   }
+}
+
+// Notification queries
+export async function createNotification(data: InsertNotification) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.insert(notifications).values(data);
+}
+
+export async function getNotificationsByUser(userId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.select().from(notifications).where(eq(notifications.userId, userId));
+}
+
+export async function markNotificationAsRead(notificationId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.update(notifications).set({ read: true }).where(eq(notifications.id, notificationId));
+}
+
+// Statistics queries
+export async function getPatientCountByDoctor(doctorId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const result = await db.select().from(patients).where(eq(patients.doctorId, doctorId));
+  return result.length;
+}
+
+export async function getConsultationCountByDoctor(doctorId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const result = await db.select().from(consultations).where(eq(consultations.doctorId, doctorId));
+  return result.length;
+}
+
+export async function getAISuggestionStats(doctorId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const result = await db.select().from(aiSuggestions).innerJoin(consultations, eq(aiSuggestions.consultationId, consultations.id)).where(eq(consultations.doctorId, doctorId));
+  
+  const stats = {
+    total: result.length,
+    approved: result.filter(r => r.aiSuggestions.reviewed === 1).length,
+    rejected: result.filter(r => r.aiSuggestions.reviewed === -1).length,
+    pending: result.filter(r => r.aiSuggestions.reviewed === 0).length,
+  };
+  return stats;
 }

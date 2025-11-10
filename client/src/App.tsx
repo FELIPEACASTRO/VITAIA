@@ -7,6 +7,8 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import PatientDetail from "./pages/PatientDetail";
+import Analytics from "./pages/Analytics";
+import ReportGenerator from "./pages/ReportGenerator";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Loader2 } from "lucide-react";
 
@@ -28,6 +30,8 @@ function Router() {
         <>
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/patient/:patientId" component={PatientDetail} />
+          <Route path="/analytics" component={Analytics} />
+          <Route path="/reports" component={ReportGenerator} />
         </>
       )}
       <Route path="/404" component={NotFound} />

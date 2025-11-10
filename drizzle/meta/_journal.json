@@ -15,6 +15,13 @@
       "when": 1762773966055,
       "tag": "0001_parallel_hemingway",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1762774568946,
+      "tag": "0002_simple_captain_midlands",
+      "breakpoints": true
     }
   ]
 }

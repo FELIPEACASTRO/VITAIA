@@ -40,17 +40,68 @@
 - [x] Tabela de historico medico
 - [x] Tabela de resultados de exames
 - [x] Tabela de logs de auditoria
+- [x] Tabela de notificacoes
 
-### Testes e Documentação
-- [ ] Testes de integração com LLM
-- [ ] Testes de segurança e LGPD
-- [ ] Documentação de arquitetura
-- [ ] Documentação de uso da aplicação
+### Exportacao de Relatorios PDF
+- [x] Endpoint para gerar PDF de consulta
+- [x] Incluir historico medico no PDF
+- [x] Incluir exames no PDF
+- [x] Incluir sugestoes de IA no PDF
+- [x] Botao de download no frontend
+- [x] Pagina de ReportGenerator
+
+### Notificacoes em Tempo Real
+- [x] Tabela de notificacoes no banco de dados
+- [x] Endpoint para listar notificacoes
+- [x] Endpoint para marcar como lida
+- [x] Componente NotificationCenter no frontend
+- [x] Historico de notificacoes
+- [x] Integracao com menu principal
+
+### Dashboard de Estatisticas
+- [x] Pagina de Analytics
+- [x] Grafico de status de sugestoes de IA (Pie Chart)
+- [x] Estatisticas de aprovacao/rejeicao de sugestoes de IA
+- [x] Total de pacientes, consultas e exames
+- [x] Taxa de aprovacao de sugestoes
+- [x] Resumo de atividades
+- [x] Cards com metricas principais
+
+### Testes e Documentacao
+- [ ] Testes de integracao com LLM
+- [ ] Testes de seguranca e LGPD
+- [ ] Documentacao de arquitetura
+- [ ] Documentacao de uso da aplicacao
 - [ ] Guia de conformidade com LGPD
 
 ## Notas Importantes
 
-- Todos os dados sensíveis devem ser tratados com conformidade LGPD
-- As sugestões de IA são apenas para auxílio ao médico, nunca substituem a decisão clínica
-- Implementar revisão humana obrigatória antes de qualquer recomendação crítica
-- Manter logs detalhados de todas as operações para auditoria
+- Todos os dados sensiveis devem ser tratados com conformidade LGPD
+- As sugestoes de IA sao apenas para auxilio ao medico, nunca substituem a decisao clinica
+- Implementar revisao humana obrigatoria antes de qualquer recomendacao critica
+- Manter logs detalhados de todas as operacoes para auditoria
+
+## Funcionalidades Implementadas
+
+### Fase 1 - Protótipo Básico
+- [x] Autenticacao OAuth
+- [x] Gerenciamento de pacientes
+- [x] Registro de consultas
+- [x] Registro de exames
+- [x] Integracao com LLM (Gemini)
+- [x] Dashboard principal
+
+### Fase 2 - Funcionalidades Avançadas
+- [x] Exportacao de relatorios em PDF
+- [x] Notificacoes em tempo real
+- [x] Dashboard de estatisticas
+- [x] Menu de navegacao atualizado
+- [x] Componente NotificationCenter
+
+### Proximos Passos Opcionais
+- [ ] Implementar WebSocket para notificacoes em tempo real
+- [ ] Adicionar suporte a upload de imagens de exames
+- [ ] Integrar Clinical-BR-LlaMA para tarefas simples
+- [ ] Implementar SOAP summary generator
+- [ ] Adicionar dashboard de auditoria LGPD
+- [ ] Implementar busca avancada de pacientes
