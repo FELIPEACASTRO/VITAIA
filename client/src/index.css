@@ -133,6 +133,67 @@
   }
 }
 
+@layer base {
+  /* VITAIA Design System Colors */
+  :root {
+    --vitaia-primary: #10B981;
+    --vitaia-primary-dark: #059669;
+    --vitaia-secondary: #06B6D4;
+    --vitaia-tertiary: #8B5CF6;
+    --vitaia-success: #10B981;
+    --vitaia-warning: #F59E0B;
+    --vitaia-error: #EF4444;
+    --vitaia-info: #06B6D4;
+  }
+  
+  /* VITAIA Gradients */
+  .vitaia-gradient-primary {
+    background: linear-gradient(135deg, #10B981 0%, #06B6D4 100%);
+  }
+  
+  .vitaia-gradient-ai {
+    background: linear-gradient(135deg, #8B5CF6 0%, #0F172A 100%);
+  }
+  
+  .vitaia-gradient-dynamic {
+    background: linear-gradient(90deg, #10B981 0%, #06B6D4 50%, #8B5CF6 100%);
+  }
+  
+  /* VITAIA Animations */
+  @keyframes vitaia-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+  
+  @keyframes vitaia-slide-up {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes vitaia-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  .vitaia-pulse {
+    animation: vitaia-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  .vitaia-slide-up {
+    animation: vitaia-slide-up 0.5s ease-out;
+  }
+  
+  .vitaia-fade-in {
+    animation: vitaia-fade-in 0.3s ease-out;
+  }
+}
+
 @layer components {
   /**
    * Custom container utility that centers content and adds responsive padding.
