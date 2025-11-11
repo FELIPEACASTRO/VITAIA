@@ -177,7 +177,7 @@ export default function Login() {
                       
                       <span className="relative flex items-center justify-center gap-3">
                         <Cpu className="w-5 h-5 animate-spin-slow" />
-                        Entrar com Manus
+                        Entrar no Sistema
                         <Sparkles className="w-5 h-5" />
                       </span>
                     </Button>
