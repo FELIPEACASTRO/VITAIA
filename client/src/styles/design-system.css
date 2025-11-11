@@ -1,0 +1,290 @@
+/* VITAIA - Futuristic Medical AI Design System */
+
+:root {
+  /* Primary Colors - Medical AI Blue */
+  --color-ai-blue-50: #E0F7FF;
+  --color-ai-blue-100: #B3ECFF;
+  --color-ai-blue-200: #80E0FF;
+  --color-ai-blue-300: #4DD4FF;
+  --color-ai-blue-400: #26CAFF;
+  --color-ai-blue-500: #00D9FF; /* Main AI Blue */
+  --color-ai-blue-600: #00B8E6;
+  --color-ai-blue-700: #0099CC;
+  --color-ai-blue-800: #007AB3;
+  --color-ai-blue-900: #005580;
+
+  /* Secondary Colors - Medical Green */
+  --color-health-green-50: #E0FFF4;
+  --color-health-green-100: #B3FFE5;
+  --color-health-green-200: #80FFD4;
+  --color-health-green-300: #4DFFC3;
+  --color-health-green-400: #26FFB6;
+  --color-health-green-500: #00FF88; /* Main Health Green */
+  --color-health-green-600: #00E67A;
+  --color-health-green-700: #00CC6A;
+  --color-health-green-800: #00B35D;
+  --color-health-green-900: #008044;
+
+  /* Accent Colors - Innovation Purple */
+  --color-innovation-purple-50: #F3E0FF;
+  --color-innovation-purple-100: #E0B3FF;
+  --color-innovation-purple-200: #CC80FF;
+  --color-innovation-purple-300: #B84DFF;
+  --color-innovation-purple-400: #A826FF;
+  --color-innovation-purple-500: #9D00FF; /* Main Innovation Purple */
+  --color-innovation-purple-600: #8A00E6;
+  --color-innovation-purple-700: #7700CC;
+  --color-innovation-purple-800: #6400B3;
+  --color-innovation-purple-900: #470080;
+
+  /* Data Colors - Holographic Pink */
+  --color-data-pink-50: #FFE0F5;
+  --color-data-pink-100: #FFB3E6;
+  --color-data-pink-200: #FF80D6;
+  --color-data-pink-300: #FF4DC6;
+  --color-data-pink-400: #FF26BB;
+  --color-data-pink-500: #FF0099; /* Main Data Pink */
+  --color-data-pink-600: #E60088;
+  --color-data-pink-700: #CC0077;
+  --color-data-pink-800: #B30066;
+  --color-data-pink-900: #800049;
+
+  /* Energy Colors - Active Orange */
+  --color-energy-orange-50: #FFF0E0;
+  --color-energy-orange-100: #FFD9B3;
+  --color-energy-orange-200: #FFBF80;
+  --color-energy-orange-300: #FFA54D;
+  --color-energy-orange-400: #FF9126;
+  --color-energy-orange-500: #FF6B00; /* Main Energy Orange */
+  --color-energy-orange-600: #E65F00;
+  --color-energy-orange-700: #CC5300;
+  --color-energy-orange-800: #B34700;
+  --color-energy-orange-900: #803300;
+
+  /* Neutral Colors - Dark Space */
+  --color-space-50: #F0F2F5;
+  --color-space-100: #E1E4E8;
+  --color-space-200: #C5CBD3;
+  --color-space-300: #A9B1BD;
+  --color-space-400: #8D98A7;
+  --color-space-500: #717E91;
+  --color-space-600: #5A6575;
+  --color-space-700: #434C59;
+  --color-space-800: #2C333D;
+  --color-space-900: #0A0E14; /* Deep Space Background */
+  --color-space-950: #050609;
+
+  /* Glassmorphism */
+  --glass-bg: rgba(15, 23, 42, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-hover: rgba(255, 255, 255, 0.05);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+
+  /* Glow Effects */
+  --glow-ai-blue: 0 0 20px rgba(0, 217, 255, 0.5);
+  --glow-health-green: 0 0 20px rgba(0, 255, 136, 0.5);
+  --glow-innovation-purple: 0 0 20px rgba(157, 0, 255, 0.5);
+  --glow-data-pink: 0 0 20px rgba(255, 0, 153, 0.5);
+
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+
+  /* Border Radius */
+  --radius-sm: 0.5rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
+  --radius-xl: 2rem;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Gradient Backgrounds */
+.gradient-ai {
+  background: linear-gradient(135deg, var(--color-ai-blue-500) 0%, var(--color-innovation-purple-500) 100%);
+}
+
+.gradient-health {
+  background: linear-gradient(135deg, var(--color-health-green-500) 0%, var(--color-ai-blue-500) 100%);
+}
+
+.gradient-holographic {
+  background: linear-gradient(
+    135deg,
+    var(--color-ai-blue-500) 0%,
+    var(--color-innovation-purple-500) 25%,
+    var(--color-data-pink-500) 50%,
+    var(--color-energy-orange-500) 75%,
+    var(--color-health-green-500) 100%
+  );
+  background-size: 200% 200%;
+  animation: holographicShift 8s ease infinite;
+}
+
+@keyframes holographicShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Glass Card */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  transition: all var(--transition-base);
+}
+
+.glass-card:hover {
+  background: var(--glass-hover);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Neon Glow Effects */
+.glow-ai {
+  box-shadow: var(--glow-ai-blue);
+}
+
+.glow-health {
+  box-shadow: var(--glow-health-green);
+}
+
+.glow-innovation {
+  box-shadow: var(--glow-innovation-purple);
+}
+
+.glow-data {
+  box-shadow: var(--glow-data-pink);
+}
+
+/* Animated Border */
+.animated-border {
+  position: relative;
+  background: linear-gradient(var(--color-space-900), var(--color-space-900)) padding-box,
+              linear-gradient(135deg, var(--color-ai-blue-500), var(--color-innovation-purple-500)) border-box;
+  border: 2px solid transparent;
+  animation: borderRotate 3s linear infinite;
+}
+
+@keyframes borderRotate {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+/* Pulse Animation */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Float Animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Scan Line Effect */
+.scan-line {
+  position: relative;
+  overflow: hidden;
+}
+
+.scan-line::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--color-ai-blue-500), transparent);
+  animation: scan 3s linear infinite;
+}
+
+@keyframes scan {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Particle Effect */
+.particles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Text Glow */
+.text-glow-ai {
+  text-shadow: 0 0 10px rgba(0, 217, 255, 0.8),
+               0 0 20px rgba(0, 217, 255, 0.6),
+               0 0 30px rgba(0, 217, 255, 0.4);
+}
+
+.text-glow-health {
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.8),
+               0 0 20px rgba(0, 255, 136, 0.6),
+               0 0 30px rgba(0, 255, 136, 0.4);
+}
+
+/* Holographic Text */
+.text-holographic {
+  background: linear-gradient(
+    135deg,
+    var(--color-ai-blue-500),
+    var(--color-innovation-purple-500),
+    var(--color-data-pink-500)
+  );
+  background-size: 200% 200%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: holographicShift 5s ease infinite;
+}
+
+/* Data Stream Lines */
+.data-stream {
+  position: relative;
+  overflow: hidden;
+}
+
+.data-stream::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 217, 255, 0.03) 2px,
+    rgba(0, 217, 255, 0.03) 4px
+  );
+  animation: dataFlow 20s linear infinite;
+}
+
+@keyframes dataFlow {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(100px); }
+}
