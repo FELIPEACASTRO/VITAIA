@@ -1,5 +1,3 @@
-export { COOKIE_NAME, ONE_YEAR_MS } from "@shared/const";
-
 // VITAIA Brand Identity
 export const APP_TITLE = import.meta.env.VITE_APP_TITLE || "VITAIA";
 export const APP_NAME = "VITAIA";
@@ -21,20 +19,4 @@ export const VITAIA_COLORS = {
   bgDark: "#0F172A",
   bgLight: "#FFFFFF",
   bgCard: "#1E293B",
-};
-
-// Generate login URL at runtime so redirect URI reflects the current origin.
-export const getLoginUrl = () => {
-  const oauthPortalUrl = import.meta.env.VITE_OAUTH_PORTAL_URL;
-  const appId = import.meta.env.VITE_APP_ID;
-  const redirectUri = `${window.location.origin}/api/oauth/callback`;
-  const state = btoa(redirectUri);
-
-  const url = new URL(`${oauthPortalUrl}/app-auth`);
-  url.searchParams.set("appId", appId);
-  url.searchParams.set("redirectUri", redirectUri);
-  url.searchParams.set("state", state);
-  url.searchParams.set("type", "signIn");
-
-  return url.toString();
 };
