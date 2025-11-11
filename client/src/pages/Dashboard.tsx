@@ -224,7 +224,7 @@ export default function Dashboard() {
               <Card
                 key={patient.id}
                 className="cursor-pointer hover:shadow-lg transition-shadow"
-                onClick={() => setLocation(`/patient/${patient.id}`)}
+                onClick={() => setLocation(`/paciente/${patient.id}`)}
               >
                 <CardHeader>
                   <CardTitle className="text-lg">{patient.name}</CardTitle>

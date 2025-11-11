@@ -4,9 +4,11 @@ import DashboardLayout from "@/components/DashboardLayout";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Activity, Users, Brain, TrendingUp } from "lucide-react";
+import { useLocation } from "wouter";
 
 export default function Home() {
   const { user, loading } = useAuth();
+  const [, setLocation] = useLocation();
 
   if (loading) {
     return (
@@ -109,7 +111,10 @@ export default function Home() {
               ))}
             </div>
 
-            <Button className="w-full mt-4 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white">
+            <Button 
+              onClick={() => setLocation("/pacientes")}
+              className="w-full mt-4 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white"
+            >
               Ver Todas as Consultas
             </Button>
           </Card>
@@ -121,19 +126,31 @@ export default function Home() {
             <h2 className="text-xl font-bold text-white mb-4">Ações Rápidas</h2>
             
             <div className="space-y-3">
-              <Button className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white justify-start">
+              <Button 
+                onClick={() => setLocation("/pacientes")}
+                className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white justify-start"
+              >
                 <span className="mr-2">+</span> Nova Consulta
               </Button>
               
-              <Button className="w-full bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-600 hover:to-cyan-700 text-white justify-start">
+              <Button 
+                onClick={() => setLocation("/pacientes")}
+                className="w-full bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-600 hover:to-cyan-700 text-white justify-start"
+              >
                 <span className="mr-2">+</span> Novo Paciente
               </Button>
               
-              <Button className="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white justify-start">
+              <Button 
+                onClick={() => setLocation("/analytics")}
+                className="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white justify-start"
+              >
                 <span className="mr-2">📊</span> Análises
               </Button>
               
-              <Button className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white justify-start">
+              <Button 
+                onClick={() => setLocation("/relatorios")}
+                className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white justify-start"
+              >
                 <span className="mr-2">📋</span> Relatórios
               </Button>
             </div>

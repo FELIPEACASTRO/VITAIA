@@ -30,11 +30,11 @@ import NotificationCenter from "./NotificationCenter";
 import { useTheme } from "@/contexts/ThemeContext";
 
 const menuItems = [
-  { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
-  { icon: Users, label: "Pacientes", path: "/dashboard" },
+  { icon: LayoutDashboard, label: "Dashboard", path: "/" },
+  { icon: Users, label: "Pacientes", path: "/pacientes" },
   { icon: BarChart3, label: "Estatísticas", path: "/analytics" },
-  { icon: FileText, label: "Relatórios", path: "/reports" },
-  { icon: Shield, label: "Auditoria", path: "/audit" },
+  { icon: FileText, label: "Relatórios", path: "/relatorios" },
+  { icon: Shield, label: "Auditoria", path: "/auditoria" },
 ];
 
 const SIDEBAR_WIDTH_KEY = "sidebar-width";
