@@ -1,33 +1,21 @@
-import { COOKIE_NAME } from "@shared/const";
-import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
-import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
+import { publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import * as db from "./db";
 import { invokeLLM } from "./_core/llm";
 
 export const appRouter = router({
   system: systemRouter,
-  auth: router({
-    me: publicProcedure.query(opts => opts.ctx.user),
-    logout: publicProcedure.mutation(({ ctx }) => {
-      const cookieOptions = getSessionCookieOptions(ctx.req);
-      ctx.res.clearCookie(COOKIE_NAME, { ...cookieOptions, maxAge: -1 });
-      return {
-        success: true,
-      } as const;
-    }),
-  }),
 
   // Patient management
   patients: router({
-    list: protectedProcedure.query(({ ctx }) => 
-      db.getPatientsByDoctor(ctx.user.id)
+    list: publicProcedure.query(() => 
+      db.getPatientsByDoctor(1)
     ),
-    get: protectedProcedure
+    get: publicProcedure
       .input(z.object({ patientId: z.number() }))
       .query(({ input }) => db.getPatientById(input.patientId)),
-    create: protectedProcedure
+    create: publicProcedure
       .input(z.object({
         name: z.string(),
         dateOfBirth: z.string().optional(),
@@ -37,13 +25,13 @@ export const appRouter = router({
         medicalHistory: z.string().optional(),
         currentMedications: z.string().optional(),
       }))
-      .mutation(({ ctx, input }) =>
+      .mutation(({ input }) =>
         db.createPatient({
           ...input,
-          doctorId: ctx.user.id,
+          doctorId: 1,
         })
       ),
-    update: protectedProcedure
+    update: publicProcedure
       .input(z.object({
         patientId: z.number(),
         name: z.string().optional(),
@@ -62,13 +50,13 @@ export const appRouter = router({
 
   // Consultation management
   consultations: router({
-    list: protectedProcedure
+    list: publicProcedure
       .input(z.object({ patientId: z.number() }))
       .query(({ input }) => db.getConsultationsByPatient(input.patientId)),
-    get: protectedProcedure
+    get: publicProcedure
       .input(z.object({ consultationId: z.number() }))
       .query(({ input }) => db.getConsultationById(input.consultationId)),
-    create: protectedProcedure
+    create: publicProcedure
       .input(z.object({
         patientId: z.number(),
         symptoms: z.string(),
@@ -77,10 +65,10 @@ export const appRouter = router({
         plan: z.string().optional(),
         notes: z.string().optional(),
       }))
-      .mutation(({ ctx, input }) =>
+      .mutation(({ input }) =>
         db.createConsultation({
           ...input,
-          doctorId: ctx.user.id,
+          doctorId: 1,
           date: new Date(),
         })
       ),
@@ -88,10 +76,10 @@ export const appRouter = router({
 
   // Exam results management
   exams: router({
-    list: protectedProcedure
+    list: publicProcedure
       .input(z.object({ consultationId: z.number() }))
       .query(({ input }) => db.getExamResultsByConsultation(input.consultationId)),
-    create: protectedProcedure
+    create: publicProcedure
       .input(z.object({
         consultationId: z.number(),
         patientId: z.number(),
@@ -106,7 +94,7 @@ export const appRouter = router({
 
   // AI suggestions and analysis
   ai: router({
-    generateSuggestions: protectedProcedure
+    generateSuggestions: publicProcedure
       .input(z.object({
         consultationId: z.number(),
         patientId: z.number(),
@@ -173,27 +161,27 @@ IMPORTANT: These are suggestions only. The final diagnosis and treatment decisio
         }
       }),
 
-    getSuggestions: protectedProcedure
+    getSuggestions: publicProcedure
       .input(z.object({ consultationId: z.number() }))
       .query(({ input }) => db.getAISuggestionsByConsultation(input.consultationId)),
 
-    reviewSuggestion: protectedProcedure
+    reviewSuggestion: publicProcedure
       .input(z.object({
         suggestionId: z.number(),
         approved: z.boolean(),
       }))
-      .mutation(({ ctx, input }) =>
+      .mutation(({ input }) =>
         db.reviewAISuggestion(
           input.suggestionId,
           input.approved ? 1 : -1,
-          ctx.user.id
+          1
         )
       ),
   }),
 
   // AI Explanations
   explanations: router({
-    create: protectedProcedure
+    create: publicProcedure
       .input(z.object({
         suggestionId: z.number(),
         reasoning: z.string(),
@@ -203,14 +191,14 @@ IMPORTANT: These are suggestions only. The final diagnosis and treatment decisio
       }))
       .mutation(({ input }) => db.createAIExplanation(input)),
     
-    get: protectedProcedure
+    get: publicProcedure
       .input(z.object({ suggestionId: z.number() }))
       .query(({ input }) => db.getAIExplanationBySuggestion(input.suggestionId)),
   }),
 
   // Suggestion Feedback
   feedback: router({
-    create: protectedProcedure
+    create: publicProcedure
       .input(z.object({
         suggestionId: z.number(),
         approved: z.boolean(),
@@ -219,21 +207,21 @@ IMPORTANT: These are suggestions only. The final diagnosis and treatment decisio
         accuracy: z.number().min(1).max(5).optional(),
         usefulness: z.number().min(1).max(5).optional(),
       }))
-      .mutation(({ ctx, input }) => 
+      .mutation(({ input }) => 
         db.createSuggestionFeedback({
           ...input,
-          doctorId: ctx.user.id,
+          doctorId: 1,
         })
       ),
     
-    get: protectedProcedure
+    get: publicProcedure
       .input(z.object({ suggestionId: z.number() }))
       .query(({ input }) => db.getSuggestionFeedback(input.suggestionId)),
   }),
 
   // Patient Consent Management
   consent: router({
-    create: protectedProcedure
+    create: publicProcedure
       .input(z.object({
         patientId: z.number(),
         consentType: z.enum(["data_processing", "ai_analysis", "research", "data_sharing"]),
@@ -249,29 +237,29 @@ IMPORTANT: These are suggestions only. The final diagnosis and treatment decisio
         })
       ),
     
-    get: protectedProcedure
+    get: publicProcedure
       .input(z.object({ patientId: z.number(), consentType: z.string() }))
       .query(({ input }) => db.getPatientConsent(input.patientId, input.consentType)),
     
-    getAll: protectedProcedure
+    getAll: publicProcedure
       .input(z.object({ patientId: z.number() }))
       .query(({ input }) => db.getAllPatientConsents(input.patientId)),
   }),
 
   // Data Retention Policy
   retention: router({
-    create: protectedProcedure
+    create: publicProcedure
       .input(z.object({
         patientId: z.number(),
         retentionPeriodMonths: z.number().default(36),
       }))
       .mutation(({ input }) => db.createDataRetentionPolicy(input)),
     
-    get: protectedProcedure
+    get: publicProcedure
       .input(z.object({ patientId: z.number() }))
       .query(({ input }) => db.getDataRetentionPolicy(input.patientId)),
     
-    update: protectedProcedure
+    update: publicProcedure
       .input(z.object({
         patientId: z.number(),
         deletionScheduledDate: z.date().optional(),
@@ -286,7 +274,7 @@ IMPORTANT: These are suggestions only. The final diagnosis and treatment decisio
 
   // Medical Images
   images: router({
-    create: protectedProcedure
+    create: publicProcedure
       .input(z.object({
         consultationId: z.number(),
         patientId: z.number(),
@@ -297,15 +285,15 @@ IMPORTANT: These are suggestions only. The final diagnosis and treatment decisio
       }))
       .mutation(({ input }) => db.createMedicalImage(input)),
     
-    list: protectedProcedure
+    list: publicProcedure
       .input(z.object({ consultationId: z.number() }))
       .query(({ input }) => db.getMedicalImagesByConsultation(input.consultationId)),
     
-    get: protectedProcedure
+    get: publicProcedure
       .input(z.object({ imageId: z.number() }))
       .query(({ input }) => db.getMedicalImageById(input.imageId)),
     
-    analyzeImage: protectedProcedure
+    analyzeImage: publicProcedure
       .input(z.object({
         imageId: z.number(),
         analysisPrompt: z.string().optional(),
@@ -360,7 +348,7 @@ Remember this is for physician review only, not a substitute for professional di
 
   // Research Protocols
   research: router({
-    createProtocol: protectedProcedure
+    createProtocol: publicProcedure
       .input(z.object({
         protocolName: z.string(),
         description: z.string().optional(),
@@ -373,13 +361,13 @@ Remember this is for physician review only, not a substitute for professional di
       }))
       .mutation(({ input }) => db.createResearchProtocol(input)),
     
-    getProtocol: protectedProcedure
+    getProtocol: publicProcedure
       .input(z.object({ protocolId: z.number() }))
       .query(({ input }) => db.getResearchProtocolById(input.protocolId)),
     
-    listProtocols: protectedProcedure.query(() => db.getAllResearchProtocols()),
+    listProtocols: publicProcedure.query(() => db.getAllResearchProtocols()),
     
-    updateProtocol: protectedProcedure
+    updateProtocol: publicProcedure
       .input(z.object({
         protocolId: z.number(),
         status: z.enum(["draft", "active", "completed", "suspended"]).optional(),
@@ -391,7 +379,7 @@ Remember this is for physician review only, not a substitute for professional di
         return db.updateResearchProtocol(protocolId, data);
       }),
     
-    enrollParticipant: protectedProcedure
+    enrollParticipant: publicProcedure
       .input(z.object({
         protocolId: z.number(),
         patientId: z.number(),
@@ -400,11 +388,11 @@ Remember this is for physician review only, not a substitute for professional di
       }))
       .mutation(({ input }) => db.enrollResearchParticipant(input)),
     
-    getParticipants: protectedProcedure
+    getParticipants: publicProcedure
       .input(z.object({ protocolId: z.number() }))
       .query(({ input }) => db.getResearchParticipantsByProtocol(input.protocolId)),
     
-    updateParticipant: protectedProcedure
+    updateParticipant: publicProcedure
       .input(z.object({
         participantId: z.number(),
         status: z.enum(["enrolled", "active", "completed", "withdrawn"]).optional(),
@@ -418,7 +406,7 @@ Remember this is for physician review only, not a substitute for professional di
 
   // EHR Integration
   ehr: router({
-    mapFhirData: protectedProcedure
+    mapFhirData: publicProcedure
       .input(z.object({
         patientId: z.number(),
         externalEhrId: z.string(),
@@ -428,11 +416,11 @@ Remember this is for physician review only, not a substitute for professional di
       }))
       .mutation(({ input }) => db.createHL7FhirMapping(input)),
     
-    getEhrMapping: protectedProcedure
+    getEhrMapping: publicProcedure
       .input(z.object({ patientId: z.number() }))
       .query(({ input }) => db.getHL7FhirMappingByPatient(input.patientId)),
     
-    syncEhrData: protectedProcedure
+    syncEhrData: publicProcedure
       .input(z.object({
         mappingId: z.number(),
         fhirData: z.string(),
@@ -449,20 +437,20 @@ Remember this is for physician review only, not a substitute for professional di
 
   // Notifications
   notifications: router({
-    list: protectedProcedure.query(({ ctx }) =>
-      db.getNotificationsByUser(ctx.user.id)
+    list: publicProcedure.query(() =>
+      db.getNotificationsByUser(1)
     ),
-    markAsRead: protectedProcedure
+    markAsRead: publicProcedure
       .input(z.object({ notificationId: z.number() }))
       .mutation(({ input }) => db.markNotificationAsRead(input.notificationId)),
   }),
 
   // Statistics
   stats: router({
-    overview: protectedProcedure.query(async ({ ctx }) => {
-      const patientCount = await db.getPatientCountByDoctor(ctx.user.id);
-      const consultationCount = await db.getConsultationCountByDoctor(ctx.user.id);
-      const aiStats = await db.getAISuggestionStats(ctx.user.id);
+    overview: publicProcedure.query(async () => {
+      const patientCount = await db.getPatientCountByDoctor(1);
+      const consultationCount = await db.getConsultationCountByDoctor(1);
+      const aiStats = await db.getAISuggestionStats(1);
       
       return {
         patientCount,
@@ -474,7 +462,7 @@ Remember this is for physician review only, not a substitute for professional di
 
   // Reports
   reports: router({
-    generateConsultationReport: protectedProcedure
+    generateConsultationReport: publicProcedure
       .input(z.object({ consultationId: z.number() }))
       .query(async ({ input }) => {
         const consultation = await db.getConsultationById(input.consultationId);
@@ -502,7 +490,7 @@ Remember this is for physician review only, not a substitute for professional di
       .input(z.object({ specialtyId: z.number() }))
       .query(({ input }) => db.getMedicalSpecialtyById(input.specialtyId)),
     
-    create: protectedProcedure
+    create: publicProcedure
       .input(z.object({
         name: z.string(),
         englishName: z.string(),
@@ -511,11 +499,11 @@ Remember this is for physician review only, not a substitute for professional di
       }))
       .mutation(({ input }) => db.createMedicalSpecialty(input)),
     
-    getDoctorSpecialties: protectedProcedure
+    getDoctorSpecialties: publicProcedure
       .input(z.object({ doctorId: z.number() }))
       .query(({ input }) => db.getDoctorSpecialties(input.doctorId)),
     
-    addDoctorSpecialty: protectedProcedure
+    addDoctorSpecialty: publicProcedure
       .input(z.object({
         doctorId: z.number(),
         specialtyId: z.number(),
@@ -536,7 +524,7 @@ Remember this is for physician review only, not a substitute for professional di
       .input(z.object({ specialtyId: z.number(), condition: z.string() }))
       .query(({ input }) => db.getGuidelineByCondition(input.specialtyId, input.condition)),
     
-    create: protectedProcedure
+    create: publicProcedure
       .input(z.object({
         specialtyId: z.number(),
         condition: z.string(),
@@ -554,7 +542,7 @@ Remember this is for physician review only, not a substitute for professional di
       .input(z.object({ specialtyId: z.number() }))
       .query(({ input }) => db.getMedicationsBySpecialty(input.specialtyId)),
     
-    create: protectedProcedure
+    create: publicProcedure
       .input(z.object({
         specialtyId: z.number(),
         medicationName: z.string(),
@@ -576,7 +564,7 @@ Remember this is for physician review only, not a substitute for professional di
       .input(z.object({ specialtyId: z.number() }))
       .query(({ input }) => db.getTestsBySpecialty(input.specialtyId)),
     
-    create: protectedProcedure
+    create: publicProcedure
       .input(z.object({
         specialtyId: z.number(),
         testName: z.string(),
@@ -597,7 +585,7 @@ Remember this is for physician review only, not a substitute for professional di
       .input(z.object({ specialtyId: z.number() }))
       .query(({ input }) => db.getProceduresBySpecialty(input.specialtyId)),
     
-    create: protectedProcedure
+    create: publicProcedure
       .input(z.object({
         specialtyId: z.number(),
         procedureName: z.string(),
@@ -614,11 +602,11 @@ Remember this is for physician review only, not a substitute for professional di
 
   // Consultation Specialty - REMOVED DUPLICATE, KEEPING ONLY MULTI-SPECIALTY
   /*consultationSpecialties: router({
-    get: protectedProcedure
+    get: publicProcedure
       .input(z.object({ consultationId: z.number() }))
       .query(({ input }) => db.getConsultationSpecialty(input.consultationId)),
     
-    create: protectedProcedure
+    create: publicProcedure
       .input(z.object({
         consultationId: z.number(),
         specialtyId: z.number(),
@@ -630,7 +618,7 @@ Remember this is for physician review only, not a substitute for professional di
 
   // Multi-Specialty AI Suggestions
   aiMultiSpecialty: router({
-    generateSpecialtySpecificSuggestions: protectedProcedure
+    generateSpecialtySpecificSuggestions: publicProcedure
       .input(z.object({
         consultationId: z.number(),
         patientId: z.number(),
