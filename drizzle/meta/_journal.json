@@ -1,47 +1,12 @@
 {
   "version": "7",
-  "dialect": "mysql",
+  "dialect": "postgresql",
   "entries": [
     {
       "idx": 0,
-      "version": "5",
-      "when": 1762773806152,
-      "tag": "0000_petite_betty_brant",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1762773966055,
-      "tag": "0001_parallel_hemingway",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1762774568946,
-      "tag": "0002_simple_captain_midlands",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1762775113096,
-      "tag": "0003_dapper_the_phantom",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1762775311434,
-      "tag": "0004_lazy_james_howlett",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "5",
-      "when": 1762775936344,
-      "tag": "0005_demonic_calypso",
+      "version": "7",
+      "when": 1762898956189,
+      "tag": "0000_hot_sandman",
       "breakpoints": true
     }
   ]
