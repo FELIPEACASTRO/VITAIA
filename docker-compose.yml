@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  # Banco de dados PostgreSQL
+  postgres:
+    image: postgres:16-alpine
+    container_name: vitaia-postgres
+    environment:
+      POSTGRES_USER: vitaia
+      POSTGRES_PASSWORD: vitaia_dev_password
+      POSTGRES_DB: vitaia_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vitaia"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - vitaia-network
+
+  # Aplicação VITAIA
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vitaia-app
+    ports:
+      - "5000:5000"
+    environment:
+      # Database
+      DATABASE_URL: postgresql://vitaia:vitaia_dev_password@postgres:5432/vitaia_db
+      PGHOST: postgres
+      PGPORT: 5432
+      PGUSER: vitaia
+      PGPASSWORD: vitaia_dev_password
+      PGDATABASE: vitaia_db
+      
+      # Application
+      NODE_ENV: production
+      PORT: 5000
+      HOST: 0.0.0.0
+      
+      # JWT/Auth (ALTERE ESTES VALORES EM PRODUÇÃO!)
+      JWT_SECRET: vitaia_dev_secret_change_in_production_12345
+      
+      # OAuth (Configure seu provedor OAuth)
+      VITE_APP_ID: ${VITE_APP_ID:-}
+      OAUTH_SERVER_URL: ${OAUTH_SERVER_URL:-}
+      VITE_OAUTH_PORTAL_URL: ${VITE_OAUTH_PORTAL_URL:-}
+      OWNER_OPEN_ID: ${OWNER_OPEN_ID:-}
+      
+      # AI/LLM (Opcional - configure se for usar IA)
+      BUILT_IN_FORGE_API_URL: ${BUILT_IN_FORGE_API_URL:-}
+      BUILT_IN_FORGE_API_KEY: ${BUILT_IN_FORGE_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - vitaia-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  vitaia-network:
+    driver: bridge

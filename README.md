@@ -41,7 +41,7 @@ VITAIA é uma plataforma inovadora de inteligência artificial médica que auxil
 - Node.js
 
 **Banco de Dados:**
-- MySQL/TiDB
+- PostgreSQL 14+
 - Drizzle ORM
 
 **IA & ML:**
@@ -79,14 +79,39 @@ VITAIA é uma plataforma inovadora de inteligência artificial médica que auxil
 
 ## 🚀 Começando
 
-### Pré-requisitos
+### 🐳 **Opção 1: Docker (Recomendado)**
+
+Forma mais rápida e fácil de executar localmente:
+
+```bash
+# Clonar repositório
+git clone https://github.com/FELIPEACASTRO/VITAIA.git
+cd VITAIA
+
+# Configurar variáveis de ambiente
+cp .env.example .env
+
+# Iniciar com Docker Compose
+docker-compose up -d
+
+# Aplicar migrações do banco de dados
+docker exec -it vitaia-app npm run db:push
+
+# Acessar: http://localhost:5000
+```
+
+**📖 [Guia Completo de Setup Local com Docker →](./SETUP_LOCAL.md)**
+
+### 💻 **Opção 2: Instalação Manual**
+
+#### Pré-requisitos
 
 - Node.js 18+
 - pnpm ou npm
-- MySQL 8.0+
+- PostgreSQL 14+
 - Git
 
-### Instalação
+#### Instalação
 
 ```bash
 # Clonar repositório
@@ -97,7 +122,7 @@ cd VITAIA
 pnpm install
 
 # Configurar variáveis de ambiente
-cp .env.example .env.local
+cp .env.example .env
 
 # Executar migrações do banco de dados
 pnpm db:push
@@ -108,18 +133,19 @@ pnpm dev
 
 ### Variáveis de Ambiente
 
+Veja `.env.example` para configuração completa. Principais variáveis:
+
 ```env
 # Banco de Dados
-DATABASE_URL=mysql://user:password@localhost:3306/vitaia
+DATABASE_URL=postgresql://vitaia:password@localhost:5432/vitaia_db
 
 # Autenticação
-JWT_SECRET=seu_secret_aqui
-VITE_APP_ID=seu_app_id
-OAUTH_SERVER_URL=https://api.manus.im
+JWT_SECRET=seu_secret_seguro_aqui
+VITE_APP_ID=seu_app_id_oauth
 
-# IA & APIs
-GEMINI_API_KEY=sua_chave_gemini
-VITE_FRONTEND_FORGE_API_KEY=sua_chave_forge
+# IA & APIs (Opcional)
+OPENAI_API_KEY=sua_chave_openai
+BUILT_IN_FORGE_API_KEY=sua_chave_forge
 
 # Aplicação
 VITE_APP_TITLE=VITAIA
