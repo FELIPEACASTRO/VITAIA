@@ -1,4 +1,3 @@
-import { useAuth } from "@/_core/hooks/useAuth";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { trpc } from "@/lib/trpc";
@@ -6,7 +5,6 @@ import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, Cart
 import { Loader2 } from "lucide-react";
 
 export default function Analytics() {
-  const { user } = useAuth();
   const { data: stats, isLoading } = trpc.stats.overview.useQuery();
 
   if (isLoading) {

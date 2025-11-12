@@ -1,4 +1,3 @@
-import { useAuth } from "@/_core/hooks/useAuth";
 import { APP_TAGLINE } from "@/const";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
@@ -9,26 +8,7 @@ import {
 import { useLocation } from "wouter";
 
 export default function Home() {
-  const { user, loading } = useAuth();
   const [, setLocation] = useLocation();
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0A0E14]">
-        <div className="text-center">
-          <div className="relative inline-flex items-center justify-center w-20 h-20 mb-4">
-            <div className="absolute inset-0 bg-gradient-to-br from-[#00D9FF] to-[#9D00FF] rounded-2xl blur-xl opacity-50 animate-pulse" />
-            <div className="relative w-20 h-20 bg-gradient-to-br from-[#00D9FF] to-[#9D00FF] rounded-2xl flex items-center justify-center"
-              style={{ boxShadow: '0 0 40px rgba(0, 217, 255, 0.4)' }}>
-              <Brain className="w-10 h-10 text-white animate-pulse" />
-            </div>
-          </div>
-          <p className="text-white font-bold text-lg">VITAIA</p>
-          <p className="text-[#A9B1BD] text-sm mt-2">Carregando interface...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <DashboardLayout>
@@ -39,7 +19,7 @@ export default function Home() {
             <div>
               <h1 className="text-4xl lg:text-5xl font-black mb-2">
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00D9FF] via-[#00FF88] to-[#9D00FF]">
-                  Olá, {user?.name || "Médico"}
+                  Olá, Médico
                 </span>
                 <span className="inline-block ml-3 animate-wave">👋</span>
               </h1>
