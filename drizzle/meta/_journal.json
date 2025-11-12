@@ -8,6 +8,13 @@
       "when": 1762898956189,
       "tag": "0000_hot_sandman",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1762985995592,
+      "tag": "0001_typical_phantom_reporter",
+      "breakpoints": true
     }
   ]
 }

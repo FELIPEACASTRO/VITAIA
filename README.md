@@ -30,26 +30,31 @@ VITAIA é uma plataforma inovadora de inteligência artificial médica que auxil
 ### Stack Tecnológico
 
 **Frontend:**
+
 - React 19 + TypeScript
 - Tailwind CSS 4 + Shadcn/UI
 - Vite (build tool)
 - tRPC para comunicação com backend
 
 **Backend:**
+
 - Express.js 4
 - tRPC 11 (RPC framework)
 - Node.js
 
 **Banco de Dados:**
+
 - PostgreSQL 14+
 - Drizzle ORM
 
 **IA & ML:**
+
 - Google Gemini (LLM comercial)
 - Clinical-BR-LlaMA-2-7B (modelo open-source)
 - Análise de imagens médicas
 
 **Segurança:**
+
 - LGPD Compliance
 - Audit Logging
 
@@ -57,23 +62,23 @@ VITAIA é uma plataforma inovadora de inteligência artificial médica que auxil
 
 ### 29 Tabelas Principais
 
-| Tabela | Descrição |
-|--------|-----------|
-| `users` | Usuários (médicos) |
-| `patients` | Dados dos pacientes |
-| `consultations` | Consultas/atendimentos |
-| `medicalHistory` | Histórico médico |
-| `examResults` | Resultados de exames |
-| `aiSuggestions` | Sugestões geradas por IA |
-| `aiExplanations` | Explicabilidade das sugestões |
-| `suggestionFeedback` | Feedback dos médicos |
-| `patientConsent` | Consentimento LGPD |
-| `medicalImages` | Imagens médicas |
-| `researchProtocol` | Protocolos de pesquisa |
-| `medicalSpecialties` | Especialidades médicas |
-| `clinicalGuidelines` | Diretrizes clínicas |
-| `specialtyMedications` | Medicações por especialidade |
-| `auditLogs` | Logs de auditoria |
+| Tabela                           | Descrição                     |
+| -------------------------------- | ----------------------------- |
+| `users`                          | Usuários (médicos)            |
+| `patients`                       | Dados dos pacientes           |
+| `consultations`                  | Consultas/atendimentos        |
+| `medicalHistory`                 | Histórico médico              |
+| `examResults`                    | Resultados de exames          |
+| `aiSuggestions`                  | Sugestões geradas por IA      |
+| `aiExplanations`                 | Explicabilidade das sugestões |
+| `suggestionFeedback`             | Feedback dos médicos          |
+| `patientConsent`                 | Consentimento LGPD            |
+| `medicalImages`                  | Imagens médicas               |
+| `researchProtocol`               | Protocolos de pesquisa        |
+| `medicalSpecialties`             | Especialidades médicas        |
+| `clinicalGuidelines`             | Diretrizes clínicas           |
+| `specialtyMedications`           | Medicações por especialidade  |
+| `auditLogs`                      | Logs de auditoria             |
 | ... e mais 14 tabelas de suporte |
 
 ## 🚀 Começando
@@ -148,6 +153,7 @@ VITE_APP_LOGO=/vitaia-logo.svg
 ```
 
 **⚠️ IMPORTANTE: Autenticação Removida**
+
 - A aplicação roda sem sistema de autenticação
 - Todos os dados são associados a um usuário padrão (ID 1)
 - Ideal para desenvolvimento e demonstrações
@@ -183,13 +189,13 @@ VITAIA/
 
 ### Paleta de Cores
 
-| Cor | Hex | Uso |
-|-----|-----|-----|
-| Verde Vivo | `#10B981` | Ações positivas, sucesso |
-| Azul Ciano | `#06B6D4` | Informações, destaques |
-| Roxo Moderno | `#8B5CF6` | Elementos de IA |
-| Vermelho Alerta | `#EF4444` | Erros, avisos críticos |
-| Âmbar Aviso | `#F59E0B` | Avisos, atenção |
+| Cor             | Hex       | Uso                      |
+| --------------- | --------- | ------------------------ |
+| Verde Vivo      | `#10B981` | Ações positivas, sucesso |
+| Azul Ciano      | `#06B6D4` | Informações, destaques   |
+| Roxo Moderno    | `#8B5CF6` | Elementos de IA          |
+| Vermelho Alerta | `#EF4444` | Erros, avisos críticos   |
+| Âmbar Aviso     | `#F59E0B` | Avisos, atenção          |
 
 ### Tipografia
 
@@ -200,10 +206,12 @@ VITAIA/
 ## 🔌 API tRPC Endpoints
 
 ### Autenticação
+
 - `auth.me` - Obter usuário atual
 - `auth.logout` - Fazer logout
 
 ### Pacientes
+
 - `patients.create` - Criar novo paciente
 - `patients.list` - Listar pacientes
 - `patients.getById` - Obter detalhes do paciente
@@ -211,24 +219,29 @@ VITAIA/
 - `patients.delete` - Deletar paciente
 
 ### Consultas
+
 - `consultations.create` - Criar nova consulta
 - `consultations.getByPatient` - Listar consultas do paciente
 - `consultations.getById` - Obter detalhes da consulta
 
 ### IA
+
 - `ai.generateSuggestions` - Gerar sugestões de diagnóstico
 - `ai.analyzeImage` - Analisar imagem médica
 - `ai.getSuggestionHistory` - Histórico de sugestões
 
 ### Explicabilidade
+
 - `explanations.create` - Criar explicação
 - `explanations.getById` - Obter explicação
 
 ### Feedback
+
 - `feedback.create` - Registrar feedback
 - `feedback.getStats` - Estatísticas de feedback
 
 ### Pesquisa Clínica
+
 - `research.createProtocol` - Criar protocolo de pesquisa
 - `research.enrollParticipant` - Inscrever participante
 - `research.getProtocols` - Listar protocolos
@@ -249,6 +262,7 @@ pnpm test:coverage
 ## 📈 Roadmap
 
 ### Curto Prazo (Próximos 3 meses)
+
 - ✅ Explicabilidade de IA
 - ✅ Dashboard LGPD
 - ✅ Sistema de feedback
@@ -257,6 +271,7 @@ pnpm test:coverage
 - [ ] Conformidade LGPD completa
 
 ### Médio Prazo (3-6 meses)
+
 - ✅ Análise de imagens médicas
 - ✅ Protocolos de pesquisa
 - ✅ Integração HL7/FHIR
@@ -265,6 +280,7 @@ pnpm test:coverage
 - [ ] Suporte a múltiplas especialidades
 
 ### Longo Prazo (6-12 meses)
+
 - [ ] Documentação ANVISA
 - [ ] Aprovação regulatória
 - [ ] Escalabilidade para 1000+ médicos
@@ -274,6 +290,7 @@ pnpm test:coverage
 ## 🔐 Segurança & Conformidade
 
 ### LGPD (Lei Geral de Proteção de Dados)
+
 - ✅ Criptografia end-to-end
 - ✅ Consentimento explícito de pacientes
 - ✅ Direito ao esquecimento
@@ -281,6 +298,7 @@ pnpm test:coverage
 - ✅ Política de retenção de dados
 
 ### Regulamentação Médica
+
 - ✅ IA como auxílio, não substituição
 - ✅ Revisão obrigatória de sugestões
 - ✅ Rastreabilidade de decisões
@@ -325,4 +343,4 @@ Para suporte, envie um email para vitaia@medical-ai.com ou abra uma issue no Git
 
 **VITAIA - A IA da Vida** 🧬💚
 
-*Transformando a medicina através da inteligência artificial responsável*
+_Transformando a medicina através da inteligência artificial responsável_

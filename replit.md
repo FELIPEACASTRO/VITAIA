@@ -10,6 +10,7 @@ VITAIA (Vita + AI = "The AI of Life") is a comprehensive medical AI platform des
 ## Tech Stack
 
 ### Frontend
+
 - React 19 with TypeScript
 - Vite 7 (build tool)
 - Tailwind CSS 4 + Shadcn/UI components
@@ -17,12 +18,14 @@ VITAIA (Vita + AI = "The AI of Life") is a comprehensive medical AI platform des
 - Wouter for routing
 
 ### Backend
+
 - Node.js with Express 4
 - tRPC 11 (RPC framework)
 - PostgreSQL database (Replit-provided)
 - Drizzle ORM for database queries
 
 ### Key Features
+
 - 22 database tables covering patients, consultations, AI suggestions, medical images, research protocols, and more
 - Multi-specialty support (50+ Brazilian medical specialties)
 - LGPD compliance (Brazilian GDPR) with audit logs and patient consent tracking
@@ -60,22 +63,27 @@ VITAIA (Vita + AI = "The AI of Life") is a comprehensive medical AI platform des
 The following environment variables are used:
 
 ### Database (Auto-configured by Replit)
+
 - `DATABASE_URL` - PostgreSQL connection string
 
 ### Authentication
+
 **⚠️ AUTHENTICATION REMOVED**
+
 - The application now runs without authentication
 - All data is associated with default user (ID 1)
 - Ideal for development and demonstrations
 - For production, consider adding authentication as needed
 
 ### AI/ML Features
+
 - `BUILT_IN_FORGE_API_URL` - Forge API endpoint
 - `BUILT_IN_FORGE_API_KEY` - Forge API key for AI features
 
 ## Database Schema
 
 **22 Tables:**
+
 1. `users` - Medical professionals (doctors)
 2. `patients` - Patient information
 3. `consultations` - Medical consultations/visits
@@ -102,23 +110,28 @@ The following environment variables are used:
 ## Running the Project
 
 ### Development Mode
+
 The project runs automatically via the configured workflow:
+
 ```bash
 npm run dev
 ```
 
 This starts:
+
 - Backend server on port 5000 (Express + Vite middleware)
 - Frontend served via Vite HMR
 - Both accessible at the Replit preview URL
 
 ### Database Migrations
+
 ```bash
 npm run db:push        # Generate and apply migrations
 npm run db:push --force # Force apply (if schema changes conflict)
 ```
 
 ### Build for Production
+
 ```bash
 npm run build   # Build frontend and backend
 npm start       # Run production server
@@ -129,6 +142,7 @@ npm start       # Run production server
 ### November 12, 2025 - Authentication System Fully Removed ✅
 
 **Complete removal of authentication system:**
+
 - ✅ Removed all OAuth/Manus authentication references
 - ✅ Removed login pages and auth components (Login.tsx, AuthDialog.tsx)
 - ✅ Removed useAuth hook and all its imports from all pages
@@ -140,6 +154,7 @@ npm start       # Run production server
 - ✅ Cleaned up all remaining auth imports from Dashboard, Home, Analytics, PatientDetail, ReportGenerator
 
 **Technical Details:**
+
 - Deleted files: `Login.tsx`, `AuthDialog.tsx`, `useAuth.ts`, `oauth.ts`, `sdk.ts`
 - Modified: All `protectedProcedure` → `publicProcedure`
 - Modified: All `ctx.user.id` → hardcoded `1`
@@ -148,6 +163,7 @@ npm start       # Run production server
 - Simplified: Removed loading states from Home.tsx (no auth checks needed)
 
 **Impact:**
+
 - Application accessible immediately without login
 - All operations use default doctor ID = 1
 - Simplified deployment (no OAuth setup required)
@@ -196,6 +212,7 @@ npm start       # Run production server
 ## Design System
 
 **Color Palette:**
+
 - Verde Vivo (#10B981) - Success, positive actions
 - Azul Ciano (#06B6D4) - Information, highlights
 - Roxo Moderno (#8B5CF6) - AI elements
@@ -203,6 +220,7 @@ npm start       # Run production server
 - Âmbar Aviso (#F59E0B) - Warnings, attention
 
 **Typography:**
+
 - Headlines: Inter Bold (700)
 - Body: Inter Regular (400)
 - Code: JetBrains Mono
@@ -210,12 +228,14 @@ npm start       # Run production server
 ## Compliance & Security
 
 ### LGPD Compliance
+
 - Patient consent tracking (`patientConsent` table)
 - Complete audit logging (`auditLogs` table)
 - Data retention policies (`dataRetentionPolicy` table)
 - Right to be forgotten support
 
 ### Security Features
+
 - **Note:** Authentication removed - single-user mode (doctorId = 1)
 - Complete audit trail for all operations
 - IP address logging for compliance
@@ -225,20 +245,25 @@ npm start       # Run production server
 ## AI Features
 
 ### Suggestion Types
+
 - **Diagnosis** - Differential diagnosis suggestions
 - **Treatment** - Treatment plan recommendations
 - **Medication** - Medication suggestions with dosing
 - **Summary** - Clinical summary generation
 
 ### Explainability
+
 Each AI suggestion includes:
+
 - Step-by-step reasoning
 - Key factors considered
 - Evidence links and references
 - Alternative options
 
 ### Quality Feedback
+
 Doctors can rate AI suggestions on:
+
 - Clinical relevance (1-5)
 - Accuracy (1-5)
 - Usefulness (1-5)
@@ -246,18 +271,21 @@ Doctors can rate AI suggestions on:
 ## Future Roadmap
 
 ### Short-term (0-3 months)
+
 - [ ] Configure AI API keys (Gemini/LLM) for production
 - [ ] Test with real medical professionals
 - [ ] Deploy to production
 - [ ] Consider adding multi-user authentication if needed
 
 ### Medium-term (3-6 months)
+
 - [ ] Clinical trial pilot study
 - [ ] Real EHR integration (HL7/FHIR)
 - [ ] Medical image AI analysis
 - [ ] Mobile app development
 
 ### Long-term (6-12 months)
+
 - [ ] ANVISA regulatory approval
 - [ ] Scale to 1000+ doctors
 - [ ] Latin America expansion
@@ -268,6 +296,7 @@ Doctors can rate AI suggestions on:
 The project is successfully running on Replit with all migrations complete and the development server operational.
 
 **What's Working:**
+
 - ✅ PostgreSQL database with all 22 tables created
 - ✅ Frontend running on port 5000 with Vite HMR
 - ✅ Backend Express server with tRPC API
@@ -276,6 +305,7 @@ The project is successfully running on Replit with all migrations complete and t
 - ✅ Deployment configuration set up
 
 **Next Steps for Production:**
+
 1. Register the app with Manus OAuth to get a real `VITE_APP_ID`
 2. Configure AI API keys (Gemini or other LLM provider)
 3. Set up S3 or object storage for medical images
@@ -289,6 +319,7 @@ None at this time. Project successfully running on Replit with PostgreSQL.
 ## Documentation
 
 Additional documentation available:
+
 - `VITAIA_DESIGN_SYSTEM.md` - Complete design system guide
 - `ANVISA_COMPLIANCE.md` - Regulatory compliance documentation
 - `SCALABILITY_ROADMAP.md` - Technical scalability planning
@@ -297,6 +328,7 @@ Additional documentation available:
 ## Support
 
 For issues or questions about this deployment, check:
+
 1. Console logs in the workflow output
 2. Database connection status
 3. Environment variables configuration

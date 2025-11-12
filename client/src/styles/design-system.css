@@ -2,76 +2,76 @@
 
 :root {
   /* Primary Colors - Medical AI Blue */
-  --color-ai-blue-50: #E0F7FF;
-  --color-ai-blue-100: #B3ECFF;
-  --color-ai-blue-200: #80E0FF;
-  --color-ai-blue-300: #4DD4FF;
-  --color-ai-blue-400: #26CAFF;
-  --color-ai-blue-500: #00D9FF; /* Main AI Blue */
-  --color-ai-blue-600: #00B8E6;
-  --color-ai-blue-700: #0099CC;
-  --color-ai-blue-800: #007AB3;
+  --color-ai-blue-50: #e0f7ff;
+  --color-ai-blue-100: #b3ecff;
+  --color-ai-blue-200: #80e0ff;
+  --color-ai-blue-300: #4dd4ff;
+  --color-ai-blue-400: #26caff;
+  --color-ai-blue-500: #00d9ff; /* Main AI Blue */
+  --color-ai-blue-600: #00b8e6;
+  --color-ai-blue-700: #0099cc;
+  --color-ai-blue-800: #007ab3;
   --color-ai-blue-900: #005580;
 
   /* Secondary Colors - Medical Green */
-  --color-health-green-50: #E0FFF4;
-  --color-health-green-100: #B3FFE5;
-  --color-health-green-200: #80FFD4;
-  --color-health-green-300: #4DFFC3;
-  --color-health-green-400: #26FFB6;
-  --color-health-green-500: #00FF88; /* Main Health Green */
-  --color-health-green-600: #00E67A;
-  --color-health-green-700: #00CC6A;
-  --color-health-green-800: #00B35D;
+  --color-health-green-50: #e0fff4;
+  --color-health-green-100: #b3ffe5;
+  --color-health-green-200: #80ffd4;
+  --color-health-green-300: #4dffc3;
+  --color-health-green-400: #26ffb6;
+  --color-health-green-500: #00ff88; /* Main Health Green */
+  --color-health-green-600: #00e67a;
+  --color-health-green-700: #00cc6a;
+  --color-health-green-800: #00b35d;
   --color-health-green-900: #008044;
 
   /* Accent Colors - Innovation Purple */
-  --color-innovation-purple-50: #F3E0FF;
-  --color-innovation-purple-100: #E0B3FF;
-  --color-innovation-purple-200: #CC80FF;
-  --color-innovation-purple-300: #B84DFF;
-  --color-innovation-purple-400: #A826FF;
-  --color-innovation-purple-500: #9D00FF; /* Main Innovation Purple */
-  --color-innovation-purple-600: #8A00E6;
-  --color-innovation-purple-700: #7700CC;
-  --color-innovation-purple-800: #6400B3;
+  --color-innovation-purple-50: #f3e0ff;
+  --color-innovation-purple-100: #e0b3ff;
+  --color-innovation-purple-200: #cc80ff;
+  --color-innovation-purple-300: #b84dff;
+  --color-innovation-purple-400: #a826ff;
+  --color-innovation-purple-500: #9d00ff; /* Main Innovation Purple */
+  --color-innovation-purple-600: #8a00e6;
+  --color-innovation-purple-700: #7700cc;
+  --color-innovation-purple-800: #6400b3;
   --color-innovation-purple-900: #470080;
 
   /* Data Colors - Holographic Pink */
-  --color-data-pink-50: #FFE0F5;
-  --color-data-pink-100: #FFB3E6;
-  --color-data-pink-200: #FF80D6;
-  --color-data-pink-300: #FF4DC6;
-  --color-data-pink-400: #FF26BB;
-  --color-data-pink-500: #FF0099; /* Main Data Pink */
-  --color-data-pink-600: #E60088;
-  --color-data-pink-700: #CC0077;
-  --color-data-pink-800: #B30066;
+  --color-data-pink-50: #ffe0f5;
+  --color-data-pink-100: #ffb3e6;
+  --color-data-pink-200: #ff80d6;
+  --color-data-pink-300: #ff4dc6;
+  --color-data-pink-400: #ff26bb;
+  --color-data-pink-500: #ff0099; /* Main Data Pink */
+  --color-data-pink-600: #e60088;
+  --color-data-pink-700: #cc0077;
+  --color-data-pink-800: #b30066;
   --color-data-pink-900: #800049;
 
   /* Energy Colors - Active Orange */
-  --color-energy-orange-50: #FFF0E0;
-  --color-energy-orange-100: #FFD9B3;
-  --color-energy-orange-200: #FFBF80;
-  --color-energy-orange-300: #FFA54D;
-  --color-energy-orange-400: #FF9126;
-  --color-energy-orange-500: #FF6B00; /* Main Energy Orange */
-  --color-energy-orange-600: #E65F00;
-  --color-energy-orange-700: #CC5300;
-  --color-energy-orange-800: #B34700;
+  --color-energy-orange-50: #fff0e0;
+  --color-energy-orange-100: #ffd9b3;
+  --color-energy-orange-200: #ffbf80;
+  --color-energy-orange-300: #ffa54d;
+  --color-energy-orange-400: #ff9126;
+  --color-energy-orange-500: #ff6b00; /* Main Energy Orange */
+  --color-energy-orange-600: #e65f00;
+  --color-energy-orange-700: #cc5300;
+  --color-energy-orange-800: #b34700;
   --color-energy-orange-900: #803300;
 
   /* Neutral Colors - Dark Space */
-  --color-space-50: #F0F2F5;
-  --color-space-100: #E1E4E8;
-  --color-space-200: #C5CBD3;
-  --color-space-300: #A9B1BD;
-  --color-space-400: #8D98A7;
-  --color-space-500: #717E91;
-  --color-space-600: #5A6575;
-  --color-space-700: #434C59;
-  --color-space-800: #2C333D;
-  --color-space-900: #0A0E14; /* Deep Space Background */
+  --color-space-50: #f0f2f5;
+  --color-space-100: #e1e4e8;
+  --color-space-200: #c5cbd3;
+  --color-space-300: #a9b1bd;
+  --color-space-400: #8d98a7;
+  --color-space-500: #717e91;
+  --color-space-600: #5a6575;
+  --color-space-700: #434c59;
+  --color-space-800: #2c333d;
+  --color-space-900: #0a0e14; /* Deep Space Background */
   --color-space-950: #050609;
 
   /* Glassmorphism */
@@ -110,11 +110,19 @@
 
 /* Gradient Backgrounds */
 .gradient-ai {
-  background: linear-gradient(135deg, var(--color-ai-blue-500) 0%, var(--color-innovation-purple-500) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-ai-blue-500) 0%,
+    var(--color-innovation-purple-500) 100%
+  );
 }
 
 .gradient-health {
-  background: linear-gradient(135deg, var(--color-health-green-500) 0%, var(--color-ai-blue-500) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-health-green-500) 0%,
+    var(--color-ai-blue-500) 100%
+  );
 }
 
 .gradient-holographic {
@@ -131,8 +139,13 @@
 }
 
 @keyframes holographicShift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 /* Glass Card */
@@ -171,21 +184,36 @@
 /* Animated Border */
 .animated-border {
   position: relative;
-  background: linear-gradient(var(--color-space-900), var(--color-space-900)) padding-box,
-              linear-gradient(135deg, var(--color-ai-blue-500), var(--color-innovation-purple-500)) border-box;
+  background:
+    linear-gradient(var(--color-space-900), var(--color-space-900)) padding-box,
+    linear-gradient(
+        135deg,
+        var(--color-ai-blue-500),
+        var(--color-innovation-purple-500)
+      )
+      border-box;
   border: 2px solid transparent;
   animation: borderRotate 3s linear infinite;
 }
 
 @keyframes borderRotate {
-  0% { filter: hue-rotate(0deg); }
-  100% { filter: hue-rotate(360deg); }
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
 }
 
 /* Pulse Animation */
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 .pulse {
@@ -194,8 +222,13 @@
 
 /* Float Animation */
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 .float {
@@ -209,19 +242,28 @@
 }
 
 .scan-line::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 2px;
-  background: linear-gradient(90deg, transparent, var(--color-ai-blue-500), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-ai-blue-500),
+    transparent
+  );
   animation: scan 3s linear infinite;
 }
 
 @keyframes scan {
-  0% { left: -100%; }
-  100% { left: 100%; }
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
 }
 
 /* Particle Effect */
@@ -235,15 +277,17 @@
 
 /* Text Glow */
 .text-glow-ai {
-  text-shadow: 0 0 10px rgba(0, 217, 255, 0.8),
-               0 0 20px rgba(0, 217, 255, 0.6),
-               0 0 30px rgba(0, 217, 255, 0.4);
+  text-shadow:
+    0 0 10px rgba(0, 217, 255, 0.8),
+    0 0 20px rgba(0, 217, 255, 0.6),
+    0 0 30px rgba(0, 217, 255, 0.4);
 }
 
 .text-glow-health {
-  text-shadow: 0 0 10px rgba(0, 255, 136, 0.8),
-               0 0 20px rgba(0, 255, 136, 0.6),
-               0 0 30px rgba(0, 255, 136, 0.4);
+  text-shadow:
+    0 0 10px rgba(0, 255, 136, 0.8),
+    0 0 20px rgba(0, 255, 136, 0.6),
+    0 0 30px rgba(0, 255, 136, 0.4);
 }
 
 /* Holographic Text */
@@ -268,7 +312,7 @@
 }
 
 .data-stream::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -285,6 +329,10 @@
 }
 
 @keyframes dataFlow {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(100px); }
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(100px);
+  }
 }

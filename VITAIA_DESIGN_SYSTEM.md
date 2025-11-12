@@ -13,33 +13,33 @@
 
 ### Cores Primárias
 
-| Cor | Hex | RGB | Uso |
-|-----|-----|-----|-----|
-| **Azul Profundo** | `#0F172A` | 15, 23, 42 | Background principal, textos escuros |
-| **Verde Vivo** | `#10B981` | 16, 185, 129 | Ações positivas, sucesso, aprovação |
-| **Azul Ciano** | `#06B6D4` | 6, 182, 212 | Informações, destaques, links |
-| **Roxo Moderno** | `#8B5CF6` | 139, 92, 246 | Elementos de IA, gradientes |
+| Cor               | Hex       | RGB          | Uso                                  |
+| ----------------- | --------- | ------------ | ------------------------------------ |
+| **Azul Profundo** | `#0F172A` | 15, 23, 42   | Background principal, textos escuros |
+| **Verde Vivo**    | `#10B981` | 16, 185, 129 | Ações positivas, sucesso, aprovação  |
+| **Azul Ciano**    | `#06B6D4` | 6, 182, 212  | Informações, destaques, links        |
+| **Roxo Moderno**  | `#8B5CF6` | 139, 92, 246 | Elementos de IA, gradientes          |
 
 ### Cores Secundárias
 
-| Cor | Hex | RGB | Uso |
-|-----|-----|-----|-----|
-| **Vermelho Alerta** | `#EF4444` | 239, 68, 68 | Erros, avisos críticos |
-| **Âmbar Aviso** | `#F59E0B` | 245, 158, 11 | Avisos, atenção |
-| **Cinza Neutro** | `#6B7280` | 107, 114, 128 | Textos secundários, borders |
-| **Branco Puro** | `#FFFFFF` | 255, 255, 255 | Backgrounds claros, textos |
+| Cor                 | Hex       | RGB           | Uso                         |
+| ------------------- | --------- | ------------- | --------------------------- |
+| **Vermelho Alerta** | `#EF4444` | 239, 68, 68   | Erros, avisos críticos      |
+| **Âmbar Aviso**     | `#F59E0B` | 245, 158, 11  | Avisos, atenção             |
+| **Cinza Neutro**    | `#6B7280` | 107, 114, 128 | Textos secundários, borders |
+| **Branco Puro**     | `#FFFFFF` | 255, 255, 255 | Backgrounds claros, textos  |
 
 ### Gradientes Signature
 
 ```css
 /* Gradiente Verde-Ciano (Vida + Tecnologia) */
-background: linear-gradient(135deg, #10B981 0%, #06B6D4 100%);
+background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
 
 /* Gradiente Roxo-Azul (IA Avançada) */
-background: linear-gradient(135deg, #8B5CF6 0%, #0F172A 100%);
+background: linear-gradient(135deg, #8b5cf6 0%, #0f172a 100%);
 
 /* Gradiente Dinâmico (Energia) */
-background: linear-gradient(90deg, #10B981 0%, #06B6D4 50%, #8B5CF6 100%);
+background: linear-gradient(90deg, #10b981 0%, #06b6d4 50%, #8b5cf6 100%);
 ```
 
 ---
@@ -48,25 +48,25 @@ background: linear-gradient(90deg, #10B981 0%, #06B6D4 50%, #8B5CF6 100%);
 
 ### Fontes
 
-| Tipo | Fonte | Uso |
-|------|-------|-----|
-| **Headlines** | Inter Bold (700) | Títulos, H1, H2 |
-| **Subheadings** | Inter SemiBold (600) | Subtítulos, H3, H4 |
-| **Body** | Inter Regular (400) | Textos, parágrafos |
-| **Code** | JetBrains Mono | Código, dados técnicos |
+| Tipo            | Fonte                | Uso                    |
+| --------------- | -------------------- | ---------------------- |
+| **Headlines**   | Inter Bold (700)     | Títulos, H1, H2        |
+| **Subheadings** | Inter SemiBold (600) | Subtítulos, H3, H4     |
+| **Body**        | Inter Regular (400)  | Textos, parágrafos     |
+| **Code**        | JetBrains Mono       | Código, dados técnicos |
 
 ### Escalas Tipográficas
 
-| Tamanho | Peso | Uso |
-|---------|------|-----|
-| **H1** | 48px / 700 | Títulos principais |
-| **H2** | 36px / 600 | Títulos de seção |
-| **H3** | 28px / 600 | Subtítulos |
-| **H4** | 24px / 600 | Cabeçalhos de card |
+| Tamanho        | Peso       | Uso                |
+| -------------- | ---------- | ------------------ |
+| **H1**         | 48px / 700 | Títulos principais |
+| **H2**         | 36px / 600 | Títulos de seção   |
+| **H3**         | 28px / 600 | Subtítulos         |
+| **H4**         | 24px / 600 | Cabeçalhos de card |
 | **Body Large** | 18px / 400 | Textos importantes |
-| **Body** | 16px / 400 | Textos padrão |
+| **Body**       | 16px / 400 | Textos padrão      |
 | **Body Small** | 14px / 400 | Textos secundários |
-| **Caption** | 12px / 500 | Labels, badges |
+| **Caption**    | 12px / 500 | Labels, badges     |
 
 ---
 
@@ -75,6 +75,7 @@ background: linear-gradient(90deg, #10B981 0%, #06B6D4 50%, #8B5CF6 100%);
 ### Botões
 
 **Primário (Verde Vivo)**
+
 ```
 Cor: #10B981
 Hover: #059669
@@ -84,6 +85,7 @@ Border Radius: 8px
 ```
 
 **Secundário (Azul Ciano)**
+
 ```
 Cor: #06B6D4
 Hover: #0891B2
@@ -93,6 +95,7 @@ Border Radius: 8px
 ```
 
 **Terciário (Roxo)**
+
 ```
 Cor: #8B5CF6
 Hover: #7C3AED
@@ -128,24 +131,28 @@ Focus Background: #FFFFFF
 ### Badges
 
 **Sucesso (Verde)**
+
 ```
 Background: #D1FAE5
 Color: #065F46
 ```
 
 **Aviso (Âmbar)**
+
 ```
 Background: #FEF3C7
 Color: #92400E
 ```
 
 **Erro (Vermelho)**
+
 ```
 Background: #FEE2E2
 Color: #7F1D1D
 ```
 
 **Info (Azul)**
+
 ```
 Background: #DBEAFE
 Color: #1E40AF
@@ -203,20 +210,35 @@ box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
 ```css
 /* Fade In */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Slide Up */
 @keyframes slideUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 /* Pulse (IA Ativa) */
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 ```
 
@@ -245,24 +267,28 @@ Desktop: > 1024px
 ## 🎯 Padrões de Uso
 
 ### Página de Login
+
 - Fundo com gradiente roxo-azul
 - Logo VITAIA centralizado
 - Formulário minimalista
 - Botão primário verde
 
 ### Dashboard
+
 - Sidebar escura com logo
 - Cards com dados do paciente
 - Gráficos com cores primárias
 - Notificações em tempo real
 
 ### Consulta/Paciente
+
 - Header com informações do paciente
 - Tabs para diferentes seções
 - Painel de IA com destaque roxo
 - Botões de ação em verde
 
 ### Análise de Imagem
+
 - Preview da imagem em destaque
 - Loading animation com pulse roxo
 - Resultado com badge de confiança
@@ -275,35 +301,35 @@ Desktop: > 1024px
 ```css
 /* Root Colors */
 :root {
-  --color-primary: #10B981;
+  --color-primary: #10b981;
   --color-primary-dark: #059669;
-  --color-secondary: #06B6D4;
-  --color-tertiary: #8B5CF6;
-  --color-danger: #EF4444;
-  --color-warning: #F59E0B;
-  --color-success: #10B981;
-  --color-info: #06B6D4;
-  --color-neutral: #6B7280;
-  --color-bg-dark: #0F172A;
-  --color-bg-light: #FFFFFF;
-  --color-border: #E5E7EB;
-  
+  --color-secondary: #06b6d4;
+  --color-tertiary: #8b5cf6;
+  --color-danger: #ef4444;
+  --color-warning: #f59e0b;
+  --color-success: #10b981;
+  --color-info: #06b6d4;
+  --color-neutral: #6b7280;
+  --color-bg-dark: #0f172a;
+  --color-bg-light: #ffffff;
+  --color-border: #e5e7eb;
+
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 16px;
   --spacing-lg: 24px;
   --spacing-xl: 32px;
-  
+
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
   --radius-full: 9999px;
-  
+
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-  
+
   --transition-fast: all 0.15s ease;
   --transition-normal: all 0.3s ease;
   --transition-slow: all 0.5s ease;
@@ -315,16 +341,19 @@ Desktop: > 1024px
 ## 📊 Componentes Específicos Médicos
 
 ### Status do Paciente
+
 - Verde: Estável
 - Âmbar: Atenção
 - Vermelho: Crítico
 
 ### Confiança de IA
+
 - Verde: > 80%
 - Âmbar: 60-80%
 - Vermelho: < 60%
 
 ### Prioridade de Consulta
+
 - Verde: Baixa
 - Âmbar: Média
 - Vermelho: Alta
@@ -334,6 +363,7 @@ Desktop: > 1024px
 ## 🎬 Animações de Carregamento
 
 ### Skeleton Loading
+
 ```
 Cor: #E5E7EB
 Animação: Shimmer de esquerda para direita
@@ -341,6 +371,7 @@ Duração: 2s
 ```
 
 ### Loading Spinner
+
 ```
 Cor: Gradiente roxo-azul
 Tamanho: 40px
@@ -348,6 +379,7 @@ Animação: Rotação contínua
 ```
 
 ### AI Processing
+
 ```
 Cor: Roxo com pulse
 Animação: Pulse suave
@@ -359,11 +391,13 @@ Duração: 1.5s
 ## 📈 Temas Suportados
 
 ### Dark Mode (Padrão)
+
 - Background: #0F172A
 - Texto: #FFFFFF
 - Cards: #1E293B
 
 ### Light Mode
+
 - Background: #FFFFFF
 - Texto: #0F172A
 - Cards: #F8FAFC
@@ -373,6 +407,7 @@ Duração: 1.5s
 ## 🔄 Consistência Visual
 
 Todos os componentes devem seguir:
+
 1. Paleta de cores definida
 2. Tipografia padronizada
 3. Espaçamento consistente

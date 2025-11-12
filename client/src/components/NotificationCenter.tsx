@@ -15,7 +15,7 @@ export default function NotificationCenter() {
   const markAsReadMutation = trpc.notifications.markAsRead.useMutation();
   const [isOpen, setIsOpen] = useState(false);
 
-  const unreadCount = notifications.filter((n) => !n.read).length;
+  const unreadCount = notifications.filter(n => !n.read).length;
 
   const handleMarkAsRead = (notificationId: number) => {
     markAsReadMutation.mutate({ notificationId });
@@ -66,14 +66,19 @@ export default function NotificationCenter() {
           )}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-80 max-h-96 overflow-y-auto">
+      <DropdownMenuContent
+        align="end"
+        className="w-80 max-h-96 overflow-y-auto"
+      >
         <div className="p-4">
           <h3 className="font-semibold">Notificações</h3>
           {notifications.length === 0 ? (
-            <p className="text-sm text-muted-foreground mt-2">Nenhuma notificação</p>
+            <p className="text-sm text-muted-foreground mt-2">
+              Nenhuma notificação
+            </p>
           ) : (
             <div className="space-y-2 mt-4">
-              {notifications.map((notification) => (
+              {notifications.map(notification => (
                 <div
                   key={notification.id}
                   className={`p-3 rounded-lg border cursor-pointer transition-colors ${getNotificationColor(
@@ -83,16 +88,22 @@ export default function NotificationCenter() {
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-2 flex-1">
-                      <span className="text-lg">{getNotificationIcon(notification.type)}</span>
+                      <span className="text-lg">
+                        {getNotificationIcon(notification.type)}
+                      </span>
                       <div className="flex-1">
-                        <p className="font-medium text-sm">{notification.title}</p>
+                        <p className="font-medium text-sm">
+                          {notification.title}
+                        </p>
                         {notification.message && (
                           <p className="text-xs text-muted-foreground mt-1">
                             {notification.message}
                           </p>
                         )}
                         <p className="text-xs text-muted-foreground mt-1">
-                          {new Date(notification.createdAt).toLocaleDateString("pt-BR")}
+                          {new Date(notification.createdAt).toLocaleDateString(
+                            "pt-BR"
+                          )}
                         </p>
                       </div>
                     </div>

@@ -10,11 +10,11 @@ const t = initTRPC.context<TrpcContext>().create({
 const isAuthenticated = t.middleware(({ next, ctx }) => {
   if (!ctx.user) {
     throw new TRPCError({
-      code: 'UNAUTHORIZED',
-      message: 'Usuário não autenticado. Faça login para continuar.',
+      code: "UNAUTHORIZED",
+      message: "Usuário não autenticado. Faça login para continuar.",
     });
   }
-  
+
   return next({
     ctx: {
       ...ctx,
@@ -27,18 +27,18 @@ const isAuthenticated = t.middleware(({ next, ctx }) => {
 const isAdmin = t.middleware(({ next, ctx }) => {
   if (!ctx.user) {
     throw new TRPCError({
-      code: 'UNAUTHORIZED',
-      message: 'Usuário não autenticado',
+      code: "UNAUTHORIZED",
+      message: "Usuário não autenticado",
     });
   }
-  
-  if (ctx.user.role !== 'admin') {
+
+  if (ctx.user.role !== "admin") {
     throw new TRPCError({
-      code: 'FORBIDDEN',
-      message: 'Acesso restrito a administradores',
+      code: "FORBIDDEN",
+      message: "Acesso restrito a administradores",
     });
   }
-  
+
   return next({
     ctx: {
       ...ctx,

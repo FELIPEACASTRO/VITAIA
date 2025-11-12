@@ -1,7 +1,27 @@
 import DashboardLayout from "@/components/DashboardLayout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { trpc } from "@/lib/trpc";
-import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import {
+  BarChart,
+  Bar,
+  LineChart,
+  Line,
+  PieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 import { Loader2 } from "lucide-react";
 
 export default function Analytics() {
@@ -17,11 +37,13 @@ export default function Analytics() {
     );
   }
 
-  const aiStatsData = stats?.aiStats ? [
-    { name: "Aprovadas", value: stats.aiStats.approved },
-    { name: "Rejeitadas", value: stats.aiStats.rejected },
-    { name: "Pendentes", value: stats.aiStats.pending },
-  ] : [];
+  const aiStatsData = stats?.aiStats
+    ? [
+        { name: "Aprovadas", value: stats.aiStats.approved },
+        { name: "Rejeitadas", value: stats.aiStats.rejected },
+        { name: "Pendentes", value: stats.aiStats.pending },
+      ]
+    : [];
 
   const COLORS = ["#3b82f6", "#ef4444", "#f59e0b"];
 
@@ -40,10 +62,14 @@ export default function Analytics() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium">Total de Pacientes</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Total de Pacientes
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">{stats?.patientCount || 0}</div>
+              <div className="text-3xl font-bold">
+                {stats?.patientCount || 0}
+              </div>
               <p className="text-xs text-muted-foreground mt-1">
                 Pacientes cadastrados
               </p>
@@ -52,10 +78,14 @@ export default function Analytics() {
 
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium">Total de Consultas</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Total de Consultas
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">{stats?.consultationCount || 0}</div>
+              <div className="text-3xl font-bold">
+                {stats?.consultationCount || 0}
+              </div>
               <p className="text-xs text-muted-foreground mt-1">
                 Consultas registradas
               </p>
@@ -64,10 +94,14 @@ export default function Analytics() {
 
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium">Sugestões de IA</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Sugestões de IA
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">{stats?.aiStats?.total || 0}</div>
+              <div className="text-3xl font-bold">
+                {stats?.aiStats?.total || 0}
+              </div>
               <p className="text-xs text-muted-foreground mt-1">
                 Total de sugestões geradas
               </p>
@@ -99,7 +133,10 @@ export default function Analytics() {
                       dataKey="value"
                     >
                       {aiStatsData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={COLORS[index % COLORS.length]}
+                        />
                       ))}
                     </Pie>
                     <Tooltip />
@@ -134,7 +171,9 @@ export default function Analytics() {
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-sm font-medium">Pendentes de Revisão</span>
+                <span className="text-sm font-medium">
+                  Pendentes de Revisão
+                </span>
                 <span className="text-2xl font-bold text-amber-600">
                   {stats?.aiStats?.pending || 0}
                 </span>
@@ -144,8 +183,11 @@ export default function Analytics() {
                   <span className="text-sm font-medium">Taxa de Aprovação</span>
                   <span className="text-lg font-bold">
                     {stats?.aiStats?.total && stats.aiStats.total > 0
-                      ? Math.round((stats.aiStats.approved / stats.aiStats.total) * 100)
-                      : 0}%
+                      ? Math.round(
+                          (stats.aiStats.approved / stats.aiStats.total) * 100
+                        )
+                      : 0}
+                    %
                   </span>
                 </div>
               </div>
@@ -191,9 +233,7 @@ export default function Analytics() {
                 <div className="text-3xl font-bold text-orange-600">
                   {stats?.aiStats?.pending || 0}
                 </div>
-                <p className="text-xs text-muted-foreground mt-2">
-                  Pendentes
-                </p>
+                <p className="text-xs text-muted-foreground mt-2">Pendentes</p>
               </div>
             </div>
           </CardContent>

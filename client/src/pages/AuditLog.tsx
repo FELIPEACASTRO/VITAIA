@@ -1,5 +1,11 @@
 import DashboardLayout from "@/components/DashboardLayout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -91,21 +97,30 @@ export default function AuditLog() {
     },
   ];
 
-  const filteredLogs = mockAuditLogs.filter((log) => {
+  const filteredLogs = mockAuditLogs.filter(log => {
     const matchesSearch =
       log.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       log.resourceName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       log.action.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesAction = !filterAction || log.action === filterAction;
-    const matchesResourceType = !filterResourceType || log.resourceType === filterResourceType;
+    const matchesResourceType =
+      !filterResourceType || log.resourceType === filterResourceType;
 
     return matchesSearch && matchesAction && matchesResourceType;
   });
 
   const handleExportCSV = () => {
-    const headers = ["Data/Hora", "Usuário", "Ação", "Recurso", "ID", "Endereço IP", "Detalhes"];
-    const rows = filteredLogs.map((log) => [
+    const headers = [
+      "Data/Hora",
+      "Usuário",
+      "Ação",
+      "Recurso",
+      "ID",
+      "Endereço IP",
+      "Detalhes",
+    ];
+    const rows = filteredLogs.map(log => [
       log.timestamp.toLocaleString("pt-BR"),
       log.userName,
       log.action,
@@ -115,7 +130,7 @@ export default function AuditLog() {
       log.details,
     ]);
 
-    const csv = [headers, ...rows].map((row) => row.join(",")).join("\n");
+    const csv = [headers, ...rows].map(row => row.join(",")).join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -150,7 +165,7 @@ export default function AuditLog() {
                 <Input
                   placeholder="Usuário, recurso, ação..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={e => setSearchTerm(e.target.value)}
                   className="mt-1"
                 />
               </div>
@@ -159,7 +174,7 @@ export default function AuditLog() {
                 <label className="text-sm font-semibold">Ação</label>
                 <select
                   value={filterAction}
-                  onChange={(e) => setFilterAction(e.target.value)}
+                  onChange={e => setFilterAction(e.target.value)}
                   className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md text-sm"
                 >
                   <option value="">Todas as ações</option>
@@ -175,7 +190,7 @@ export default function AuditLog() {
                 <label className="text-sm font-semibold">Tipo de Recurso</label>
                 <select
                   value={filterResourceType}
-                  onChange={(e) => setFilterResourceType(e.target.value)}
+                  onChange={e => setFilterResourceType(e.target.value)}
                   className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md text-sm"
                 >
                   <option value="">Todos os recursos</option>
@@ -187,7 +202,11 @@ export default function AuditLog() {
               </div>
 
               <div className="flex items-end">
-                <Button onClick={handleExportCSV} variant="outline" className="w-full">
+                <Button
+                  onClick={handleExportCSV}
+                  variant="outline"
+                  className="w-full"
+                >
                   <Download className="w-4 h-4 mr-2" />
                   Exportar CSV
                 </Button>
@@ -200,7 +219,9 @@ export default function AuditLog() {
         <Card>
           <CardHeader>
             <CardTitle>Registros de Auditoria</CardTitle>
-            <CardDescription>{filteredLogs.length} registros encontrados</CardDescription>
+            <CardDescription>
+              {filteredLogs.length} registros encontrados
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
@@ -209,7 +230,7 @@ export default function AuditLog() {
                   Nenhum registro encontrado
                 </div>
               ) : (
-                filteredLogs.map((log) => (
+                filteredLogs.map(log => (
                   <div
                     key={log.id}
                     className={`p-4 rounded-lg border ${getResourceColor(log.resourceType)}`}
@@ -217,13 +238,17 @@ export default function AuditLog() {
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
-                          <span className="font-semibold text-sm">{log.userName}</span>
+                          <span className="font-semibold text-sm">
+                            {log.userName}
+                          </span>
                           <Badge className={getActionColor(log.action)}>
                             {log.action.replace(/_/g, " ")}
                           </Badge>
                           <Badge variant="outline">{log.resourceType}</Badge>
                         </div>
-                        <p className="text-sm text-gray-700">{log.resourceName}</p>
+                        <p className="text-sm text-gray-700">
+                          {log.resourceName}
+                        </p>
                       </div>
                       <div className="text-right text-xs text-gray-500">
                         <div className="flex items-center gap-1 justify-end mb-1">
@@ -248,19 +273,24 @@ export default function AuditLog() {
           </CardHeader>
           <CardContent className="space-y-2 text-sm text-gray-700">
             <p>
-              ✓ <strong>Rastreamento Completo:</strong> Todos os acessos a dados de pacientes são registrados
+              ✓ <strong>Rastreamento Completo:</strong> Todos os acessos a dados
+              de pacientes são registrados
             </p>
             <p>
-              ✓ <strong>Retenção de Dados:</strong> Logs são mantidos por 36 meses conforme regulamentação
+              ✓ <strong>Retenção de Dados:</strong> Logs são mantidos por 36
+              meses conforme regulamentação
             </p>
             <p>
-              ✓ <strong>Direito ao Esquecimento:</strong> Dados de pacientes podem ser deletados a pedido
+              ✓ <strong>Direito ao Esquecimento:</strong> Dados de pacientes
+              podem ser deletados a pedido
             </p>
             <p>
-              ✓ <strong>Consentimento:</strong> Registro de consentimento para processamento de dados
+              ✓ <strong>Consentimento:</strong> Registro de consentimento para
+              processamento de dados
             </p>
             <p>
-              ✓ <strong>Transparência:</strong> Pacientes podem solicitar cópia de seus dados
+              ✓ <strong>Transparência:</strong> Pacientes podem solicitar cópia
+              de seus dados
             </p>
           </CardContent>
         </Card>

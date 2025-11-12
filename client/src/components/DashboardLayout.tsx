@@ -14,7 +14,17 @@ import {
 } from "@/components/ui/sidebar";
 import { APP_LOGO, APP_TITLE } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
-import { LayoutDashboard, PanelLeft, Users, BarChart3, FileText, Shield, Moon, Sun, User } from "lucide-react";
+import {
+  LayoutDashboard,
+  PanelLeft,
+  Users,
+  BarChart3,
+  FileText,
+  Shield,
+  Moon,
+  Sun,
+  User,
+} from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import NotificationCenter from "./NotificationCenter";
@@ -235,9 +245,11 @@ function DashboardLayoutContent({
             <button
               onClick={toggleTheme}
               className="h-9 w-9 flex items-center justify-center hover:bg-accent rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              title={theme === 'dark' ? 'Ativar modo claro' : 'Ativar modo escuro'}
+              title={
+                theme === "dark" ? "Ativar modo claro" : "Ativar modo escuro"
+              }
             >
-              {theme === 'dark' ? (
+              {theme === "dark" ? (
                 <Sun className="h-4 w-4 text-muted-foreground" />
               ) : (
                 <Moon className="h-4 w-4 text-muted-foreground" />

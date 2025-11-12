@@ -1,9 +1,18 @@
 import { APP_TAGLINE } from "@/const";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
-import { 
-  Activity, Users, Brain, TrendingUp, Plus, Sparkles,
-  ArrowRight, Zap, ChevronRight, Clock, CheckCircle2
+import {
+  Activity,
+  Users,
+  Brain,
+  TrendingUp,
+  Plus,
+  Sparkles,
+  ArrowRight,
+  Zap,
+  ChevronRight,
+  Clock,
+  CheckCircle2,
 } from "lucide-react";
 import { useLocation } from "wouter";
 
@@ -29,8 +38,8 @@ export default function Home() {
               onClick={() => setLocation("/pacientes")}
               className="relative overflow-hidden group h-12 px-6"
               style={{
-                background: 'linear-gradient(135deg, #00D9FF 0%, #9D00FF 100%)',
-                boxShadow: '0 10px 30px rgba(0, 217, 255, 0.3)',
+                background: "linear-gradient(135deg, #00D9FF 0%, #9D00FF 100%)",
+                boxShadow: "0 10px 30px rgba(0, 217, 255, 0.3)",
               }}
             >
               <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
@@ -82,24 +91,44 @@ export default function Home() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Recent Activity */}
           <div className="lg:col-span-2 space-y-4">
-            <GlassCard title="Atividade Recente" icon={<Clock className="w-5 h-5" />}>
+            <GlassCard
+              title="Atividade Recente"
+              icon={<Clock className="w-5 h-5" />}
+            >
               <div className="space-y-3">
                 {[
-                  { patient: "Maria Silva", action: "Consulta completada", time: "Há 2 horas", status: "success" },
-                  { patient: "João Santos", action: "Análise IA solicitada", time: "Há 4 horas", status: "processing" },
-                  { patient: "Ana Costa", action: "Exames recebidos", time: "Há 1 dia", status: "success" },
+                  {
+                    patient: "Maria Silva",
+                    action: "Consulta completada",
+                    time: "Há 2 horas",
+                    status: "success",
+                  },
+                  {
+                    patient: "João Santos",
+                    action: "Análise IA solicitada",
+                    time: "Há 4 horas",
+                    status: "processing",
+                  },
+                  {
+                    patient: "Ana Costa",
+                    action: "Exames recebidos",
+                    time: "Há 1 dia",
+                    status: "success",
+                  },
                 ].map((item, i) => (
                   <div
                     key={i}
                     className="flex items-center justify-between p-4 bg-[rgba(255,255,255,0.03)] hover:bg-[rgba(255,255,255,0.06)] rounded-xl border border-[rgba(255,255,255,0.05)] transition-all duration-300 cursor-pointer group"
                   >
                     <div className="flex items-center gap-4">
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                        item.status === 'success' 
-                          ? 'bg-gradient-to-br from-[#00FF88]/20 to-[#00CC6A]/20' 
-                          : 'bg-gradient-to-br from-[#00D9FF]/20 to-[#0099CC]/20'
-                      }`}>
-                        {item.status === 'success' ? (
+                      <div
+                        className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                          item.status === "success"
+                            ? "bg-gradient-to-br from-[#00FF88]/20 to-[#00CC6A]/20"
+                            : "bg-gradient-to-br from-[#00D9FF]/20 to-[#0099CC]/20"
+                        }`}
+                      >
+                        {item.status === "success" ? (
                           <CheckCircle2 className="w-5 h-5 text-[#00FF88]" />
                         ) : (
                           <Brain className="w-5 h-5 text-[#00D9FF] animate-pulse" />
@@ -111,7 +140,9 @@ export default function Home() {
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <span className="text-[#717E91] text-xs">{item.time}</span>
+                      <span className="text-[#717E91] text-xs">
+                        {item.time}
+                      </span>
                       <ChevronRight className="w-4 h-4 text-[#717E91] group-hover:text-[#00D9FF] transition-colors" />
                     </div>
                   </div>
@@ -159,8 +190,8 @@ export default function Home() {
               </div>
             </GlassCard>
 
-            <GlassCard 
-              title="Recursos IA" 
+            <GlassCard
+              title="Recursos IA"
               icon={<Sparkles className="w-5 h-5 text-[#9D00FF]" />}
               gradient="from-[#9D00FF]/10 to-[#7000FF]/5"
             >
@@ -169,9 +200,12 @@ export default function Home() {
                   "Diagnóstico Inteligente",
                   "Análise de Imagens",
                   "Recomendações Médicas",
-                  "Multi-Especialidade"
+                  "Multi-Especialidade",
                 ].map((feature, i) => (
-                  <li key={i} className="flex items-center gap-3 text-[#E1E4E8] text-sm">
+                  <li
+                    key={i}
+                    className="flex items-center gap-3 text-[#E1E4E8] text-sm"
+                  >
                     <div className="w-2 h-2 rounded-full bg-gradient-to-r from-[#9D00FF] to-[#00D9FF] animate-pulse" />
                     {feature}
                   </li>
@@ -186,8 +220,10 @@ export default function Home() {
           <div className="absolute -inset-0.5 bg-gradient-to-r from-[#00D9FF] via-[#9D00FF] to-[#00FF88] rounded-2xl blur opacity-20 group-hover:opacity-30 transition-opacity" />
           <div className="relative bg-[rgba(15,23,42,0.7)] backdrop-blur-xl rounded-2xl p-6 border border-[rgba(255,255,255,0.1)]">
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#00D9FF] to-[#9D00FF] flex items-center justify-center flex-shrink-0"
-                style={{ boxShadow: '0 0 20px rgba(0, 217, 255, 0.4)' }}>
+              <div
+                className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#00D9FF] to-[#9D00FF] flex items-center justify-center flex-shrink-0"
+                style={{ boxShadow: "0 0 20px rgba(0, 217, 255, 0.4)" }}
+              >
                 <Brain className="w-6 h-6 text-white" />
               </div>
               <div className="flex-1">
@@ -196,9 +232,11 @@ export default function Home() {
                   Dica de IA do Dia
                 </h3>
                 <p className="text-[#A9B1BD] leading-relaxed">
-                  Use a IA para gerar sugestões de diagnóstico baseadas em diretrizes clínicas atualizadas. 
-                  Sempre revise as recomendações antes de prescrever. A combinação de experiência médica e inteligência artificial 
-                  resulta em decisões clínicas mais precisas.
+                  Use a IA para gerar sugestões de diagnóstico baseadas em
+                  diretrizes clínicas atualizadas. Sempre revise as
+                  recomendações antes de prescrever. A combinação de experiência
+                  médica e inteligência artificial resulta em decisões clínicas
+                  mais precisas.
                 </p>
               </div>
             </div>
@@ -243,7 +281,9 @@ function StatCard({
     <div className="relative group">
       <div
         className="absolute -inset-0.5 rounded-2xl blur opacity-0 group-hover:opacity-40 transition-opacity duration-300"
-        style={{ background: `linear-gradient(135deg, ${glowColor}, transparent)` }}
+        style={{
+          background: `linear-gradient(135deg, ${glowColor}, transparent)`,
+        }}
       />
       <div className="relative bg-[rgba(15,23,42,0.7)] backdrop-blur-xl rounded-2xl p-6 border border-[rgba(255,255,255,0.08)] hover:border-[rgba(255,255,255,0.15)] transition-all duration-300">
         <div className="flex items-start justify-between mb-4">
@@ -277,7 +317,9 @@ function GlassCard({
   gradient?: string;
 }) {
   return (
-    <div className={`relative bg-[rgba(15,23,42,0.7)] backdrop-blur-xl rounded-2xl p-6 border border-[rgba(255,255,255,0.08)] ${gradient ? `bg-gradient-to-br ${gradient}` : ''}`}>
+    <div
+      className={`relative bg-[rgba(15,23,42,0.7)] backdrop-blur-xl rounded-2xl p-6 border border-[rgba(255,255,255,0.08)] ${gradient ? `bg-gradient-to-br ${gradient}` : ""}`}
+    >
       <div className="flex items-center gap-3 mb-6">
         <div className="text-[#00D9FF]">{icon}</div>
         <h2 className="text-xl font-bold text-white">{title}</h2>
@@ -299,10 +341,7 @@ function QuickActionButton({
   onClick: () => void;
 }) {
   return (
-    <button
-      onClick={onClick}
-      className="w-full group relative overflow-hidden"
-    >
+    <button onClick={onClick} className="w-full group relative overflow-hidden">
       <div className="relative bg-[rgba(255,255,255,0.03)] hover:bg-[rgba(255,255,255,0.06)] rounded-xl p-4 border border-[rgba(255,255,255,0.05)] hover:border-[rgba(255,255,255,0.1)] transition-all duration-300 flex items-center gap-3">
         <div
           className={`w-10 h-10 rounded-lg bg-gradient-to-br ${gradient} flex items-center justify-center flex-shrink-0 shadow-lg`}

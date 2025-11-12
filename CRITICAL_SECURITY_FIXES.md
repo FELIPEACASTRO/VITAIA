@@ -21,7 +21,7 @@
 
 ```typescript
 // AES-256-GCM para dados em repouso
-// TLS 1.3 para dados em trânsito  
+// TLS 1.3 para dados em trânsito
 // Chaves rotacionadas automaticamente
 // HSM para gerenciamento de chaves
 ```
@@ -33,19 +33,19 @@
 
 ```typescript
 enum UserRole {
-  ADMIN = 'admin',
-  DOCTOR = 'doctor', 
-  NURSE = 'nurse',
-  RESEARCHER = 'researcher',
-  AUDITOR = 'auditor'
+  ADMIN = "admin",
+  DOCTOR = "doctor",
+  NURSE = "nurse",
+  RESEARCHER = "researcher",
+  AUDITOR = "auditor",
 }
 
 enum Permission {
-  READ_PATIENT_DATA = 'read:patient',
-  WRITE_PATIENT_DATA = 'write:patient',
-  ACCESS_AI_SUGGESTIONS = 'access:ai',
-  MANAGE_USERS = 'manage:users',
-  VIEW_AUDIT_LOGS = 'view:audit'
+  READ_PATIENT_DATA = "read:patient",
+  WRITE_PATIENT_DATA = "write:patient",
+  ACCESS_AI_SUGGESTIONS = "access:ai",
+  MANAGE_USERS = "manage:users",
+  VIEW_AUDIT_LOGS = "view:audit",
 }
 ```
 
@@ -84,7 +84,7 @@ interface AuditEvent {
 ## IMPLEMENTAÇÃO IMEDIATA NECESSÁRIA
 
 1. **Desabilitar sistema em produção** até correções
-2. **Implementar autenticação robusta** 
+2. **Implementar autenticação robusta**
 3. **Criptografar todos os dados médicos**
 4. **Adicionar controle de acesso**
 5. **Implementar audit logging completo**
@@ -95,7 +95,7 @@ interface AuditEvent {
 ## CRONOGRAMA DE CORREÇÕES
 
 - **Semana 1-2:** Autenticação e criptografia
-- **Semana 3-4:** Controle de acesso e auditoria  
+- **Semana 3-4:** Controle de acesso e auditoria
 - **Semana 5-8:** Modelos ML proprietários
 - **Semana 9-12:** Testes e certificações
 - **Semana 13-16:** Validação clínica
@@ -103,7 +103,7 @@ interface AuditEvent {
 ## INVESTIMENTO NECESSÁRIO
 
 - **Equipe de segurança:** R$ 500K/ano
-- **Infraestrutura segura:** R$ 200K/ano  
+- **Infraestrutura segura:** R$ 200K/ano
 - **Certificações:** R$ 300K
 - **Testes clínicos:** R$ 1M
 - **Total primeiro ano:** R$ 2M

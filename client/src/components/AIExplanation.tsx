@@ -1,4 +1,10 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,14 +20,22 @@ interface AIExplanationProps {
   reviewed?: number;
 }
 
-export default function AIExplanation({ suggestionId, content, confidence = 75, model = "gemini", reviewed = 0 }: AIExplanationProps) {
+export default function AIExplanation({
+  suggestionId,
+  content,
+  confidence = 75,
+  model = "gemini",
+  reviewed = 0,
+}: AIExplanationProps) {
   const [showFeedback, setShowFeedback] = useState(false);
   const [feedbackText, setFeedbackText] = useState("");
   const [clinicalRelevance, setClinicalRelevance] = useState(3);
   const [accuracy, setAccuracy] = useState(3);
   const [usefulness, setUsefulness] = useState(3);
 
-  const { data: explanation } = trpc.explanations.get.useQuery({ suggestionId });
+  const { data: explanation } = trpc.explanations.get.useQuery({
+    suggestionId,
+  });
   const feedbackMutation = trpc.feedback.create.useMutation();
   const reviewMutation = trpc.ai.reviewSuggestion.useMutation();
 
@@ -54,7 +68,8 @@ export default function AIExplanation({ suggestionId, content, confidence = 75, 
   };
 
   const getStatusIcon = () => {
-    if (reviewed === 1) return <CheckCircle className="w-5 h-5 text-green-600" />;
+    if (reviewed === 1)
+      return <CheckCircle className="w-5 h-5 text-green-600" />;
     if (reviewed === -1) return <XCircle className="w-5 h-5 text-red-600" />;
     return <AlertCircle className="w-5 h-5 text-yellow-600" />;
   };
@@ -109,22 +124,32 @@ export default function AIExplanation({ suggestionId, content, confidence = 75, 
 
             {explanation.keyFactors && (
               <div className="bg-purple-50 p-3 rounded-lg border border-purple-200">
-                <h5 className="font-semibold text-sm mb-2">Fatores Principais</h5>
-                <p className="text-sm text-gray-700">{explanation.keyFactors}</p>
+                <h5 className="font-semibold text-sm mb-2">
+                  Fatores Principais
+                </h5>
+                <p className="text-sm text-gray-700">
+                  {explanation.keyFactors}
+                </p>
               </div>
             )}
 
             {explanation.alternativeOptions && (
               <div className="bg-orange-50 p-3 rounded-lg border border-orange-200">
-                <h5 className="font-semibold text-sm mb-2">Opções Alternativas</h5>
-                <p className="text-sm text-gray-700">{explanation.alternativeOptions}</p>
+                <h5 className="font-semibold text-sm mb-2">
+                  Opções Alternativas
+                </h5>
+                <p className="text-sm text-gray-700">
+                  {explanation.alternativeOptions}
+                </p>
               </div>
             )}
 
             {explanation.evidenceLinks && (
               <div className="bg-green-50 p-3 rounded-lg border border-green-200">
                 <h5 className="font-semibold text-sm mb-2">Evidências</h5>
-                <p className="text-sm text-gray-700">{explanation.evidenceLinks}</p>
+                <p className="text-sm text-gray-700">
+                  {explanation.evidenceLinks}
+                </p>
               </div>
             )}
           </div>
@@ -145,37 +170,43 @@ export default function AIExplanation({ suggestionId, content, confidence = 75, 
             {showFeedback && (
               <div className="space-y-3 bg-gray-50 p-4 rounded-lg">
                 <div>
-                  <label className="text-sm font-semibold">Relevância Clínica: {clinicalRelevance}/5</label>
+                  <label className="text-sm font-semibold">
+                    Relevância Clínica: {clinicalRelevance}/5
+                  </label>
                   <input
                     type="range"
                     min="1"
                     max="5"
                     value={clinicalRelevance}
-                    onChange={(e) => setClinicalRelevance(Number(e.target.value))}
+                    onChange={e => setClinicalRelevance(Number(e.target.value))}
                     className="w-full mt-1"
                   />
                 </div>
 
                 <div>
-                  <label className="text-sm font-semibold">Acurácia: {accuracy}/5</label>
+                  <label className="text-sm font-semibold">
+                    Acurácia: {accuracy}/5
+                  </label>
                   <input
                     type="range"
                     min="1"
                     max="5"
                     value={accuracy}
-                    onChange={(e) => setAccuracy(Number(e.target.value))}
+                    onChange={e => setAccuracy(Number(e.target.value))}
                     className="w-full mt-1"
                   />
                 </div>
 
                 <div>
-                  <label className="text-sm font-semibold">Utilidade: {usefulness}/5</label>
+                  <label className="text-sm font-semibold">
+                    Utilidade: {usefulness}/5
+                  </label>
                   <input
                     type="range"
                     min="1"
                     max="5"
                     value={usefulness}
-                    onChange={(e) => setUsefulness(Number(e.target.value))}
+                    onChange={e => setUsefulness(Number(e.target.value))}
                     className="w-full mt-1"
                   />
                 </div>
@@ -183,7 +214,7 @@ export default function AIExplanation({ suggestionId, content, confidence = 75, 
                 <Textarea
                   placeholder="Adicione seu feedback/justificativa..."
                   value={feedbackText}
-                  onChange={(e) => setFeedbackText(e.target.value)}
+                  onChange={e => setFeedbackText(e.target.value)}
                   className="min-h-24"
                 />
               </div>
@@ -195,7 +226,9 @@ export default function AIExplanation({ suggestionId, content, confidence = 75, 
                 variant="default"
                 size="sm"
                 onClick={handleApprove}
-                disabled={feedbackMutation.isPending || reviewMutation.isPending}
+                disabled={
+                  feedbackMutation.isPending || reviewMutation.isPending
+                }
                 className="flex-1 bg-green-600 hover:bg-green-700"
               >
                 ✓ Aprovar
@@ -204,7 +237,9 @@ export default function AIExplanation({ suggestionId, content, confidence = 75, 
                 variant="destructive"
                 size="sm"
                 onClick={handleReject}
-                disabled={feedbackMutation.isPending || reviewMutation.isPending}
+                disabled={
+                  feedbackMutation.isPending || reviewMutation.isPending
+                }
                 className="flex-1"
               >
                 ✗ Rejeitar
@@ -216,7 +251,9 @@ export default function AIExplanation({ suggestionId, content, confidence = 75, 
         {/* Reviewed Status */}
         {reviewed !== 0 && (
           <div className="text-sm text-gray-600 italic">
-            {reviewed === 1 ? "✓ Você aprovou esta sugestão" : "✗ Você rejeitou esta sugestão"}
+            {reviewed === 1
+              ? "✓ Você aprovou esta sugestão"
+              : "✗ Você rejeitou esta sugestão"}
           </div>
         )}
       </CardContent>

@@ -4,7 +4,9 @@ export const APP_NAME = "VITAIA";
 export const APP_TAGLINE = "A IA da Vida - Inteligência Artificial Médica";
 export const APP_VERSION = "1.0.0";
 
-export const APP_LOGO = import.meta.env.VITE_APP_LOGO || "https://placehold.co/128x128/10B981/FFFFFF?text=V";
+export const APP_LOGO =
+  import.meta.env.VITE_APP_LOGO ||
+  "https://placehold.co/128x128/10B981/FFFFFF?text=V";
 
 // VITAIA Color System
 export const VITAIA_COLORS = {

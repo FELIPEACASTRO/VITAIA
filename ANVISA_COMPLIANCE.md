@@ -30,17 +30,18 @@ Este documento descreve o plano de conformidade com as regulamentações da ANVI
 
 **Riscos Identificados:**
 
-| Risco | Severidade | Probabilidade | Mitigação |
-|-------|-----------|---------------|-----------|
-| Sugestão incorreta de diagnóstico | Alta | Média | Validação com estudos clínicos |
-| Acesso não autorizado a dados | Alta | Baixa | Criptografia end-to-end, OAuth |
-| Falha de sistema | Média | Baixa | Backup automático, redundância |
-| Viés algorítmico | Média | Média | Treinamento com dados diversos |
-| Indisponibilidade do serviço | Média | Baixa | SLA 99.9%, infraestrutura cloud |
+| Risco                             | Severidade | Probabilidade | Mitigação                       |
+| --------------------------------- | ---------- | ------------- | ------------------------------- |
+| Sugestão incorreta de diagnóstico | Alta       | Média         | Validação com estudos clínicos  |
+| Acesso não autorizado a dados     | Alta       | Baixa         | Criptografia end-to-end, OAuth  |
+| Falha de sistema                  | Média      | Baixa         | Backup automático, redundância  |
+| Viés algorítmico                  | Média      | Média         | Treinamento com dados diversos  |
+| Indisponibilidade do serviço      | Média      | Baixa         | SLA 99.9%, infraestrutura cloud |
 
 ### 2.3 Testes Clínicos
 
 **Estudo Piloto Recomendado:**
+
 - Duração: 6 meses
 - Participantes: 100-200 pacientes
 - Comparação: Diagnósticos de IA vs. diagnósticos médicos reais
@@ -66,33 +67,37 @@ Este documento descreve o plano de conformidade com as regulamentações da ANVI
 
 ## 4. Certificações Recomendadas
 
-| Certificação | Escopo | Prazo |
-|-------------|--------|-------|
-| ISO 13485 | Gestão de Qualidade em Dispositivos Médicos | 12-18 meses |
-| ISO 27001 | Segurança da Informação | 6-12 meses |
-| HITRUST CSF | Segurança em Saúde | 9-15 meses |
-| SOC 2 Type II | Controles de Segurança | 6-12 meses |
+| Certificação  | Escopo                                      | Prazo       |
+| ------------- | ------------------------------------------- | ----------- |
+| ISO 13485     | Gestão de Qualidade em Dispositivos Médicos | 12-18 meses |
+| ISO 27001     | Segurança da Informação                     | 6-12 meses  |
+| HITRUST CSF   | Segurança em Saúde                          | 9-15 meses  |
+| SOC 2 Type II | Controles de Segurança                      | 6-12 meses  |
 
 ## 5. Roadmap de Conformidade
 
 ### Fase 1: Preparação (Meses 1-3)
+
 - Documentação técnica completa
 - Análise de risco detalhada
 - Plano de testes clínicos
 - Contratação de consultoria regulatória
 
 ### Fase 2: Validação (Meses 4-9)
+
 - Estudo clínico piloto
 - Testes de segurança
 - Validação de algoritmos
 - Preparação de documentação ANVISA
 
 ### Fase 3: Submissão (Meses 10-12)
+
 - Submissão de dossiê técnico à ANVISA
 - Resposta a questionamentos
 - Aprovação regulatória
 
 ### Fase 4: Pós-Comercialização (Contínuo)
+
 - Monitoramento de efetividade
 - Atualizações de segurança
 - Relatórios de vigilância
@@ -103,29 +108,32 @@ Este documento descreve o plano de conformidade com as regulamentações da ANVI
 ### 6.1 Opções de Receita
 
 **Modelo 1: Assinatura por Clínica**
+
 - Pequena (1-5 médicos): R$ 2.000/mês
 - Média (6-20 médicos): R$ 5.000/mês
 - Grande (20+ médicos): R$ 10.000/mês
 
 **Modelo 2: Assinatura por Médico**
+
 - Profissional: R$ 500/mês
 - Clínica: R$ 300/mês (volume)
 - Hospital: Negociação customizada
 
 **Modelo 3: Híbrido (Recomendado)**
+
 - Assinatura base + uso por consulta
 - Assinatura base: R$ 3.000/mês
 - Por análise de IA: R$ 50-100
 
 ### 6.2 Projeção Financeira (5 anos)
 
-| Ano | Clientes | ARR | Custo Operacional | Lucro |
-|-----|----------|-----|------------------|-------|
-| 1 | 10 | R$ 360K | R$ 500K | -R$ 140K |
-| 2 | 50 | R$ 1.8M | R$ 800K | R$ 1M |
-| 3 | 150 | R$ 5.4M | R$ 1.5M | R$ 3.9M |
-| 4 | 300 | R$ 10.8M | R$ 2.5M | R$ 8.3M |
-| 5 | 500 | R$ 18M | R$ 4M | R$ 14M |
+| Ano | Clientes | ARR      | Custo Operacional | Lucro    |
+| --- | -------- | -------- | ----------------- | -------- |
+| 1   | 10       | R$ 360K  | R$ 500K           | -R$ 140K |
+| 2   | 50       | R$ 1.8M  | R$ 800K           | R$ 1M    |
+| 3   | 150      | R$ 5.4M  | R$ 1.5M           | R$ 3.9M  |
+| 4   | 300      | R$ 10.8M | R$ 2.5M           | R$ 8.3M  |
+| 5   | 500      | R$ 18M   | R$ 4M             | R$ 14M   |
 
 ## 7. Escalabilidade Técnica
 

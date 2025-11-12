@@ -1,16 +1,31 @@
 import DashboardLayout from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { trpc } from "@/lib/trpc";
 import { Streamdown } from "streamdown";
-import { ArrowLeft, Plus, Loader2 } from "lucide-react";
+import { ArrowLeft, Plus, Loader2, Brain, Settings } from "lucide-react";
 import { useState } from "react";
 import { useLocation } from "wouter";
+import MedicalAIAnalysis from "@/components/MedicalAIAnalysis";
+import AIProviderSelector from "@/components/AIProviderSelector";
 
 interface PatientDetailProps {
   params: {
@@ -21,17 +36,23 @@ interface PatientDetailProps {
 export default function PatientDetail({ params }: PatientDetailProps) {
   const patientId = parseInt(params.patientId);
   const [, setLocation] = useLocation();
-  const [isCreateConsultationOpen, setIsCreateConsultationOpen] = useState(false);
+  const [isCreateConsultationOpen, setIsCreateConsultationOpen] =
+    useState(false);
   const [consultationForm, setConsultationForm] = useState({
     symptoms: "",
     physicalExamination: "",
     notes: "",
   });
-  const [selectedConsultationId, setSelectedConsultationId] = useState<number | undefined>(undefined);
+  const [selectedConsultationId, setSelectedConsultationId] = useState<
+    number | undefined
+  >(undefined);
 
   // Queries
-  const { data: patient, isLoading: patientLoading } = trpc.patients.get.useQuery({ patientId });
-  const { data: consultations } = trpc.consultations.list.useQuery({ patientId });
+  const { data: patient, isLoading: patientLoading } =
+    trpc.patients.get.useQuery({ patientId });
+  const { data: consultations } = trpc.consultations.list.useQuery({
+    patientId,
+  });
   const { data: selectedConsultation } = trpc.consultations.get.useQuery(
     { consultationId: selectedConsultationId ?? 0 },
     { enabled: selectedConsultationId !== undefined }
@@ -54,7 +75,8 @@ export default function PatientDetail({ params }: PatientDetailProps) {
     },
   });
 
-  const generateAISuggestionsMutation = trpc.ai.generateSuggestions.useMutation();
+  const generateAISuggestionsMutation =
+    trpc.ai.generateSuggestions.useMutation();
 
   const handleCreateConsultation = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,15 +90,17 @@ export default function PatientDetail({ params }: PatientDetailProps) {
 
   const handleGenerateAISuggestions = async () => {
     if (!selectedConsultation) return;
-    
+
     await generateAISuggestionsMutation.mutateAsync({
       consultationId: selectedConsultation.id,
       patientId,
       symptoms: selectedConsultation.symptoms || "",
-      examResults: examResults?.map(e => `${e.examType}: ${e.results || ""}`).join("\n") || undefined,
+      examResults:
+        examResults?.map(e => `${e.examType}: ${e.results || ""}`).join("\n") ||
+        undefined,
       medicalHistory: patient?.medicalHistory || undefined,
     });
-    
+
     trpc.useUtils().ai.getSuggestions.invalidate();
   };
 
@@ -119,7 +143,8 @@ export default function PatientDetail({ params }: PatientDetailProps) {
             <h1 className="text-3xl font-bold">{patient.name}</h1>
             <p className="text-muted-foreground">
               {patient.dateOfBirth && `Nascido em ${patient.dateOfBirth}`}
-              {patient.gender && ` • ${patient.gender === "M" ? "Masculino" : patient.gender === "F" ? "Feminino" : "Outro"}`}
+              {patient.gender &&
+                ` • ${patient.gender === "M" ? "Masculino" : patient.gender === "F" ? "Feminino" : "Outro"}`}
             </p>
           </div>
         </div>
@@ -152,7 +177,9 @@ export default function PatientDetail({ params }: PatientDetailProps) {
                 <CardTitle className="text-sm">Medicações Atuais</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted-foreground">{patient.currentMedications}</p>
+                <p className="text-sm text-muted-foreground">
+                  {patient.currentMedications}
+                </p>
               </CardContent>
             </Card>
           )}
@@ -160,16 +187,21 @@ export default function PatientDetail({ params }: PatientDetailProps) {
 
         {/* Tabs */}
         <Tabs defaultValue="consultations" className="w-full">
-          <TabsList>
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="consultations">Consultas</TabsTrigger>
-            <TabsTrigger value="history">Histórico Médico</TabsTrigger>
+            <TabsTrigger value="ai-analysis">Análise de IA</TabsTrigger>
+            <TabsTrigger value="ai-settings">Config. IA</TabsTrigger>
+            <TabsTrigger value="history">Histórico</TabsTrigger>
           </TabsList>
 
           {/* Consultations Tab */}
           <TabsContent value="consultations" className="space-y-4">
             <div className="flex justify-between items-center">
               <h2 className="text-xl font-semibold">Consultas</h2>
-              <Dialog open={isCreateConsultationOpen} onOpenChange={setIsCreateConsultationOpen}>
+              <Dialog
+                open={isCreateConsultationOpen}
+                onOpenChange={setIsCreateConsultationOpen}
+              >
                 <DialogTrigger asChild>
                   <Button className="gap-2">
                     <Plus className="w-4 h-4" />
@@ -183,13 +215,16 @@ export default function PatientDetail({ params }: PatientDetailProps) {
                       Preencha os detalhes da consulta para {patient.name}
                     </DialogDescription>
                   </DialogHeader>
-                  <form onSubmit={handleCreateConsultation} className="space-y-4">
+                  <form
+                    onSubmit={handleCreateConsultation}
+                    className="space-y-4"
+                  >
                     <div>
                       <Label htmlFor="symptoms">Sintomas *</Label>
                       <Textarea
                         id="symptoms"
                         value={consultationForm.symptoms}
-                        onChange={(e) =>
+                        onChange={e =>
                           setConsultationForm({
                             ...consultationForm,
                             symptoms: e.target.value,
@@ -204,7 +239,7 @@ export default function PatientDetail({ params }: PatientDetailProps) {
                       <Textarea
                         id="exam"
                         value={consultationForm.physicalExamination}
-                        onChange={(e) =>
+                        onChange={e =>
                           setConsultationForm({
                             ...consultationForm,
                             physicalExamination: e.target.value,
@@ -218,7 +253,7 @@ export default function PatientDetail({ params }: PatientDetailProps) {
                       <Textarea
                         id="notes"
                         value={consultationForm.notes}
-                        onChange={(e) =>
+                        onChange={e =>
                           setConsultationForm({
                             ...consultationForm,
                             notes: e.target.value,
@@ -253,13 +288,14 @@ export default function PatientDetail({ params }: PatientDetailProps) {
               <Card>
                 <CardContent className="pt-6 text-center">
                   <p className="text-muted-foreground">
-                    Nenhuma consulta registrada. Comece criando uma nova consulta.
+                    Nenhuma consulta registrada. Comece criando uma nova
+                    consulta.
                   </p>
                 </CardContent>
               </Card>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {consultations?.map((consultation) => (
+                {consultations?.map(consultation => (
                   <Card
                     key={consultation.id}
                     className="cursor-pointer hover:shadow-lg transition-shadow"
@@ -267,7 +303,9 @@ export default function PatientDetail({ params }: PatientDetailProps) {
                   >
                     <CardHeader>
                       <CardTitle className="text-lg">
-                        {new Date(consultation.date).toLocaleDateString("pt-BR")}
+                        {new Date(consultation.date).toLocaleDateString(
+                          "pt-BR"
+                        )}
                       </CardTitle>
                       <CardDescription>
                         {(consultation.symptoms || "").substring(0, 100)}...
@@ -303,12 +341,19 @@ export default function PatientDetail({ params }: PatientDetailProps) {
                   {/* Exam Results */}
                   {examResults && examResults.length > 0 && (
                     <div>
-                      <h3 className="font-semibold mb-2">Resultados de Exames</h3>
-                          <div className="space-y-2">
-                        {examResults?.map((exam) => (
-                          <div key={exam.id} className="text-sm border-l-2 border-primary pl-3">
+                      <h3 className="font-semibold mb-2">
+                        Resultados de Exames
+                      </h3>
+                      <div className="space-y-2">
+                        {examResults?.map(exam => (
+                          <div
+                            key={exam.id}
+                            className="text-sm border-l-2 border-primary pl-3"
+                          >
                             <p className="font-medium">{exam.examType}</p>
-                            <p className="text-muted-foreground">{exam.results || "Sem resultados"}</p>
+                            <p className="text-muted-foreground">
+                              {exam.results || "Sem resultados"}
+                            </p>
                           </div>
                         ))}
                       </div>
@@ -332,7 +377,7 @@ export default function PatientDetail({ params }: PatientDetailProps) {
 
                     {aiSuggestions && aiSuggestions.length > 0 ? (
                       <div className="space-y-3">
-                        {aiSuggestions.map((suggestion) => (
+                        {aiSuggestions.map(suggestion => (
                           <Card key={suggestion.id} className="bg-blue-50">
                             <CardContent className="pt-4">
                               <div className="flex justify-between items-start mb-2">
@@ -340,7 +385,11 @@ export default function PatientDetail({ params }: PatientDetailProps) {
                                   {suggestion.suggestionType.toUpperCase()}
                                 </span>
                                 <span className="text-xs text-muted-foreground">
-                                  {suggestion.reviewed === 1 ? "✓ Aprovado" : suggestion.reviewed === -1 ? "✗ Rejeitado" : "Pendente"}
+                                  {suggestion.reviewed === 1
+                                    ? "✓ Aprovado"
+                                    : suggestion.reviewed === -1
+                                      ? "✗ Rejeitado"
+                                      : "Pendente"}
                                 </span>
                               </div>
                               <Streamdown>{suggestion.content}</Streamdown>
@@ -350,13 +399,37 @@ export default function PatientDetail({ params }: PatientDetailProps) {
                       </div>
                     ) : (
                       <p className="text-sm text-muted-foreground">
-                        Nenhuma sugestão gerada ainda. Clique em "Gerar Sugestões" para obter análise de IA.
+                        Nenhuma sugestão gerada ainda. Clique em "Gerar
+                        Sugestões" para obter análise de IA.
                       </p>
                     )}
                   </div>
                 </CardContent>
               </Card>
             )}
+          </TabsContent>
+
+          {/* AI Analysis Tab */}
+          <TabsContent value="ai-analysis" className="space-y-4">
+            <div className="flex items-center gap-2 mb-4">
+              <Brain className="h-5 w-5 text-primary" />
+              <h2 className="text-xl font-semibold">
+                Análise Médica com IA Multi-Provedor
+              </h2>
+            </div>
+            <MedicalAIAnalysis
+              consultationId={selectedConsultationId || 0}
+              patientId={patientId}
+            />
+          </TabsContent>
+
+          {/* AI Settings Tab */}
+          <TabsContent value="ai-settings" className="space-y-4">
+            <div className="flex items-center gap-2 mb-4">
+              <Settings className="h-5 w-5 text-primary" />
+              <h2 className="text-xl font-semibold">Configurações de IA</h2>
+            </div>
+            <AIProviderSelector showHealthCheck={true} className="max-w-2xl" />
           </TabsContent>
 
           {/* Medical History Tab */}

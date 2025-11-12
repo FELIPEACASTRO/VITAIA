@@ -1,14 +1,56 @@
-import { integer, pgEnum, pgTable, text, timestamp, varchar, boolean, serial } from "drizzle-orm/pg-core";
+import {
+  integer,
+  pgEnum,
+  pgTable,
+  text,
+  timestamp,
+  varchar,
+  boolean,
+  serial,
+} from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 
 export const roleEnum = pgEnum("role", ["user", "admin"]);
 export const genderEnum = pgEnum("gender", ["M", "F", "Other"]);
-export const suggestionTypeEnum = pgEnum("suggestionType", ["diagnosis", "treatment", "medication", "summary"]);
-export const notificationTypeEnum = pgEnum("type", ["patient_added", "ai_suggestion_ready", "consultation_created", "exam_added"]);
-export const consentTypeEnum = pgEnum("consentType", ["data_processing", "ai_analysis", "research", "data_sharing"]);
-export const protocolStatusEnum = pgEnum("protocol_status", ["draft", "active", "completed", "suspended"]);
-export const participantStatusEnum = pgEnum("participant_status", ["enrolled", "active", "completed", "withdrawn"]);
-export const syncStatusEnum = pgEnum("syncStatus", ["pending", "synced", "failed"]);
+export const suggestionTypeEnum = pgEnum("suggestionType", [
+  "diagnosis",
+  "treatment",
+  "medication",
+  "summary",
+  "differential_diagnosis",
+  "treatment_plan",
+  "lab_analysis",
+  "multi_provider_consensus",
+]);
+export const notificationTypeEnum = pgEnum("type", [
+  "patient_added",
+  "ai_suggestion_ready",
+  "consultation_created",
+  "exam_added",
+]);
+export const consentTypeEnum = pgEnum("consentType", [
+  "data_processing",
+  "ai_analysis",
+  "research",
+  "data_sharing",
+]);
+export const protocolStatusEnum = pgEnum("protocol_status", [
+  "draft",
+  "active",
+  "completed",
+  "suspended",
+]);
+export const participantStatusEnum = pgEnum("participant_status", [
+  "enrolled",
+  "active",
+  "completed",
+  "withdrawn",
+]);
+export const syncStatusEnum = pgEnum("syncStatus", [
+  "pending",
+  "synced",
+  "failed",
+]);
 
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
@@ -28,7 +70,10 @@ export const users = pgTable("users", {
   failedLoginAttempts: integer("failedLoginAttempts").default(0), // Tentativas de login falhadas
   lockedUntil: timestamp("lockedUntil"), // Conta bloqueada até
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().notNull().$onUpdate(() => new Date()),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .notNull()
+    .$onUpdate(() => new Date()),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
 });
 
@@ -37,7 +82,9 @@ export type InsertUser = typeof users.$inferInsert;
 
 export const patients = pgTable("patients", {
   id: serial("id").primaryKey(),
-  doctorId: integer("doctorId").notNull().references(() => users.id),
+  doctorId: integer("doctorId")
+    .notNull()
+    .references(() => users.id),
   name: varchar("name", { length: 255 }).notNull(),
   dateOfBirth: varchar("dateOfBirth", { length: 10 }),
   gender: genderEnum("gender"),
@@ -46,7 +93,10 @@ export const patients = pgTable("patients", {
   medicalHistory: text("medicalHistory"),
   currentMedications: text("currentMedications"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().notNull().$onUpdate(() => new Date()),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .notNull()
+    .$onUpdate(() => new Date()),
 });
 
 export type Patient = typeof patients.$inferSelect;
@@ -54,8 +104,12 @@ export type InsertPatient = typeof patients.$inferInsert;
 
 export const consultations = pgTable("consultations", {
   id: serial("id").primaryKey(),
-  patientId: integer("patientId").notNull().references(() => patients.id),
-  doctorId: integer("doctorId").notNull().references(() => users.id),
+  patientId: integer("patientId")
+    .notNull()
+    .references(() => patients.id),
+  doctorId: integer("doctorId")
+    .notNull()
+    .references(() => users.id),
   date: timestamp("date").defaultNow().notNull(),
   symptoms: text("symptoms"),
   physicalExamination: text("physicalExamination"),
@@ -63,7 +117,10 @@ export const consultations = pgTable("consultations", {
   plan: text("plan"),
   notes: text("notes"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().notNull().$onUpdate(() => new Date()),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .notNull()
+    .$onUpdate(() => new Date()),
 });
 
 export type Consultation = typeof consultations.$inferSelect;
@@ -71,8 +128,12 @@ export type InsertConsultation = typeof consultations.$inferInsert;
 
 export const examResults = pgTable("examResults", {
   id: serial("id").primaryKey(),
-  consultationId: integer("consultationId").notNull().references(() => consultations.id),
-  patientId: integer("patientId").notNull().references(() => patients.id),
+  consultationId: integer("consultationId")
+    .notNull()
+    .references(() => consultations.id),
+  patientId: integer("patientId")
+    .notNull()
+    .references(() => patients.id),
   examType: varchar("examType", { length: 100 }).notNull(),
   examDate: varchar("examDate", { length: 10 }),
   results: text("results"),
@@ -86,8 +147,12 @@ export type InsertExamResult = typeof examResults.$inferInsert;
 
 export const aiSuggestions = pgTable("aiSuggestions", {
   id: serial("id").primaryKey(),
-  consultationId: integer("consultationId").notNull().references(() => consultations.id),
-  patientId: integer("patientId").notNull().references(() => patients.id),
+  consultationId: integer("consultationId")
+    .notNull()
+    .references(() => consultations.id),
+  patientId: integer("patientId")
+    .notNull()
+    .references(() => patients.id),
   suggestionType: suggestionTypeEnum("suggestionType").notNull(),
   content: text("content").notNull(),
   model: varchar("model", { length: 100 }),
@@ -117,7 +182,9 @@ export type InsertAuditLog = typeof auditLogs.$inferInsert;
 
 export const notifications = pgTable("notifications", {
   id: serial("id").primaryKey(),
-  userId: integer("userId").notNull().references(() => users.id),
+  userId: integer("userId")
+    .notNull()
+    .references(() => users.id),
   title: varchar("title", { length: 255 }).notNull(),
   message: text("message"),
   type: notificationTypeEnum("type").notNull(),
@@ -132,7 +199,9 @@ export type InsertNotification = typeof notifications.$inferInsert;
 
 export const aiExplanations = pgTable("aiExplanations", {
   id: serial("id").primaryKey(),
-  suggestionId: integer("suggestionId").notNull().references(() => aiSuggestions.id),
+  suggestionId: integer("suggestionId")
+    .notNull()
+    .references(() => aiSuggestions.id),
   reasoning: text("reasoning").notNull(),
   keyFactors: text("keyFactors"),
   evidenceLinks: text("evidenceLinks"),
@@ -145,8 +214,12 @@ export type InsertAIExplanation = typeof aiExplanations.$inferInsert;
 
 export const suggestionFeedback = pgTable("suggestionFeedback", {
   id: serial("id").primaryKey(),
-  suggestionId: integer("suggestionId").notNull().references(() => aiSuggestions.id),
-  doctorId: integer("doctorId").notNull().references(() => users.id),
+  suggestionId: integer("suggestionId")
+    .notNull()
+    .references(() => aiSuggestions.id),
+  doctorId: integer("doctorId")
+    .notNull()
+    .references(() => users.id),
   approved: boolean("approved").notNull(),
   feedback: text("feedback"),
   clinicalRelevance: integer("clinicalRelevance"),
@@ -160,7 +233,9 @@ export type InsertSuggestionFeedback = typeof suggestionFeedback.$inferInsert;
 
 export const patientConsent = pgTable("patientConsent", {
   id: serial("id").primaryKey(),
-  patientId: integer("patientId").notNull().references(() => patients.id),
+  patientId: integer("patientId")
+    .notNull()
+    .references(() => patients.id),
   consentType: consentTypeEnum("consentType").notNull(),
   consentGiven: boolean("consentGiven").notNull(),
   consentDate: timestamp("consentDate").notNull(),
@@ -175,7 +250,9 @@ export type InsertPatientConsent = typeof patientConsent.$inferInsert;
 
 export const dataRetentionPolicy = pgTable("dataRetentionPolicy", {
   id: serial("id").primaryKey(),
-  patientId: integer("patientId").notNull().references(() => patients.id),
+  patientId: integer("patientId")
+    .notNull()
+    .references(() => patients.id),
   retentionPeriodMonths: integer("retentionPeriodMonths").default(36),
   deletionScheduledDate: timestamp("deletionScheduledDate"),
   deletionCompletedDate: timestamp("deletionCompletedDate"),
@@ -188,8 +265,12 @@ export type InsertDataRetentionPolicy = typeof dataRetentionPolicy.$inferInsert;
 
 export const medicalImages = pgTable("medicalImages", {
   id: serial("id").primaryKey(),
-  consultationId: integer("consultationId").notNull().references(() => consultations.id),
-  patientId: integer("patientId").notNull().references(() => patients.id),
+  consultationId: integer("consultationId")
+    .notNull()
+    .references(() => consultations.id),
+  patientId: integer("patientId")
+    .notNull()
+    .references(() => patients.id),
   imageType: varchar("imageType", { length: 100 }).notNull(),
   imageUrl: varchar("imageUrl", { length: 500 }).notNull(),
   imageKey: varchar("imageKey", { length: 255 }).notNull(),
@@ -207,7 +288,9 @@ export const researchProtocol = pgTable("researchProtocol", {
   id: serial("id").primaryKey(),
   protocolName: varchar("protocolName", { length: 255 }).notNull(),
   description: text("description"),
-  principalInvestigator: varchar("principalInvestigator", { length: 255 }).notNull(),
+  principalInvestigator: varchar("principalInvestigator", {
+    length: 255,
+  }).notNull(),
   institution: varchar("institution", { length: 255 }),
   startDate: timestamp("startDate").notNull(),
   endDate: timestamp("endDate"),
@@ -222,8 +305,12 @@ export type InsertResearchProtocol = typeof researchProtocol.$inferInsert;
 
 export const researchParticipant = pgTable("researchParticipant", {
   id: serial("id").primaryKey(),
-  protocolId: integer("protocolId").notNull().references(() => researchProtocol.id),
-  patientId: integer("patientId").notNull().references(() => patients.id),
+  protocolId: integer("protocolId")
+    .notNull()
+    .references(() => researchProtocol.id),
+  patientId: integer("patientId")
+    .notNull()
+    .references(() => patients.id),
   enrollmentDate: timestamp("enrollmentDate").defaultNow().notNull(),
   withdrawalDate: timestamp("withdrawalDate"),
   consentDocumentUrl: varchar("consentDocumentUrl", { length: 500 }),
@@ -237,7 +324,9 @@ export type InsertResearchParticipant = typeof researchParticipant.$inferInsert;
 
 export const hl7FhirMapping = pgTable("hl7FhirMapping", {
   id: serial("id").primaryKey(),
-  patientId: integer("patientId").notNull().references(() => patients.id),
+  patientId: integer("patientId")
+    .notNull()
+    .references(() => patients.id),
   externalEhrId: varchar("externalEhrId", { length: 255 }).notNull(),
   ehrSystem: varchar("ehrSystem", { length: 100 }).notNull(),
   fhirResourceType: varchar("fhirResourceType", { length: 100 }),
@@ -264,8 +353,12 @@ export type InsertMedicalSpecialty = typeof medicalSpecialties.$inferInsert;
 
 export const doctorSpecialties = pgTable("doctorSpecialties", {
   id: serial("id").primaryKey(),
-  doctorId: integer("doctorId").notNull().references(() => users.id),
-  specialtyId: integer("specialtyId").notNull().references(() => medicalSpecialties.id),
+  doctorId: integer("doctorId")
+    .notNull()
+    .references(() => users.id),
+  specialtyId: integer("specialtyId")
+    .notNull()
+    .references(() => medicalSpecialties.id),
   licenseNumber: varchar("licenseNumber", { length: 100 }),
   yearsOfExperience: integer("yearsOfExperience"),
   isPrimary: boolean("isPrimary").default(false),
@@ -277,7 +370,9 @@ export type InsertDoctorSpecialty = typeof doctorSpecialties.$inferInsert;
 
 export const clinicalGuidelines = pgTable("clinicalGuidelines", {
   id: serial("id").primaryKey(),
-  specialtyId: integer("specialtyId").notNull().references(() => medicalSpecialties.id),
+  specialtyId: integer("specialtyId")
+    .notNull()
+    .references(() => medicalSpecialties.id),
   condition: varchar("condition", { length: 255 }).notNull(),
   guidelineContent: text("guidelineContent").notNull(),
   source: varchar("source", { length: 255 }),
@@ -285,7 +380,10 @@ export const clinicalGuidelines = pgTable("clinicalGuidelines", {
   version: varchar("version", { length: 50 }),
   isActive: boolean("isActive").default(true),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().notNull().$onUpdate(() => new Date()),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .notNull()
+    .$onUpdate(() => new Date()),
 });
 
 export type ClinicalGuideline = typeof clinicalGuidelines.$inferSelect;
@@ -293,7 +391,9 @@ export type InsertClinicalGuideline = typeof clinicalGuidelines.$inferInsert;
 
 export const specialtyMedications = pgTable("specialtyMedications", {
   id: serial("id").primaryKey(),
-  specialtyId: integer("specialtyId").notNull().references(() => medicalSpecialties.id),
+  specialtyId: integer("specialtyId")
+    .notNull()
+    .references(() => medicalSpecialties.id),
   medicationName: varchar("medicationName", { length: 255 }).notNull(),
   activeIngredient: varchar("activeIngredient", { length: 255 }),
   dosageForm: varchar("dosageForm", { length: 100 }),
@@ -307,11 +407,14 @@ export const specialtyMedications = pgTable("specialtyMedications", {
 });
 
 export type SpecialtyMedication = typeof specialtyMedications.$inferSelect;
-export type InsertSpecialtyMedication = typeof specialtyMedications.$inferInsert;
+export type InsertSpecialtyMedication =
+  typeof specialtyMedications.$inferInsert;
 
 export const specialtyDiagnosticTests = pgTable("specialtyDiagnosticTests", {
   id: serial("id").primaryKey(),
-  specialtyId: integer("specialtyId").notNull().references(() => medicalSpecialties.id),
+  specialtyId: integer("specialtyId")
+    .notNull()
+    .references(() => medicalSpecialties.id),
   testName: varchar("testName", { length: 255 }).notNull(),
   testCode: varchar("testCode", { length: 100 }),
   description: text("description"),
@@ -323,12 +426,16 @@ export const specialtyDiagnosticTests = pgTable("specialtyDiagnosticTests", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
-export type SpecialtyDiagnosticTest = typeof specialtyDiagnosticTests.$inferSelect;
-export type InsertSpecialtyDiagnosticTest = typeof specialtyDiagnosticTests.$inferInsert;
+export type SpecialtyDiagnosticTest =
+  typeof specialtyDiagnosticTests.$inferSelect;
+export type InsertSpecialtyDiagnosticTest =
+  typeof specialtyDiagnosticTests.$inferInsert;
 
 export const specialtyProcedures = pgTable("specialtyProcedures", {
   id: serial("id").primaryKey(),
-  specialtyId: integer("specialtyId").notNull().references(() => medicalSpecialties.id),
+  specialtyId: integer("specialtyId")
+    .notNull()
+    .references(() => medicalSpecialties.id),
   procedureName: varchar("procedureName", { length: 255 }).notNull(),
   procedureCode: varchar("procedureCode", { length: 100 }),
   description: text("description"),
@@ -345,24 +452,50 @@ export type InsertSpecialtyProcedure = typeof specialtyProcedures.$inferInsert;
 
 export const consultationSpecialty = pgTable("consultationSpecialty", {
   id: serial("id").primaryKey(),
-  consultationId: integer("consultationId").notNull().references(() => consultations.id),
-  specialtyId: integer("specialtyId").notNull().references(() => medicalSpecialties.id),
+  consultationId: integer("consultationId")
+    .notNull()
+    .references(() => consultations.id),
+  specialtyId: integer("specialtyId")
+    .notNull()
+    .references(() => medicalSpecialties.id),
   primaryDiagnosis: varchar("primaryDiagnosis", { length: 255 }),
   icdCode: varchar("icdCode", { length: 20 }),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
 export type ConsultationSpecialty = typeof consultationSpecialty.$inferSelect;
-export type InsertConsultationSpecialty = typeof consultationSpecialty.$inferInsert;
+export type InsertConsultationSpecialty =
+  typeof consultationSpecialty.$inferInsert;
 
 // ========================================
 // MLOPS E MACHINE LEARNING TABLES
 // ========================================
 
-export const modelStatusEnum = pgEnum("model_status", ["training", "active", "deprecated", "failed"]);
-export const experimentStatusEnum = pgEnum("experiment_status", ["running", "completed", "failed", "cancelled"]);
-export const featureTypeEnum = pgEnum("feature_type", ["numerical", "categorical", "text", "image", "time_series"]);
-export const predictionStatusEnum = pgEnum("prediction_status", ["pending", "completed", "failed", "reviewed"]);
+export const modelStatusEnum = pgEnum("model_status", [
+  "training",
+  "active",
+  "deprecated",
+  "failed",
+]);
+export const experimentStatusEnum = pgEnum("experiment_status", [
+  "running",
+  "completed",
+  "failed",
+  "cancelled",
+]);
+export const featureTypeEnum = pgEnum("feature_type", [
+  "numerical",
+  "categorical",
+  "text",
+  "image",
+  "time_series",
+]);
+export const predictionStatusEnum = pgEnum("prediction_status", [
+  "pending",
+  "completed",
+  "failed",
+  "reviewed",
+]);
 
 // Registro de versões de modelos
 export const modelVersions = pgTable("modelVersions", {
@@ -382,7 +515,9 @@ export const modelVersions = pgTable("modelVersions", {
   aucRoc: integer("aucRoc"), // AUC-ROC em %
   trainingTime: integer("trainingTime"), // Tempo de treino em segundos
   modelSize: integer("modelSize"), // Tamanho do modelo em bytes
-  createdBy: integer("createdBy").notNull().references(() => users.id),
+  createdBy: integer("createdBy")
+    .notNull()
+    .references(() => users.id),
   deployedAt: timestamp("deployedAt"),
   deprecatedAt: timestamp("deprecatedAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -404,7 +539,9 @@ export const mlExperiments = pgTable("mlExperiments", {
   results: text("results"), // JSON com resultados
   startedAt: timestamp("startedAt").defaultNow().notNull(),
   completedAt: timestamp("completedAt"),
-  createdBy: integer("createdBy").notNull().references(() => users.id),
+  createdBy: integer("createdBy")
+    .notNull()
+    .references(() => users.id),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
@@ -422,9 +559,14 @@ export const featureDefinitions = pgTable("featureDefinitions", {
   validationRules: text("validationRules"), // JSON com regras de validação
   isActive: boolean("isActive").default(true),
   version: integer("version").default(1),
-  createdBy: integer("createdBy").notNull().references(() => users.id),
+  createdBy: integer("createdBy")
+    .notNull()
+    .references(() => users.id),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().notNull().$onUpdate(() => new Date()),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .notNull()
+    .$onUpdate(() => new Date()),
 });
 
 export type FeatureDefinition = typeof featureDefinitions.$inferSelect;
@@ -441,7 +583,9 @@ export const trainingDatasets = pgTable("trainingDatasets", {
   features: text("features"), // JSON com lista de features
   target: varchar("target", { length: 100 }), // Variável target
   splitRatio: varchar("splitRatio", { length: 20 }), // Ex: "70/20/10" (train/val/test)
-  createdBy: integer("createdBy").notNull().references(() => users.id),
+  createdBy: integer("createdBy")
+    .notNull()
+    .references(() => users.id),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
@@ -451,7 +595,9 @@ export type InsertTrainingDataset = typeof trainingDatasets.$inferInsert;
 // Log de predições para monitoramento
 export const predictionLogs = pgTable("predictionLogs", {
   id: serial("id").primaryKey(),
-  modelVersionId: integer("modelVersionId").notNull().references(() => modelVersions.id),
+  modelVersionId: integer("modelVersionId")
+    .notNull()
+    .references(() => modelVersions.id),
   consultationId: integer("consultationId").references(() => consultations.id),
   patientId: integer("patientId").references(() => patients.id),
   inputFeatures: text("inputFeatures").notNull(), // JSON com features de entrada
@@ -472,7 +618,9 @@ export type InsertPredictionLog = typeof predictionLogs.$inferInsert;
 // Monitoramento de drift de modelo
 export const modelDriftMonitoring = pgTable("modelDriftMonitoring", {
   id: serial("id").primaryKey(),
-  modelVersionId: integer("modelVersionId").notNull().references(() => modelVersions.id),
+  modelVersionId: integer("modelVersionId")
+    .notNull()
+    .references(() => modelVersions.id),
   metricName: varchar("metricName", { length: 100 }).notNull(), // accuracy, precision, etc.
   currentValue: integer("currentValue").notNull(), // Valor atual da métrica
   baselineValue: integer("baselineValue").notNull(), // Valor baseline
@@ -485,7 +633,8 @@ export const modelDriftMonitoring = pgTable("modelDriftMonitoring", {
 });
 
 export type ModelDriftMonitoring = typeof modelDriftMonitoring.$inferSelect;
-export type InsertModelDriftMonitoring = typeof modelDriftMonitoring.$inferInsert;
+export type InsertModelDriftMonitoring =
+  typeof modelDriftMonitoring.$inferInsert;
 
 // Detecção de anomalias
 export const anomalyDetections = pgTable("anomalyDetections", {

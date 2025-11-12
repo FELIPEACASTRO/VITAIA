@@ -58,12 +58,8 @@
           "name": "aiExplanations_suggestionId_aiSuggestions_id_fk",
           "tableFrom": "aiExplanations",
           "tableTo": "aiSuggestions",
-          "columnsFrom": [
-            "suggestionId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["suggestionId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -154,12 +150,8 @@
           "name": "aiSuggestions_consultationId_consultations_id_fk",
           "tableFrom": "aiSuggestions",
           "tableTo": "consultations",
-          "columnsFrom": [
-            "consultationId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["consultationId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -167,12 +159,8 @@
           "name": "aiSuggestions_patientId_patients_id_fk",
           "tableFrom": "aiSuggestions",
           "tableTo": "patients",
-          "columnsFrom": [
-            "patientId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["patientId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -180,12 +168,8 @@
           "name": "aiSuggestions_reviewedBy_users_id_fk",
           "tableFrom": "aiSuggestions",
           "tableTo": "users",
-          "columnsFrom": [
-            "reviewedBy"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["reviewedBy"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -256,12 +240,8 @@
           "name": "auditLogs_userId_users_id_fk",
           "tableFrom": "auditLogs",
           "tableTo": "users",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["userId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -346,12 +326,8 @@
           "name": "clinicalGuidelines_specialtyId_medicalSpecialties_id_fk",
           "tableFrom": "clinicalGuidelines",
           "tableTo": "medicalSpecialties",
-          "columnsFrom": [
-            "specialtyId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["specialtyId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -410,12 +386,8 @@
           "name": "consultationSpecialty_consultationId_consultations_id_fk",
           "tableFrom": "consultationSpecialty",
           "tableTo": "consultations",
-          "columnsFrom": [
-            "consultationId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["consultationId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -423,12 +395,8 @@
           "name": "consultationSpecialty_specialtyId_medicalSpecialties_id_fk",
           "tableFrom": "consultationSpecialty",
           "tableTo": "medicalSpecialties",
-          "columnsFrom": [
-            "specialtyId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["specialtyId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -519,12 +487,8 @@
           "name": "consultations_patientId_patients_id_fk",
           "tableFrom": "consultations",
           "tableTo": "patients",
-          "columnsFrom": [
-            "patientId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["patientId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -532,12 +496,8 @@
           "name": "consultations_doctorId_users_id_fk",
           "tableFrom": "consultations",
           "tableTo": "users",
-          "columnsFrom": [
-            "doctorId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["doctorId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -603,12 +563,8 @@
           "name": "dataRetentionPolicy_patientId_patients_id_fk",
           "tableFrom": "dataRetentionPolicy",
           "tableTo": "patients",
-          "columnsFrom": [
-            "patientId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["patientId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -674,12 +630,8 @@
           "name": "doctorSpecialties_doctorId_users_id_fk",
           "tableFrom": "doctorSpecialties",
           "tableTo": "users",
-          "columnsFrom": [
-            "doctorId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["doctorId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -687,12 +639,8 @@
           "name": "doctorSpecialties_specialtyId_medicalSpecialties_id_fk",
           "tableFrom": "doctorSpecialties",
           "tableTo": "medicalSpecialties",
-          "columnsFrom": [
-            "specialtyId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["specialtyId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -769,12 +717,8 @@
           "name": "examResults_consultationId_consultations_id_fk",
           "tableFrom": "examResults",
           "tableTo": "consultations",
-          "columnsFrom": [
-            "consultationId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["consultationId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -782,12 +726,8 @@
           "name": "examResults_patientId_patients_id_fk",
           "tableFrom": "examResults",
           "tableTo": "patients",
-          "columnsFrom": [
-            "patientId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["patientId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -866,12 +806,8 @@
           "name": "hl7FhirMapping_patientId_patients_id_fk",
           "tableFrom": "hl7FhirMapping",
           "tableTo": "patients",
-          "columnsFrom": [
-            "patientId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["patientId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -961,12 +897,8 @@
           "name": "medicalImages_consultationId_consultations_id_fk",
           "tableFrom": "medicalImages",
           "tableTo": "consultations",
-          "columnsFrom": [
-            "consultationId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["consultationId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -974,12 +906,8 @@
           "name": "medicalImages_patientId_patients_id_fk",
           "tableFrom": "medicalImages",
           "tableTo": "patients",
-          "columnsFrom": [
-            "patientId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["patientId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1039,9 +967,7 @@
         "medicalSpecialties_name_unique": {
           "name": "medicalSpecialties_name_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
+          "columns": ["name"]
         }
       },
       "policies": {},
@@ -1116,12 +1042,8 @@
           "name": "notifications_userId_users_id_fk",
           "tableFrom": "notifications",
           "tableTo": "users",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["userId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1199,12 +1121,8 @@
           "name": "patientConsent_patientId_patients_id_fk",
           "tableFrom": "patientConsent",
           "tableTo": "patients",
-          "columnsFrom": [
-            "patientId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["patientId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1295,12 +1213,8 @@
           "name": "patients_doctorId_users_id_fk",
           "tableFrom": "patients",
           "tableTo": "users",
-          "columnsFrom": [
-            "doctorId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["doctorId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1381,12 +1295,8 @@
           "name": "researchParticipant_protocolId_researchProtocol_id_fk",
           "tableFrom": "researchParticipant",
           "tableTo": "researchProtocol",
-          "columnsFrom": [
-            "protocolId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["protocolId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1394,12 +1304,8 @@
           "name": "researchParticipant_patientId_patients_id_fk",
           "tableFrom": "researchParticipant",
           "tableTo": "patients",
-          "columnsFrom": [
-            "patientId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["patientId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1570,12 +1476,8 @@
           "name": "specialtyDiagnosticTests_specialtyId_medicalSpecialties_id_fk",
           "tableFrom": "specialtyDiagnosticTests",
           "tableTo": "medicalSpecialties",
-          "columnsFrom": [
-            "specialtyId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["specialtyId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1670,12 +1572,8 @@
           "name": "specialtyMedications_specialtyId_medicalSpecialties_id_fk",
           "tableFrom": "specialtyMedications",
           "tableTo": "medicalSpecialties",
-          "columnsFrom": [
-            "specialtyId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["specialtyId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1764,12 +1662,8 @@
           "name": "specialtyProcedures_specialtyId_medicalSpecialties_id_fk",
           "tableFrom": "specialtyProcedures",
           "tableTo": "medicalSpecialties",
-          "columnsFrom": [
-            "specialtyId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["specialtyId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1846,12 +1740,8 @@
           "name": "suggestionFeedback_suggestionId_aiSuggestions_id_fk",
           "tableFrom": "suggestionFeedback",
           "tableTo": "aiSuggestions",
-          "columnsFrom": [
-            "suggestionId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["suggestionId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1859,12 +1749,8 @@
           "name": "suggestionFeedback_doctorId_users_id_fk",
           "tableFrom": "suggestionFeedback",
           "tableTo": "users",
-          "columnsFrom": [
-            "doctorId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["doctorId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1946,9 +1832,7 @@
         "users_openId_unique": {
           "name": "users_openId_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "openId"
-          ]
+          "columns": ["openId"]
         }
       },
       "policies": {},
@@ -1960,21 +1844,12 @@
     "public.consentType": {
       "name": "consentType",
       "schema": "public",
-      "values": [
-        "data_processing",
-        "ai_analysis",
-        "research",
-        "data_sharing"
-      ]
+      "values": ["data_processing", "ai_analysis", "research", "data_sharing"]
     },
     "public.gender": {
       "name": "gender",
       "schema": "public",
-      "values": [
-        "M",
-        "F",
-        "Other"
-      ]
+      "values": ["M", "F", "Other"]
     },
     "public.type": {
       "name": "type",
@@ -1989,49 +1864,27 @@
     "public.participant_status": {
       "name": "participant_status",
       "schema": "public",
-      "values": [
-        "enrolled",
-        "active",
-        "completed",
-        "withdrawn"
-      ]
+      "values": ["enrolled", "active", "completed", "withdrawn"]
     },
     "public.protocol_status": {
       "name": "protocol_status",
       "schema": "public",
-      "values": [
-        "draft",
-        "active",
-        "completed",
-        "suspended"
-      ]
+      "values": ["draft", "active", "completed", "suspended"]
     },
     "public.role": {
       "name": "role",
       "schema": "public",
-      "values": [
-        "user",
-        "admin"
-      ]
+      "values": ["user", "admin"]
     },
     "public.suggestionType": {
       "name": "suggestionType",
       "schema": "public",
-      "values": [
-        "diagnosis",
-        "treatment",
-        "medication",
-        "summary"
-      ]
+      "values": ["diagnosis", "treatment", "medication", "summary"]
     },
     "public.syncStatus": {
       "name": "syncStatus",
       "schema": "public",
-      "values": [
-        "pending",
-        "synced",
-        "failed"
-      ]
+      "values": ["pending", "synced", "failed"]
     }
   },
   "schemas": {},

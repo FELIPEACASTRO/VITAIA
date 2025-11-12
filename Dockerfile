@@ -1,53 +1,94 @@
-# VITAIA - Medical AI Assistant
-# Dockerfile para desenvolvimento e produção
+# VITAIA Medical AI - Production Dockerfile
+# Multi-stage build for optimized production image
 
-FROM node:20-alpine AS base
+# Stage 1: Build dependencies and application
+FROM node:20-alpine AS builder
 
-# Instalar dependências do sistema
-RUN apk add --no-cache libc6-compat curl
-
+# Set working directory
 WORKDIR /app
 
-# Copiar arquivos de dependências
-COPY package.json pnpm-lock.yaml ./
+# Install system dependencies for native modules
+RUN apk add --no-cache \
+    python3 \
+    make \
+    g++ \
+    cairo-dev \
+    jpeg-dev \
+    pango-dev \
+    musl-dev \
+    giflib-dev \
+    pixman-dev \
+    pangomm-dev \
+    libjpeg-turbo-dev \
+    freetype-dev
 
-# Instalar pnpm
-RUN npm install -g pnpm
+# Copy package files
+COPY package*.json pnpm-lock.yaml ./
 
-# Stage de dependências
-FROM base AS deps
+# Install pnpm
+RUN npm install -g pnpm@latest
+
+# Install dependencies
 RUN pnpm install --frozen-lockfile
 
-# Stage de build
-FROM base AS builder
-COPY --from=deps /app/node_modules ./node_modules
+# Copy source code
 COPY . .
 
-# Build da aplicação
-ENV NODE_ENV=production
+# Build the application
 RUN pnpm run build
 
-# Stage de produção
-FROM base AS runner
+# Stage 2: Production runtime
+FROM node:20-alpine AS runtime
+
+# Set working directory
 WORKDIR /app
 
-ENV NODE_ENV=production
+# Install only production system dependencies
+RUN apk add --no-cache \
+    dumb-init \
+    curl \
+    ca-certificates
 
-# Criar usuário não-root para segurança
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 vitaia
+# Create non-root user for security
+RUN addgroup -g 1001 -S vitaia && \
+    adduser -S vitaia -u 1001
 
-# Copiar arquivos necessários
-COPY --from=builder --chown=vitaia:nodejs /app/dist ./dist
-COPY --from=builder --chown=vitaia:nodejs /app/node_modules ./node_modules
-COPY --from=builder --chown=vitaia:nodejs /app/package.json ./package.json
-COPY --from=builder --chown=vitaia:nodejs /app/drizzle ./drizzle
+# Copy built application from builder stage
+COPY --from=builder --chown=vitaia:vitaia /app/dist ./dist
+COPY --from=builder --chown=vitaia:vitaia /app/client/dist ./client/dist
+COPY --from=builder --chown=vitaia:vitaia /app/package.json ./
+COPY --from=builder --chown=vitaia:vitaia /app/drizzle ./drizzle
 
+# Install only production dependencies
+RUN npm install -g pnpm@latest && \
+    pnpm install --prod --frozen-lockfile && \
+    pnpm store prune && \
+    npm cache clean --force
+
+# Set proper permissions
+RUN chown -R vitaia:vitaia /app
+
+# Switch to non-root user
 USER vitaia
 
+# Expose port
 EXPOSE 5000
 
-ENV PORT=5000
-ENV HOST=0.0.0.0
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost:5000/health || exit 1
 
+# Use dumb-init to handle signals properly
+ENTRYPOINT ["dumb-init", "--"]
+
+# Start the application
 CMD ["node", "dist/index.js"]
+
+# Labels for metadata
+LABEL maintainer="VITAIA Team <vitaia@medical-ai.com>"
+LABEL version="1.0.0"
+LABEL description="VITAIA Medical AI - Multi-Provider AI for Healthcare"
+LABEL org.opencontainers.image.title="VITAIA Medical AI"
+LABEL org.opencontainers.image.description="Advanced medical AI platform with multi-provider support"
+LABEL org.opencontainers.image.version="1.0.0"
+LABEL org.opencontainers.image.vendor="VITAIA"

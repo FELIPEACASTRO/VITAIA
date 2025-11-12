@@ -34,12 +34,14 @@ cp .env.example .env
 ```
 
 **Edite o arquivo `.env`** e configure:
+
 - 🤖 **OpenAI** (Opcional): Configure se for usar recursos de IA
 - 🗄️ **Database**: Configuração automática pelo Docker
 
 **Para desenvolvimento local, os valores padrão já funcionam!**
 
 **⚠️ IMPORTANTE: Autenticação Removida**
+
 - A aplicação roda sem sistema de autenticação
 - Todos os dados são associados a um usuário padrão (ID 1)
 - Ideal para desenvolvimento e demonstrações
@@ -52,6 +54,7 @@ docker-compose up -d
 ```
 
 Este comando irá:
+
 - 📦 Baixar as imagens necessárias (PostgreSQL, Node.js)
 - 🗄️ Criar o banco de dados PostgreSQL
 - 🏗️ Construir a aplicação VITAIA
@@ -90,6 +93,7 @@ http://localhost:5000
 ## 📊 Comandos Úteis
 
 ### **Ver logs em tempo real**
+
 ```bash
 # Logs de todos os serviços
 docker-compose logs -f
@@ -102,31 +106,37 @@ docker-compose logs -f postgres
 ```
 
 ### **Parar os serviços**
+
 ```bash
 docker-compose down
 ```
 
 ### **Parar e remover volumes (⚠️ APAGA O BANCO DE DADOS)**
+
 ```bash
 docker-compose down -v
 ```
 
 ### **Reiniciar os serviços**
+
 ```bash
 docker-compose restart
 ```
 
 ### **Rebuildar a aplicação (após alterações no código)**
+
 ```bash
 docker-compose up -d --build
 ```
 
 ### **Acessar o container da aplicação**
+
 ```bash
 docker exec -it vitaia-app sh
 ```
 
 ### **Acessar o banco de dados PostgreSQL**
+
 ```bash
 docker exec -it vitaia-postgres psql -U vitaia -d vitaia_db
 ```
@@ -144,6 +154,7 @@ A aplicação roda com um **usuário não-root** para segurança:
 - **GID**: 1001
 
 Este usuário é criado automaticamente no Dockerfile e possui permissões apenas para:
+
 - Ler arquivos da aplicação
 - Escrever logs
 - Conectar ao banco de dados
@@ -151,6 +162,7 @@ Este usuário é criado automaticamente no Dockerfile e possui permissões apena
 ### **Banco de Dados**
 
 Credenciais padrão (desenvolvimento):
+
 - **Host**: `localhost` (ou `postgres` dentro do Docker)
 - **Port**: `5432`
 - **Database**: `vitaia_db`
@@ -166,6 +178,7 @@ Credenciais padrão (desenvolvimento):
 Se preferir rodar sem Docker (desenvolvimento):
 
 ### 1. **Instalar Dependências**
+
 ```bash
 npm install
 # ou
@@ -175,6 +188,7 @@ pnpm install
 ### 2. **Configurar PostgreSQL Local**
 
 Instale PostgreSQL e crie o banco:
+
 ```sql
 CREATE DATABASE vitaia_db;
 CREATE USER vitaia WITH PASSWORD 'vitaia_dev_password';
@@ -182,17 +196,20 @@ GRANT ALL PRIVILEGES ON DATABASE vitaia_db TO vitaia;
 ```
 
 ### 3. **Configurar `.env`**
+
 ```bash
 cp .env.example .env
 # Edite DATABASE_URL para apontar para seu PostgreSQL local
 ```
 
 ### 4. **Executar Migrações**
+
 ```bash
 npm run db:push
 ```
 
 ### 5. **Iniciar em Modo Desenvolvimento**
+
 ```bash
 npm run dev
 ```
@@ -204,6 +221,7 @@ Acesse: `http://localhost:5000`
 ## 🐛 Resolução de Problemas
 
 ### **Erro: "Port 5000 already in use"**
+
 ```bash
 # Encontrar processo usando a porta
 lsof -i :5000
@@ -217,6 +235,7 @@ ports:
 ```
 
 ### **Erro: "Connection refused" ao banco de dados**
+
 ```bash
 # Verificar se o PostgreSQL está rodando
 docker ps | grep postgres
@@ -229,6 +248,7 @@ docker-compose restart postgres
 ```
 
 ### **Erro: "Migration failed"**
+
 ```bash
 # Force push do schema
 docker exec -it vitaia-app sh
@@ -236,6 +256,7 @@ npm run db:push --force
 ```
 
 ### **Container não inicia**
+
 ```bash
 # Ver logs detalhados
 docker-compose logs app
@@ -279,6 +300,7 @@ Antes de fazer deploy em produção:
 7. ✅ Implemente controle de acesso por usuário
 
 **Nota:** Atualmente todos os dados são associados ao usuário ID 1. Para produção, você precisará:
+
 - Adicionar sistema de autenticação (ex: Clerk, Auth0, NextAuth)
 - Modificar as rotas tRPC para usar `ctx.user` do sistema de autenticação
 - Atualizar o schema do banco para suportar múltiplos usuários
@@ -288,6 +310,7 @@ Antes de fazer deploy em produção:
 ## 📞 Suporte
 
 Problemas? Dúvidas?
+
 - Verifique a [Documentação completa](./README.md)
 - Abra uma issue no repositório
 - Consulte os logs: `docker-compose logs -f`

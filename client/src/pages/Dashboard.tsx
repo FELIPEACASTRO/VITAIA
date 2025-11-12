@@ -1,11 +1,28 @@
 import DashboardLayout from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
-import { Plus, Search, Users, Calendar, Mail, Phone, FileText, ChevronRight, Sparkles } from "lucide-react";
+import {
+  Plus,
+  Search,
+  Users,
+  Calendar,
+  Mail,
+  Phone,
+  FileText,
+  ChevronRight,
+  Sparkles,
+} from "lucide-react";
 import { useState } from "react";
 import { useLocation } from "wouter";
 
@@ -40,9 +57,10 @@ export default function Dashboard() {
     },
   });
 
-  const filteredPatients = patients?.filter((patient) =>
-    patient.name.toLowerCase().includes(searchTerm.toLowerCase())
-  ) || [];
+  const filteredPatients =
+    patients?.filter(patient =>
+      patient.name.toLowerCase().includes(searchTerm.toLowerCase())
+    ) || [];
 
   const handleCreatePatient = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,8 +87,9 @@ export default function Dashboard() {
               <Button
                 className="relative overflow-hidden group h-12 px-6"
                 style={{
-                  background: 'linear-gradient(135deg, #00D9FF 0%, #9D00FF 100%)',
-                  boxShadow: '0 10px 30px rgba(0, 217, 255, 0.3)',
+                  background:
+                    "linear-gradient(135deg, #00D9FF 0%, #9D00FF 100%)",
+                  boxShadow: "0 10px 30px rgba(0, 217, 255, 0.3)",
                 }}
               >
                 <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
@@ -83,8 +102,10 @@ export default function Dashboard() {
             <DialogContent className="max-w-2xl bg-[rgba(15,23,42,0.95)] backdrop-blur-2xl border border-[rgba(255,255,255,0.1)]">
               <DialogHeader>
                 <DialogTitle className="text-white text-2xl font-bold flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00D9FF] to-[#9D00FF] flex items-center justify-center"
-                    style={{ boxShadow: '0 0 20px rgba(0, 217, 255, 0.4)' }}>
+                  <div
+                    className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00D9FF] to-[#9D00FF] flex items-center justify-center"
+                    style={{ boxShadow: "0 0 20px rgba(0, 217, 255, 0.4)" }}
+                  >
                     <Plus className="w-5 h-5" />
                   </div>
                   Adicionar Novo Paciente
@@ -96,31 +117,49 @@ export default function Dashboard() {
               <form onSubmit={handleCreatePatient} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="col-span-2">
-                    <Label htmlFor="name" className="text-white">Nome do Paciente *</Label>
+                    <Label htmlFor="name" className="text-white">
+                      Nome do Paciente *
+                    </Label>
                     <Input
                       id="name"
                       value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      onChange={e =>
+                        setFormData({ ...formData, name: e.target.value })
+                      }
                       required
                       className="bg-[rgba(255,255,255,0.05)] border-[rgba(255,255,255,0.1)] text-white focus:border-[#00D9FF]"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="dob" className="text-white">Data de Nascimento</Label>
+                    <Label htmlFor="dob" className="text-white">
+                      Data de Nascimento
+                    </Label>
                     <Input
                       id="dob"
                       type="date"
                       value={formData.dateOfBirth}
-                      onChange={(e) => setFormData({ ...formData, dateOfBirth: e.target.value })}
+                      onChange={e =>
+                        setFormData({
+                          ...formData,
+                          dateOfBirth: e.target.value,
+                        })
+                      }
                       className="bg-[rgba(255,255,255,0.05)] border-[rgba(255,255,255,0.1)] text-white focus:border-[#00D9FF]"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="gender" className="text-white">Gênero</Label>
+                    <Label htmlFor="gender" className="text-white">
+                      Gênero
+                    </Label>
                     <select
                       id="gender"
                       value={formData.gender}
-                      onChange={(e) => setFormData({ ...formData, gender: e.target.value as "M" | "F" | "Other" })}
+                      onChange={e =>
+                        setFormData({
+                          ...formData,
+                          gender: e.target.value as "M" | "F" | "Other",
+                        })
+                      }
                       className="w-full px-3 py-2 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded-md text-white"
                     >
                       <option value="M">Masculino</option>
@@ -129,40 +168,62 @@ export default function Dashboard() {
                     </select>
                   </div>
                   <div>
-                    <Label htmlFor="email" className="text-white">Email</Label>
+                    <Label htmlFor="email" className="text-white">
+                      Email
+                    </Label>
                     <Input
                       id="email"
                       type="email"
                       value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      onChange={e =>
+                        setFormData({ ...formData, email: e.target.value })
+                      }
                       className="bg-[rgba(255,255,255,0.05)] border-[rgba(255,255,255,0.1)] text-white focus:border-[#00D9FF]"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="phone" className="text-white">Telefone</Label>
+                    <Label htmlFor="phone" className="text-white">
+                      Telefone
+                    </Label>
                     <Input
                       id="phone"
                       value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      onChange={e =>
+                        setFormData({ ...formData, phone: e.target.value })
+                      }
                       className="bg-[rgba(255,255,255,0.05)] border-[rgba(255,255,255,0.1)] text-white focus:border-[#00D9FF]"
                     />
                   </div>
                   <div className="col-span-2">
-                    <Label htmlFor="medicalHistory" className="text-white">Histórico Médico</Label>
+                    <Label htmlFor="medicalHistory" className="text-white">
+                      Histórico Médico
+                    </Label>
                     <Textarea
                       id="medicalHistory"
                       value={formData.medicalHistory}
-                      onChange={(e) => setFormData({ ...formData, medicalHistory: e.target.value })}
+                      onChange={e =>
+                        setFormData({
+                          ...formData,
+                          medicalHistory: e.target.value,
+                        })
+                      }
                       rows={3}
                       className="bg-[rgba(255,255,255,0.05)] border-[rgba(255,255,255,0.1)] text-white focus:border-[#00D9FF]"
                     />
                   </div>
                   <div className="col-span-2">
-                    <Label htmlFor="currentMedications" className="text-white">Medicações Atuais</Label>
+                    <Label htmlFor="currentMedications" className="text-white">
+                      Medicações Atuais
+                    </Label>
                     <Textarea
                       id="currentMedications"
                       value={formData.currentMedications}
-                      onChange={(e) => setFormData({ ...formData, currentMedications: e.target.value })}
+                      onChange={e =>
+                        setFormData({
+                          ...formData,
+                          currentMedications: e.target.value,
+                        })
+                      }
                       rows={2}
                       className="bg-[rgba(255,255,255,0.05)] border-[rgba(255,255,255,0.1)] text-white focus:border-[#00D9FF]"
                     />
@@ -174,11 +235,14 @@ export default function Dashboard() {
                     disabled={createPatientMutation.isPending}
                     className="flex-1"
                     style={{
-                      background: 'linear-gradient(135deg, #00FF88 0%, #00CC6A 100%)',
-                      boxShadow: '0 10px 30px rgba(0, 255, 136, 0.3)',
+                      background:
+                        "linear-gradient(135deg, #00FF88 0%, #00CC6A 100%)",
+                      boxShadow: "0 10px 30px rgba(0, 255, 136, 0.3)",
                     }}
                   >
-                    {createPatientMutation.isPending ? "Criando..." : "Criar Paciente"}
+                    {createPatientMutation.isPending
+                      ? "Criando..."
+                      : "Criar Paciente"}
                   </Button>
                   <Button
                     type="button"
@@ -202,7 +266,7 @@ export default function Dashboard() {
               <Input
                 placeholder="Buscar pacientes por nome..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={e => setSearchTerm(e.target.value)}
                 className="border-0 bg-transparent text-white placeholder:text-[#717E91] focus-visible:ring-0"
               />
             </div>
@@ -215,8 +279,10 @@ export default function Dashboard() {
             <div className="text-center">
               <div className="relative inline-flex items-center justify-center w-16 h-16 mb-4">
                 <div className="absolute inset-0 bg-gradient-to-br from-[#00D9FF] to-[#9D00FF] rounded-2xl blur-xl opacity-50 animate-pulse" />
-                <div className="relative w-16 h-16 bg-gradient-to-br from-[#00D9FF] to-[#9D00FF] rounded-2xl flex items-center justify-center"
-                  style={{ boxShadow: '0 0 30px rgba(0, 217, 255, 0.4)' }}>
+                <div
+                  className="relative w-16 h-16 bg-gradient-to-br from-[#00D9FF] to-[#9D00FF] rounded-2xl flex items-center justify-center"
+                  style={{ boxShadow: "0 0 30px rgba(0, 217, 255, 0.4)" }}
+                >
                   <Users className="w-8 h-8 text-white animate-pulse" />
                 </div>
               </div>
@@ -225,20 +291,27 @@ export default function Dashboard() {
           </div>
         ) : filteredPatients.length === 0 ? (
           <div className="relative bg-[rgba(15,23,42,0.7)] backdrop-blur-xl rounded-2xl p-12 border border-[rgba(255,255,255,0.08)] text-center">
-            <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-[#00D9FF]/20 to-[#9D00FF]/20 mb-4"
-              style={{ boxShadow: '0 0 30px rgba(0, 217, 255, 0.2)' }}>
+            <div
+              className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-[#00D9FF]/20 to-[#9D00FF]/20 mb-4"
+              style={{ boxShadow: "0 0 30px rgba(0, 217, 255, 0.2)" }}
+            >
               <Users className="w-10 h-10 text-[#00D9FF]" />
             </div>
-            <h3 className="text-white text-xl font-bold mb-2">Nenhum paciente encontrado</h3>
+            <h3 className="text-white text-xl font-bold mb-2">
+              Nenhum paciente encontrado
+            </h3>
             <p className="text-[#A9B1BD] mb-6">
-              {searchTerm ? "Tente buscar com outro termo" : "Comece adicionando seu primeiro paciente"}
+              {searchTerm
+                ? "Tente buscar com outro termo"
+                : "Comece adicionando seu primeiro paciente"}
             </p>
             {!searchTerm && (
               <Button
                 onClick={() => setIsCreateOpen(true)}
                 style={{
-                  background: 'linear-gradient(135deg, #00D9FF 0%, #9D00FF 100%)',
-                  boxShadow: '0 10px 30px rgba(0, 217, 255, 0.3)',
+                  background:
+                    "linear-gradient(135deg, #00D9FF 0%, #9D00FF 100%)",
+                  boxShadow: "0 10px 30px rgba(0, 217, 255, 0.3)",
                 }}
               >
                 <Plus className="w-4 h-4 mr-2" />
@@ -248,7 +321,7 @@ export default function Dashboard() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredPatients.map((patient) => (
+            {filteredPatients.map(patient => (
               <div
                 key={patient.id}
                 onClick={() => setLocation(`/paciente/${patient.id}`)}
@@ -258,18 +331,24 @@ export default function Dashboard() {
                 <div className="relative bg-[rgba(15,23,42,0.7)] backdrop-blur-xl rounded-2xl p-6 border border-[rgba(255,255,255,0.08)] hover:border-[rgba(255,255,255,0.15)] transition-all duration-300">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#00D9FF] to-[#9D00FF] flex items-center justify-center font-bold text-white text-lg"
-                        style={{ boxShadow: '0 0 20px rgba(0, 217, 255, 0.4)' }}>
+                      <div
+                        className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#00D9FF] to-[#9D00FF] flex items-center justify-center font-bold text-white text-lg"
+                        style={{ boxShadow: "0 0 20px rgba(0, 217, 255, 0.4)" }}
+                      >
                         {patient.name.charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <h3 className="text-white font-bold text-lg">{patient.name}</h3>
-                        <p className="text-[#A9B1BD] text-sm">ID: #{patient.id}</p>
+                        <h3 className="text-white font-bold text-lg">
+                          {patient.name}
+                        </h3>
+                        <p className="text-[#A9B1BD] text-sm">
+                          ID: #{patient.id}
+                        </p>
                       </div>
                     </div>
                     <ChevronRight className="w-5 h-5 text-[#717E91] group-hover:text-[#00D9FF] group-hover:translate-x-1 transition-all" />
                   </div>
-                  
+
                   <div className="space-y-2">
                     {patient.email && (
                       <div className="flex items-center gap-2 text-[#A9B1BD] text-sm">
@@ -286,7 +365,11 @@ export default function Dashboard() {
                     {patient.dateOfBirth && (
                       <div className="flex items-center gap-2 text-[#A9B1BD] text-sm">
                         <Calendar className="w-4 h-4 text-[#9D00FF]" />
-                        <span>{new Date(patient.dateOfBirth).toLocaleDateString('pt-BR')}</span>
+                        <span>
+                          {new Date(patient.dateOfBirth).toLocaleDateString(
+                            "pt-BR"
+                          )}
+                        </span>
                       </div>
                     )}
                   </div>
@@ -295,7 +378,9 @@ export default function Dashboard() {
                     <div className="mt-4 pt-4 border-t border-[rgba(255,255,255,0.08)]">
                       <div className="flex items-center gap-2 mb-2">
                         <FileText className="w-4 h-4 text-[#FF0099]" />
-                        <span className="text-[#A9B1BD] text-xs font-medium">Histórico Médico</span>
+                        <span className="text-[#A9B1BD] text-xs font-medium">
+                          Histórico Médico
+                        </span>
                       </div>
                       <p className="text-[#717E91] text-sm line-clamp-2">
                         {patient.medicalHistory}
@@ -315,7 +400,8 @@ export default function Dashboard() {
               <div className="flex items-center gap-3">
                 <Sparkles className="w-5 h-5 text-[#00D9FF]" />
                 <span className="text-white font-semibold">
-                  Total: {filteredPatients.length} paciente{filteredPatients.length !== 1 ? 's' : ''}
+                  Total: {filteredPatients.length} paciente
+                  {filteredPatients.length !== 1 ? "s" : ""}
                 </span>
               </div>
               <div className="flex items-center gap-2">
