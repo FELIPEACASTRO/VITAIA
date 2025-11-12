@@ -1,16 +1,20 @@
 import { systemRouter } from "./_core/systemRouter";
-import { publicProcedure, router } from "./_core/trpc";
+import { authRouter } from "./_core/authRouter";
+import { mlopsRouter } from "./_core/mlopsRouter";
+import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import * as db from "./db";
 import { invokeLLM } from "./_core/llm";
 
 export const appRouter = router({
   system: systemRouter,
+  auth: authRouter,
+  mlops: mlopsRouter,
 
   // Patient management
   patients: router({
-    list: publicProcedure.query(() => 
-      db.getPatientsByDoctor(1)
+    list: protectedProcedure.query(({ ctx }) =>
+      db.getPatientsByDoctor(ctx.user!.id)
     ),
     get: publicProcedure
       .input(z.object({ patientId: z.number() }))
@@ -133,8 +137,8 @@ IMPORTANT: These are suggestions only. The final diagnosis and treatment decisio
             ],
           });
 
-          const content = typeof response.choices[0]?.message?.content === 'string' 
-            ? response.choices[0].message.content 
+          const content = typeof response.choices[0]?.message?.content === 'string'
+            ? response.choices[0].message.content
             : "";
 
           if (content) {
@@ -190,7 +194,7 @@ IMPORTANT: These are suggestions only. The final diagnosis and treatment decisio
         alternativeOptions: z.string().optional(),
       }))
       .mutation(({ input }) => db.createAIExplanation(input)),
-    
+
     get: publicProcedure
       .input(z.object({ suggestionId: z.number() }))
       .query(({ input }) => db.getAIExplanationBySuggestion(input.suggestionId)),
@@ -207,13 +211,13 @@ IMPORTANT: These are suggestions only. The final diagnosis and treatment decisio
         accuracy: z.number().min(1).max(5).optional(),
         usefulness: z.number().min(1).max(5).optional(),
       }))
-      .mutation(({ input }) => 
+      .mutation(({ input }) =>
         db.createSuggestionFeedback({
           ...input,
           doctorId: 1,
         })
       ),
-    
+
     get: publicProcedure
       .input(z.object({ suggestionId: z.number() }))
       .query(({ input }) => db.getSuggestionFeedback(input.suggestionId)),
@@ -236,11 +240,11 @@ IMPORTANT: These are suggestions only. The final diagnosis and treatment decisio
           ipAddress: ctx.req.ip || "unknown",
         })
       ),
-    
+
     get: publicProcedure
       .input(z.object({ patientId: z.number(), consentType: z.string() }))
       .query(({ input }) => db.getPatientConsent(input.patientId, input.consentType)),
-    
+
     getAll: publicProcedure
       .input(z.object({ patientId: z.number() }))
       .query(({ input }) => db.getAllPatientConsents(input.patientId)),
@@ -254,11 +258,11 @@ IMPORTANT: These are suggestions only. The final diagnosis and treatment decisio
         retentionPeriodMonths: z.number().default(36),
       }))
       .mutation(({ input }) => db.createDataRetentionPolicy(input)),
-    
+
     get: publicProcedure
       .input(z.object({ patientId: z.number() }))
       .query(({ input }) => db.getDataRetentionPolicy(input.patientId)),
-    
+
     update: publicProcedure
       .input(z.object({
         patientId: z.number(),
@@ -284,15 +288,15 @@ IMPORTANT: These are suggestions only. The final diagnosis and treatment decisio
         description: z.string().optional(),
       }))
       .mutation(({ input }) => db.createMedicalImage(input)),
-    
+
     list: publicProcedure
       .input(z.object({ consultationId: z.number() }))
       .query(({ input }) => db.getMedicalImagesByConsultation(input.consultationId)),
-    
+
     get: publicProcedure
       .input(z.object({ imageId: z.number() }))
       .query(({ input }) => db.getMedicalImageById(input.imageId)),
-    
+
     analyzeImage: publicProcedure
       .input(z.object({
         imageId: z.number(),
@@ -360,13 +364,13 @@ Remember this is for physician review only, not a substitute for professional di
         ethicsApprovalDate: z.date().optional(),
       }))
       .mutation(({ input }) => db.createResearchProtocol(input)),
-    
+
     getProtocol: publicProcedure
       .input(z.object({ protocolId: z.number() }))
       .query(({ input }) => db.getResearchProtocolById(input.protocolId)),
-    
+
     listProtocols: publicProcedure.query(() => db.getAllResearchProtocols()),
-    
+
     updateProtocol: publicProcedure
       .input(z.object({
         protocolId: z.number(),
@@ -378,7 +382,7 @@ Remember this is for physician review only, not a substitute for professional di
         const { protocolId, ...data } = input;
         return db.updateResearchProtocol(protocolId, data);
       }),
-    
+
     enrollParticipant: publicProcedure
       .input(z.object({
         protocolId: z.number(),
@@ -387,11 +391,11 @@ Remember this is for physician review only, not a substitute for professional di
         consentGiven: z.boolean(),
       }))
       .mutation(({ input }) => db.enrollResearchParticipant(input)),
-    
+
     getParticipants: publicProcedure
       .input(z.object({ protocolId: z.number() }))
       .query(({ input }) => db.getResearchParticipantsByProtocol(input.protocolId)),
-    
+
     updateParticipant: publicProcedure
       .input(z.object({
         participantId: z.number(),
@@ -415,11 +419,11 @@ Remember this is for physician review only, not a substitute for professional di
         fhirData: z.string(),
       }))
       .mutation(({ input }) => db.createHL7FhirMapping(input)),
-    
+
     getEhrMapping: publicProcedure
       .input(z.object({ patientId: z.number() }))
       .query(({ input }) => db.getHL7FhirMappingByPatient(input.patientId)),
-    
+
     syncEhrData: publicProcedure
       .input(z.object({
         mappingId: z.number(),
@@ -451,7 +455,7 @@ Remember this is for physician review only, not a substitute for professional di
       const patientCount = await db.getPatientCountByDoctor(1);
       const consultationCount = await db.getConsultationCountByDoctor(1);
       const aiStats = await db.getAISuggestionStats(1);
-      
+
       return {
         patientCount,
         consultationCount,
@@ -469,7 +473,7 @@ Remember this is for physician review only, not a substitute for professional di
         const patient = consultation ? await db.getPatientById(consultation.patientId) : null;
         const examResults = consultation ? await db.getExamResultsByConsultation(input.consultationId) : [];
         const aiSuggestions = consultation ? await db.getAISuggestionsByConsultation(input.consultationId) : [];
-        
+
         return {
           success: true,
           data: {
@@ -485,11 +489,11 @@ Remember this is for physician review only, not a substitute for professional di
   // Medical Specialties
   specialties: router({
     list: publicProcedure.query(() => db.getAllMedicalSpecialties()),
-    
+
     get: publicProcedure
       .input(z.object({ specialtyId: z.number() }))
       .query(({ input }) => db.getMedicalSpecialtyById(input.specialtyId)),
-    
+
     create: publicProcedure
       .input(z.object({
         name: z.string(),
@@ -498,11 +502,11 @@ Remember this is for physician review only, not a substitute for professional di
         icd10Code: z.string().optional(),
       }))
       .mutation(({ input }) => db.createMedicalSpecialty(input)),
-    
+
     getDoctorSpecialties: publicProcedure
       .input(z.object({ doctorId: z.number() }))
       .query(({ input }) => db.getDoctorSpecialties(input.doctorId)),
-    
+
     addDoctorSpecialty: publicProcedure
       .input(z.object({
         doctorId: z.number(),
@@ -519,11 +523,11 @@ Remember this is for physician review only, not a substitute for professional di
     list: publicProcedure
       .input(z.object({ specialtyId: z.number() }))
       .query(({ input }) => db.getGuidelinesBySpecialty(input.specialtyId)),
-    
+
     getByCondition: publicProcedure
       .input(z.object({ specialtyId: z.number(), condition: z.string() }))
       .query(({ input }) => db.getGuidelineByCondition(input.specialtyId, input.condition)),
-    
+
     create: publicProcedure
       .input(z.object({
         specialtyId: z.number(),
@@ -541,7 +545,7 @@ Remember this is for physician review only, not a substitute for professional di
     listBySpecialty: publicProcedure
       .input(z.object({ specialtyId: z.number() }))
       .query(({ input }) => db.getMedicationsBySpecialty(input.specialtyId)),
-    
+
     create: publicProcedure
       .input(z.object({
         specialtyId: z.number(),
@@ -563,7 +567,7 @@ Remember this is for physician review only, not a substitute for professional di
     listBySpecialty: publicProcedure
       .input(z.object({ specialtyId: z.number() }))
       .query(({ input }) => db.getTestsBySpecialty(input.specialtyId)),
-    
+
     create: publicProcedure
       .input(z.object({
         specialtyId: z.number(),
@@ -584,7 +588,7 @@ Remember this is for physician review only, not a substitute for professional di
     listBySpecialty: publicProcedure
       .input(z.object({ specialtyId: z.number() }))
       .query(({ input }) => db.getProceduresBySpecialty(input.specialtyId)),
-    
+
     create: publicProcedure
       .input(z.object({
         specialtyId: z.number(),
@@ -605,7 +609,7 @@ Remember this is for physician review only, not a substitute for professional di
     get: publicProcedure
       .input(z.object({ consultationId: z.number() }))
       .query(({ input }) => db.getConsultationSpecialty(input.consultationId)),
-    
+
     create: publicProcedure
       .input(z.object({
         consultationId: z.number(),

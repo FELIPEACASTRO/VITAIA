@@ -14,9 +14,19 @@ export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   openId: varchar("openId", { length: 64 }).notNull().unique(),
   name: text("name"),
-  email: varchar("email", { length: 320 }),
+  email: varchar("email", { length: 320 }).unique(),
+  password: varchar("password", { length: 255 }), // Hash da senha
   loginMethod: varchar("loginMethod", { length: 64 }),
   role: roleEnum("role").default("user").notNull(),
+  crm: varchar("crm", { length: 20 }), // Registro médico
+  specialty: varchar("specialty", { length: 100 }), // Especialidade médica
+  isActive: boolean("isActive").default(true), // Status da conta
+  emailVerified: boolean("emailVerified").default(false), // Email verificado
+  twoFactorEnabled: boolean("twoFactorEnabled").default(false), // 2FA
+  twoFactorSecret: varchar("twoFactorSecret", { length: 32 }), // Secret para 2FA
+  lastPasswordChange: timestamp("lastPasswordChange"), // Última mudança de senha
+  failedLoginAttempts: integer("failedLoginAttempts").default(0), // Tentativas de login falhadas
+  lockedUntil: timestamp("lockedUntil"), // Conta bloqueada até
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().notNull().$onUpdate(() => new Date()),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
@@ -344,3 +354,169 @@ export const consultationSpecialty = pgTable("consultationSpecialty", {
 
 export type ConsultationSpecialty = typeof consultationSpecialty.$inferSelect;
 export type InsertConsultationSpecialty = typeof consultationSpecialty.$inferInsert;
+
+// ========================================
+// MLOPS E MACHINE LEARNING TABLES
+// ========================================
+
+export const modelStatusEnum = pgEnum("model_status", ["training", "active", "deprecated", "failed"]);
+export const experimentStatusEnum = pgEnum("experiment_status", ["running", "completed", "failed", "cancelled"]);
+export const featureTypeEnum = pgEnum("feature_type", ["numerical", "categorical", "text", "image", "time_series"]);
+export const predictionStatusEnum = pgEnum("prediction_status", ["pending", "completed", "failed", "reviewed"]);
+
+// Registro de versões de modelos
+export const modelVersions = pgTable("modelVersions", {
+  id: serial("id").primaryKey(),
+  modelName: varchar("modelName", { length: 100 }).notNull(),
+  version: varchar("version", { length: 20 }).notNull(),
+  description: text("description"),
+  algorithm: varchar("algorithm", { length: 100 }), // Random Forest, XGBoost, Neural Network, etc.
+  hyperparameters: text("hyperparameters"), // JSON com hiperparâmetros
+  trainingDataHash: varchar("trainingDataHash", { length: 64 }), // Hash dos dados de treino
+  modelPath: varchar("modelPath", { length: 500 }), // Caminho do modelo salvo
+  status: modelStatusEnum("status").default("training"),
+  accuracy: integer("accuracy"), // Acurácia em %
+  precision: integer("precision"), // Precisão em %
+  recall: integer("recall"), // Recall em %
+  f1Score: integer("f1Score"), // F1-Score em %
+  aucRoc: integer("aucRoc"), // AUC-ROC em %
+  trainingTime: integer("trainingTime"), // Tempo de treino em segundos
+  modelSize: integer("modelSize"), // Tamanho do modelo em bytes
+  createdBy: integer("createdBy").notNull().references(() => users.id),
+  deployedAt: timestamp("deployedAt"),
+  deprecatedAt: timestamp("deprecatedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type ModelVersion = typeof modelVersions.$inferSelect;
+export type InsertModelVersion = typeof modelVersions.$inferInsert;
+
+// Experimentos de ML
+export const mlExperiments = pgTable("mlExperiments", {
+  id: serial("id").primaryKey(),
+  experimentName: varchar("experimentName", { length: 100 }).notNull(),
+  description: text("description"),
+  objective: varchar("objective", { length: 100 }), // classification, regression, clustering
+  dataset: varchar("dataset", { length: 100 }),
+  status: experimentStatusEnum("status").default("running"),
+  config: text("config"), // JSON com configuração do experimento
+  metrics: text("metrics"), // JSON com métricas do experimento
+  results: text("results"), // JSON com resultados
+  startedAt: timestamp("startedAt").defaultNow().notNull(),
+  completedAt: timestamp("completedAt"),
+  createdBy: integer("createdBy").notNull().references(() => users.id),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type MLExperiment = typeof mlExperiments.$inferSelect;
+export type InsertMLExperiment = typeof mlExperiments.$inferInsert;
+
+// Feature Store
+export const featureDefinitions = pgTable("featureDefinitions", {
+  id: serial("id").primaryKey(),
+  featureName: varchar("featureName", { length: 100 }).notNull().unique(),
+  description: text("description"),
+  featureType: featureTypeEnum("featureType").notNull(),
+  source: varchar("source", { length: 100 }), // Tabela/fonte de origem
+  transformation: text("transformation"), // SQL ou código de transformação
+  validationRules: text("validationRules"), // JSON com regras de validação
+  isActive: boolean("isActive").default(true),
+  version: integer("version").default(1),
+  createdBy: integer("createdBy").notNull().references(() => users.id),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull().$onUpdate(() => new Date()),
+});
+
+export type FeatureDefinition = typeof featureDefinitions.$inferSelect;
+export type InsertFeatureDefinition = typeof featureDefinitions.$inferInsert;
+
+// Datasets de treino
+export const trainingDatasets = pgTable("trainingDatasets", {
+  id: serial("id").primaryKey(),
+  datasetName: varchar("datasetName", { length: 100 }).notNull(),
+  description: text("description"),
+  dataPath: varchar("dataPath", { length: 500 }), // Caminho dos dados
+  dataHash: varchar("dataHash", { length: 64 }).notNull(), // Hash para versionamento
+  size: integer("size"), // Número de registros
+  features: text("features"), // JSON com lista de features
+  target: varchar("target", { length: 100 }), // Variável target
+  splitRatio: varchar("splitRatio", { length: 20 }), // Ex: "70/20/10" (train/val/test)
+  createdBy: integer("createdBy").notNull().references(() => users.id),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type TrainingDataset = typeof trainingDatasets.$inferSelect;
+export type InsertTrainingDataset = typeof trainingDatasets.$inferInsert;
+
+// Log de predições para monitoramento
+export const predictionLogs = pgTable("predictionLogs", {
+  id: serial("id").primaryKey(),
+  modelVersionId: integer("modelVersionId").notNull().references(() => modelVersions.id),
+  consultationId: integer("consultationId").references(() => consultations.id),
+  patientId: integer("patientId").references(() => patients.id),
+  inputFeatures: text("inputFeatures").notNull(), // JSON com features de entrada
+  prediction: text("prediction").notNull(), // JSON com predição
+  confidence: integer("confidence"), // Confiança da predição (0-100)
+  actualOutcome: text("actualOutcome"), // Resultado real (para feedback)
+  feedback: text("feedback"), // Feedback do médico
+  status: predictionStatusEnum("status").default("pending"),
+  processingTime: integer("processingTime"), // Tempo de processamento em ms
+  reviewedBy: integer("reviewedBy").references(() => users.id),
+  reviewedAt: timestamp("reviewedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type PredictionLog = typeof predictionLogs.$inferSelect;
+export type InsertPredictionLog = typeof predictionLogs.$inferInsert;
+
+// Monitoramento de drift de modelo
+export const modelDriftMonitoring = pgTable("modelDriftMonitoring", {
+  id: serial("id").primaryKey(),
+  modelVersionId: integer("modelVersionId").notNull().references(() => modelVersions.id),
+  metricName: varchar("metricName", { length: 100 }).notNull(), // accuracy, precision, etc.
+  currentValue: integer("currentValue").notNull(), // Valor atual da métrica
+  baselineValue: integer("baselineValue").notNull(), // Valor baseline
+  driftScore: integer("driftScore"), // Score de drift (0-100)
+  threshold: integer("threshold").default(10), // Threshold para alerta
+  isAlert: boolean("isAlert").default(false), // Se está em alerta
+  alertSentAt: timestamp("alertSentAt"),
+  measurementPeriod: varchar("measurementPeriod", { length: 20 }), // daily, weekly, monthly
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type ModelDriftMonitoring = typeof modelDriftMonitoring.$inferSelect;
+export type InsertModelDriftMonitoring = typeof modelDriftMonitoring.$inferInsert;
+
+// Detecção de anomalias
+export const anomalyDetections = pgTable("anomalyDetections", {
+  id: serial("id").primaryKey(),
+  detectionType: varchar("detectionType", { length: 50 }).notNull(), // fraud, outlier, pattern
+  resourceType: varchar("resourceType", { length: 50 }), // consultation, user, prediction
+  resourceId: integer("resourceId"),
+  anomalyScore: integer("anomalyScore").notNull(), // Score de anomalia (0-100)
+  description: text("description"),
+  features: text("features"), // JSON com features que causaram a anomalia
+  severity: varchar("severity", { length: 20 }).default("medium"), // low, medium, high, critical
+  status: varchar("status", { length: 20 }).default("open"), // open, investigating, resolved, false_positive
+  investigatedBy: integer("investigatedBy").references(() => users.id),
+  investigatedAt: timestamp("investigatedAt"),
+  resolution: text("resolution"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type AnomalyDetection = typeof anomalyDetections.$inferSelect;
+export type InsertAnomalyDetection = typeof anomalyDetections.$inferInsert;
+
+// Métricas de performance do sistema
+export const systemMetrics = pgTable("systemMetrics", {
+  id: serial("id").primaryKey(),
+  metricName: varchar("metricName", { length: 100 }).notNull(),
+  metricValue: integer("metricValue").notNull(),
+  unit: varchar("unit", { length: 20 }), // ms, %, count, bytes
+  category: varchar("category", { length: 50 }), // performance, usage, error, business
+  tags: text("tags"), // JSON com tags adicionais
+  timestamp: timestamp("timestamp").defaultNow().notNull(),
+});
+
+export type SystemMetric = typeof systemMetrics.$inferSelect;
+export type InsertSystemMetric = typeof systemMetrics.$inferInsert;
