@@ -49,10 +49,9 @@ VITAIA é uma plataforma inovadora de inteligência artificial médica que auxil
 - Clinical-BR-LlaMA-2-7B (modelo open-source)
 - Análise de imagens médicas
 
-**Autenticação & Segurança:**
-- Manus OAuth
-- JWT Sessions
+**Segurança:**
 - LGPD Compliance
+- Audit Logging
 
 ## 📊 Estrutura do Banco de Dados
 
@@ -139,10 +138,6 @@ Veja `.env.example` para configuração completa. Principais variáveis:
 # Banco de Dados
 DATABASE_URL=postgresql://vitaia:password@localhost:5432/vitaia_db
 
-# Autenticação
-JWT_SECRET=seu_secret_seguro_aqui
-VITE_APP_ID=seu_app_id_oauth
-
 # IA & APIs (Opcional)
 OPENAI_API_KEY=sua_chave_openai
 BUILT_IN_FORGE_API_KEY=sua_chave_forge
@@ -151,6 +146,12 @@ BUILT_IN_FORGE_API_KEY=sua_chave_forge
 VITE_APP_TITLE=VITAIA
 VITE_APP_LOGO=/vitaia-logo.svg
 ```
+
+**⚠️ IMPORTANTE: Autenticação Removida**
+- A aplicação roda sem sistema de autenticação
+- Todos os dados são associados a um usuário padrão (ID 1)
+- Ideal para desenvolvimento e demonstrações
+- Para produção, considere adicionar autenticação conforme necessário
 
 ## 📁 Estrutura do Projeto
 

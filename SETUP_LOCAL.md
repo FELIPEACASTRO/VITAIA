@@ -34,11 +34,16 @@ cp .env.example .env
 ```
 
 **Edite o arquivo `.env`** e configure:
-- ✅ **JWT_SECRET**: Altere para uma string aleatória segura em produção
-- ⚙️ **OAuth** (Opcional): Configure se for usar autenticação OAuth
 - 🤖 **OpenAI** (Opcional): Configure se for usar recursos de IA
+- 🗄️ **Database**: Configuração automática pelo Docker
 
 **Para desenvolvimento local, os valores padrão já funcionam!**
+
+**⚠️ IMPORTANTE: Autenticação Removida**
+- A aplicação roda sem sistema de autenticação
+- Todos os dados são associados a um usuário padrão (ID 1)
+- Ideal para desenvolvimento e demonstrações
+- Não há necessidade de configurar OAuth ou JWT
 
 ### 3️⃣ **Execute com Docker Compose**
 
@@ -261,15 +266,22 @@ vitaia/
 
 ## 🔒 Segurança - Produção
 
+**⚠️ IMPORTANTE:** A aplicação não possui sistema de autenticação
+
 Antes de fazer deploy em produção:
 
-1. ✅ Altere `JWT_SECRET` para valor aleatório forte
+1. ✅ **Implemente autenticação** (OAuth, JWT, ou similar)
 2. ✅ Altere senhas do PostgreSQL
 3. ✅ Configure HTTPS/SSL
-4. ✅ Configure OAuth real (não use valores padrão)
-5. ✅ Use secrets manager (não .env em produção)
-6. ✅ Configure firewall/security groups
-7. ✅ Ative logs e monitoring
+4. ✅ Use secrets manager (não .env em produção)
+5. ✅ Configure firewall/security groups
+6. ✅ Ative logs e monitoring
+7. ✅ Implemente controle de acesso por usuário
+
+**Nota:** Atualmente todos os dados são associados ao usuário ID 1. Para produção, você precisará:
+- Adicionar sistema de autenticação (ex: Clerk, Auth0, NextAuth)
+- Modificar as rotas tRPC para usar `ctx.user` do sistema de autenticação
+- Atualizar o schema do banco para suportar múltiplos usuários
 
 ---
 

@@ -63,11 +63,12 @@ The following environment variables are used:
 ### Database (Auto-configured by Replit)
 - `DATABASE_URL` - PostgreSQL connection string
 
-### Authentication (Manus OAuth)
-- `VITE_APP_ID` - Application ID for Manus OAuth
-- `JWT_SECRET` - Secret for cookie signing
-- `OAUTH_SERVER_URL` - OAuth server URL (default: https://api.manus.im)
-- `OWNER_OPEN_ID` - OpenID of the owner/admin user
+### Authentication
+**⚠️ AUTHENTICATION REMOVED**
+- The application now runs without authentication
+- All data is associated with default user (ID 1)
+- Ideal for development and demonstrations
+- For production, consider adding authentication as needed
 
 ### AI/ML Features
 - `BUILT_IN_FORGE_API_URL` - Forge API endpoint
@@ -125,6 +126,30 @@ npm start       # Run production server
 ```
 
 ## Recent Changes (Migration to Replit)
+
+### November 11, 2025 - Authentication System Removed
+
+**Complete removal of authentication system:**
+- ✅ Removed OAuth/Manus authentication
+- ✅ Removed login pages and auth components
+- ✅ Removed JWT session management
+- ✅ Removed protected procedures (all routes now public)
+- ✅ Updated all tRPC routes to use default user (ID 1)
+- ✅ Updated documentation to reflect no-auth architecture
+- ✅ Removed auth-related environment variables
+
+**Technical Details:**
+- Deleted: `Login.tsx`, `AuthDialog.tsx`, `useAuth.ts`
+- Deleted: `server/_core/oauth.ts`, `server/_core/sdk.ts`
+- Modified: All `protectedProcedure` → `publicProcedure`
+- Modified: All `ctx.user.id` → hardcoded `1`
+- Removed: `COOKIE_NAME`, `UNAUTHED_ERR_MSG`, `NOT_ADMIN_ERR_MSG`
+
+**Impact:**
+- Application is now accessible without login
+- All operations use default doctor ID = 1
+- Simplified deployment (no OAuth setup required)
+- Ideal for demos and development
 
 ### November 11, 2025 - Complete Setup & Routing Implementation
 
