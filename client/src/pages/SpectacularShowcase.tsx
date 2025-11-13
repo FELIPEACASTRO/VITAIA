@@ -4,16 +4,16 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Sparkles, 
-  Eye, 
-  Code, 
-  Palette, 
-  Zap, 
+import {
+  Sparkles,
+  Eye,
+  Code,
+  Palette,
+  Zap,
   Heart,
   Brain,
   Users,
-  Activity
+  Activity,
 } from "lucide-react";
 
 // Import dos componentes espetaculares
@@ -40,7 +40,7 @@ const mockPatient = {
     heartRate: 78,
     bloodPressure: "140/90",
     temperature: 36.8,
-    oxygenSaturation: 97
+    oxygenSaturation: 97,
   },
   conditions: ["Hipertensão", "Diabetes Tipo 2", "Colesterol Alto"],
   aiInsights: {
@@ -48,10 +48,10 @@ const mockPatient = {
     recommendations: [
       "Monitorar pressão arterial diariamente",
       "Ajustar medicação para diabetes",
-      "Agendar consulta cardiológica"
+      "Agendar consulta cardiológica",
     ],
-    lastAnalysis: "Hoje às 14:30"
-  }
+    lastAnalysis: "Hoje às 14:30",
+  },
 };
 
 const showcaseItems = [
@@ -61,7 +61,7 @@ const showcaseItems = [
     description: "Landing page cinematográfica com animações avançadas",
     icon: Sparkles,
     color: "from-purple-500 to-pink-500",
-    component: "hero"
+    component: "hero",
   },
   {
     id: "loading",
@@ -69,7 +69,7 @@ const showcaseItems = [
     description: "Tela de carregamento com múltiplos estágios e animações",
     icon: Zap,
     color: "from-blue-500 to-cyan-500",
-    component: "loading"
+    component: "loading",
   },
   {
     id: "patient-card",
@@ -77,7 +77,7 @@ const showcaseItems = [
     description: "Card de paciente com vitais, IA e micro-interações",
     icon: Heart,
     color: "from-green-500 to-emerald-500",
-    component: "patient"
+    component: "patient",
   },
   {
     id: "dashboard",
@@ -85,7 +85,7 @@ const showcaseItems = [
     description: "Dashboard completo com gráficos e analytics em tempo real",
     icon: Activity,
     color: "from-orange-500 to-red-500",
-    component: "dashboard"
+    component: "dashboard",
   },
   {
     id: "microcopy",
@@ -93,8 +93,8 @@ const showcaseItems = [
     description: "Comunicação empática e profissional em cada interação",
     icon: Brain,
     color: "from-indigo-500 to-purple-500",
-    component: "microcopy"
-  }
+    component: "microcopy",
+  },
 ];
 
 export default function SpectacularShowcase() {
@@ -116,7 +116,7 @@ export default function SpectacularShowcase() {
             <SpectacularLoadingScreen isLoading={isLoadingDemo} />
             {!isLoadingDemo && (
               <div className="flex items-center justify-center min-h-[400px] bg-slate-100 dark:bg-slate-800 rounded-lg">
-                <Button 
+                <Button
                   onClick={startLoadingDemo}
                   className="bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-600 hover:to-cyan-600"
                 >
@@ -130,10 +130,10 @@ export default function SpectacularShowcase() {
       case "patient":
         return (
           <div className="max-w-md mx-auto">
-            <SpectacularPatientCard 
+            <SpectacularPatientCard
               patient={mockPatient}
-              onViewDetails={(id) => console.log("Ver detalhes:", id)}
-              onScheduleAppointment={(id) => console.log("Agendar:", id)}
+              onViewDetails={id => console.log("Ver detalhes:", id)}
+              onScheduleAppointment={id => console.log("Agendar:", id)}
             />
           </div>
         );
@@ -167,13 +167,19 @@ export default function SpectacularShowcase() {
                 </div>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-2">
-              <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+              <Badge
+                variant="outline"
+                className="bg-green-50 text-green-700 border-green-200"
+              >
                 <Eye className="h-3 w-3 mr-1" />
                 Demo Mode
               </Badge>
-              <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200">
+              <Badge
+                variant="outline"
+                className="bg-purple-50 text-purple-700 border-purple-200"
+              >
                 <Code className="h-3 w-3 mr-1" />
                 React 19 + TypeScript
               </Badge>
@@ -194,20 +200,22 @@ export default function SpectacularShowcase() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
-                {showcaseItems.map((item) => (
+                {showcaseItems.map(item => (
                   <motion.button
                     key={item.id}
                     onClick={() => setActiveComponent(item.component)}
                     className={`w-full text-left p-4 rounded-lg border transition-all duration-300 ${
                       activeComponent === item.component
-                        ? 'border-purple-200 bg-purple-50 dark:bg-purple-900/20 dark:border-purple-700'
-                        : 'border-gray-200 dark:border-gray-700 hover:border-purple-200 hover:bg-purple-50/50 dark:hover:bg-purple-900/10'
+                        ? "border-purple-200 bg-purple-50 dark:bg-purple-900/20 dark:border-purple-700"
+                        : "border-gray-200 dark:border-gray-700 hover:border-purple-200 hover:bg-purple-50/50 dark:hover:bg-purple-900/10"
                     }`}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
                     <div className="flex items-start gap-3">
-                      <div className={`p-2 rounded-lg bg-gradient-to-r ${item.color}`}>
+                      <div
+                        className={`p-2 rounded-lg bg-gradient-to-r ${item.color}`}
+                      >
                         <item.icon className="h-4 w-4 text-white" />
                       </div>
                       <div className="flex-1 min-w-0">
@@ -235,13 +243,34 @@ export default function SpectacularShowcase() {
               <CardContent>
                 <div className="space-y-3 text-sm">
                   {[
-                    { role: "Product Manager", color: "bg-blue-100 text-blue-800" },
-                    { role: "UX Designer", color: "bg-green-100 text-green-800" },
-                    { role: "UI Designer", color: "bg-purple-100 text-purple-800" },
-                    { role: "Motion Designer", color: "bg-pink-100 text-pink-800" },
-                    { role: "UX Writer", color: "bg-orange-100 text-orange-800" },
-                    { role: "Frontend Dev", color: "bg-cyan-100 text-cyan-800" },
-                    { role: "Accessibility", color: "bg-indigo-100 text-indigo-800" },
+                    {
+                      role: "Product Manager",
+                      color: "bg-blue-100 text-blue-800",
+                    },
+                    {
+                      role: "UX Designer",
+                      color: "bg-green-100 text-green-800",
+                    },
+                    {
+                      role: "UI Designer",
+                      color: "bg-purple-100 text-purple-800",
+                    },
+                    {
+                      role: "Motion Designer",
+                      color: "bg-pink-100 text-pink-800",
+                    },
+                    {
+                      role: "UX Writer",
+                      color: "bg-orange-100 text-orange-800",
+                    },
+                    {
+                      role: "Frontend Dev",
+                      color: "bg-cyan-100 text-cyan-800",
+                    },
+                    {
+                      role: "Accessibility",
+                      color: "bg-indigo-100 text-indigo-800",
+                    },
                   ].map((prof, index) => (
                     <motion.div
                       key={prof.role}
@@ -249,7 +278,10 @@ export default function SpectacularShowcase() {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1 }}
                     >
-                      <Badge variant="secondary" className={`${prof.color} text-xs`}>
+                      <Badge
+                        variant="secondary"
+                        className={`${prof.color} text-xs`}
+                      >
                         ✅ {prof.role}
                       </Badge>
                     </motion.div>
@@ -277,22 +309,39 @@ export default function SpectacularShowcase() {
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                      {showcaseItems.find(item => item.component === activeComponent)?.title}
+                      {
+                        showcaseItems.find(
+                          item => item.component === activeComponent
+                        )?.title
+                      }
                     </h3>
                     <p className="text-gray-600 dark:text-gray-300 mt-1">
-                      {showcaseItems.find(item => item.component === activeComponent)?.description}
+                      {
+                        showcaseItems.find(
+                          item => item.component === activeComponent
+                        )?.description
+                      }
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                    <Badge
+                      variant="outline"
+                      className="bg-green-50 text-green-700 border-green-200"
+                    >
                       <Heart className="h-3 w-3 mr-1" />
                       Responsivo
                     </Badge>
-                    <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                    <Badge
+                      variant="outline"
+                      className="bg-blue-50 text-blue-700 border-blue-200"
+                    >
                       <Zap className="h-3 w-3 mr-1" />
                       Animado
                     </Badge>
-                    <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200">
+                    <Badge
+                      variant="outline"
+                      className="bg-purple-50 text-purple-700 border-purple-200"
+                    >
                       <Brain className="h-3 w-3 mr-1" />
                       IA Ready
                     </Badge>

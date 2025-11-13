@@ -14,38 +14,71 @@ import {
   Stethoscope,
   FileText,
   Shield,
-  Zap
+  Zap,
 } from "lucide-react";
-import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
+import {
+  LineChart,
+  Line,
+  AreaChart,
+  Area,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts";
 
 // Mock data for demonstrations
 const patientData = [
-  { month: 'Jan', patients: 45, consultations: 120, aiAnalyses: 89 },
-  { month: 'Fev', patients: 52, consultations: 145, aiAnalyses: 112 },
-  { month: 'Mar', patients: 61, consultations: 167, aiAnalyses: 134 },
-  { month: 'Abr', patients: 58, consultations: 189, aiAnalyses: 156 },
-  { month: 'Mai', patients: 67, consultations: 203, aiAnalyses: 178 },
-  { month: 'Jun', patients: 74, consultations: 234, aiAnalyses: 201 },
+  { month: "Jan", patients: 45, consultations: 120, aiAnalyses: 89 },
+  { month: "Fev", patients: 52, consultations: 145, aiAnalyses: 112 },
+  { month: "Mar", patients: 61, consultations: 167, aiAnalyses: 134 },
+  { month: "Abr", patients: 58, consultations: 189, aiAnalyses: 156 },
+  { month: "Mai", patients: 67, consultations: 203, aiAnalyses: 178 },
+  { month: "Jun", patients: 74, consultations: 234, aiAnalyses: 201 },
 ];
 
 const aiAccuracyData = [
-  { specialty: 'Cardiologia', accuracy: 96.8 },
-  { specialty: 'Neurologia', accuracy: 94.2 },
-  { specialty: 'Oncologia', accuracy: 97.5 },
-  { specialty: 'Pediatria', accuracy: 93.1 },
-  { specialty: 'Dermatologia', accuracy: 98.3 },
+  { specialty: "Cardiologia", accuracy: 96.8 },
+  { specialty: "Neurologia", accuracy: 94.2 },
+  { specialty: "Oncologia", accuracy: 97.5 },
+  { specialty: "Pediatria", accuracy: 93.1 },
+  { specialty: "Dermatologia", accuracy: 98.3 },
 ];
 
 const riskDistribution = [
-  { name: 'Baixo Risco', value: 65, color: '#10B981' },
-  { name: 'Risco Moderado', value: 25, color: '#F59E0B' },
-  { name: 'Alto Risco', value: 10, color: '#EF4444' },
+  { name: "Baixo Risco", value: 65, color: "#10B981" },
+  { name: "Risco Moderado", value: 25, color: "#F59E0B" },
+  { name: "Alto Risco", value: 10, color: "#EF4444" },
 ];
 
 const recentAlerts = [
-  { id: 1, patient: 'Maria Silva', type: 'critical', message: 'Pressão arterial elevada detectada', time: '2 min atrás' },
-  { id: 2, patient: 'João Santos', type: 'warning', message: 'Exame de rotina em atraso', time: '15 min atrás' },
-  { id: 3, patient: 'Ana Costa', type: 'info', message: 'Nova análise de IA disponível', time: '1h atrás' },
+  {
+    id: 1,
+    patient: "Maria Silva",
+    type: "critical",
+    message: "Pressão arterial elevada detectada",
+    time: "2 min atrás",
+  },
+  {
+    id: 2,
+    patient: "João Santos",
+    type: "warning",
+    message: "Exame de rotina em atraso",
+    time: "15 min atrás",
+  },
+  {
+    id: 3,
+    patient: "Ana Costa",
+    type: "info",
+    message: "Nova análise de IA disponível",
+    time: "1h atrás",
+  },
 ];
 
 const stats = [
@@ -105,7 +138,10 @@ export default function SpectacularDashboard() {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+          <Badge
+            variant="outline"
+            className="bg-green-50 text-green-700 border-green-200"
+          >
             <Activity className="h-3 w-3 mr-1" />
             Sistema Online
           </Badge>
@@ -137,15 +173,25 @@ export default function SpectacularDashboard() {
                       {stat.value}
                     </p>
                     <div className="flex items-center mt-2">
-                      <TrendingUp className={`h-4 w-4 mr-1 ${
-                        stat.trend === 'up' ? 'text-green-500' : 'text-red-500'
-                      }`} />
-                      <span className={`text-sm font-medium ${
-                        stat.trend === 'up' ? 'text-green-600' : 'text-red-600'
-                      }`}>
+                      <TrendingUp
+                        className={`h-4 w-4 mr-1 ${
+                          stat.trend === "up"
+                            ? "text-green-500"
+                            : "text-red-500"
+                        }`}
+                      />
+                      <span
+                        className={`text-sm font-medium ${
+                          stat.trend === "up"
+                            ? "text-green-600"
+                            : "text-red-600"
+                        }`}
+                      >
                         {stat.change}
                       </span>
-                      <span className="text-sm text-gray-500 ml-1">vs mês anterior</span>
+                      <span className="text-sm text-gray-500 ml-1">
+                        vs mês anterior
+                      </span>
                     </div>
                   </div>
                   <div className={`p-3 rounded-full ${stat.bgColor}`}>
@@ -177,28 +223,38 @@ export default function SpectacularDashboard() {
               <ResponsiveContainer width="100%" height={300}>
                 <AreaChart data={patientData}>
                   <defs>
-                    <linearGradient id="colorPatients" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#10B981" stopOpacity={0.8}/>
-                      <stop offset="95%" stopColor="#10B981" stopOpacity={0.1}/>
+                    <linearGradient
+                      id="colorPatients"
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
+                      <stop offset="5%" stopColor="#10B981" stopOpacity={0.8} />
+                      <stop
+                        offset="95%"
+                        stopColor="#10B981"
+                        stopOpacity={0.1}
+                      />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
                   <XAxis dataKey="month" />
                   <YAxis />
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: 'rgba(255, 255, 255, 0.95)', 
-                      border: 'none', 
-                      borderRadius: '8px',
-                      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                    }} 
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "rgba(255, 255, 255, 0.95)",
+                      border: "none",
+                      borderRadius: "8px",
+                      boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+                    }}
                   />
-                  <Area 
-                    type="monotone" 
-                    dataKey="patients" 
-                    stroke="#10B981" 
-                    fillOpacity={1} 
-                    fill="url(#colorPatients)" 
+                  <Area
+                    type="monotone"
+                    dataKey="patients"
+                    stroke="#10B981"
+                    fillOpacity={1}
+                    fill="url(#colorPatients)"
                     strokeWidth={3}
                   />
                 </AreaChart>
@@ -224,26 +280,41 @@ export default function SpectacularDashboard() {
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={aiAccuracyData}>
                   <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
-                  <XAxis dataKey="specialty" angle={-45} textAnchor="end" height={80} />
-                  <YAxis domain={[90, 100]} />
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: 'rgba(255, 255, 255, 0.95)', 
-                      border: 'none', 
-                      borderRadius: '8px',
-                      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                    }} 
-                    formatter={(value) => [`${value}%`, 'Precisão']}
+                  <XAxis
+                    dataKey="specialty"
+                    angle={-45}
+                    textAnchor="end"
+                    height={80}
                   />
-                  <Bar 
-                    dataKey="accuracy" 
+                  <YAxis domain={[90, 100]} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "rgba(255, 255, 255, 0.95)",
+                      border: "none",
+                      borderRadius: "8px",
+                      boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+                    }}
+                    formatter={value => [`${value}%`, "Precisão"]}
+                  />
+                  <Bar
+                    dataKey="accuracy"
                     fill="url(#colorAccuracy)"
                     radius={[4, 4, 0, 0]}
                   />
                   <defs>
-                    <linearGradient id="colorAccuracy" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#8B5CF6" stopOpacity={0.8}/>
-                      <stop offset="95%" stopColor="#8B5CF6" stopOpacity={0.6}/>
+                    <linearGradient
+                      id="colorAccuracy"
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
+                      <stop offset="5%" stopColor="#8B5CF6" stopOpacity={0.8} />
+                      <stop
+                        offset="95%"
+                        stopColor="#8B5CF6"
+                        stopOpacity={0.6}
+                      />
                     </linearGradient>
                   </defs>
                 </BarChart>
@@ -284,15 +355,18 @@ export default function SpectacularDashboard() {
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value) => [`${value}%`, 'Pacientes']} />
+                  <Tooltip formatter={value => [`${value}%`, "Pacientes"]} />
                 </PieChart>
               </ResponsiveContainer>
               <div className="space-y-2 mt-4">
                 {riskDistribution.map((item, index) => (
-                  <div key={index} className="flex items-center justify-between">
+                  <div
+                    key={index}
+                    className="flex items-center justify-between"
+                  >
                     <div className="flex items-center gap-2">
-                      <div 
-                        className="w-3 h-3 rounded-full" 
+                      <div
+                        className="w-3 h-3 rounded-full"
                         style={{ backgroundColor: item.color }}
                       />
                       <span className="text-sm text-gray-600 dark:text-gray-300">
@@ -333,14 +407,22 @@ export default function SpectacularDashboard() {
                     transition={{ delay: 0.8 + index * 0.1 }}
                     className="flex items-start gap-4 p-4 rounded-lg bg-gray-50 dark:bg-slate-700 hover:bg-gray-100 dark:hover:bg-slate-600 transition-colors"
                   >
-                    <div className={`p-2 rounded-full ${
-                      alert.type === 'critical' ? 'bg-red-100 text-red-600' :
-                      alert.type === 'warning' ? 'bg-yellow-100 text-yellow-600' :
-                      'bg-blue-100 text-blue-600'
-                    }`}>
-                      {alert.type === 'critical' ? <AlertTriangle className="h-4 w-4" /> :
-                       alert.type === 'warning' ? <Clock className="h-4 w-4" /> :
-                       <Brain className="h-4 w-4" />}
+                    <div
+                      className={`p-2 rounded-full ${
+                        alert.type === "critical"
+                          ? "bg-red-100 text-red-600"
+                          : alert.type === "warning"
+                            ? "bg-yellow-100 text-yellow-600"
+                            : "bg-blue-100 text-blue-600"
+                      }`}
+                    >
+                      {alert.type === "critical" ? (
+                        <AlertTriangle className="h-4 w-4" />
+                      ) : alert.type === "warning" ? (
+                        <Clock className="h-4 w-4" />
+                      ) : (
+                        <Brain className="h-4 w-4" />
+                      )}
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-900 dark:text-white">
@@ -373,10 +455,26 @@ export default function SpectacularDashboard() {
         className="flex flex-wrap gap-4 justify-center"
       >
         {[
-          { icon: Users, label: "Novo Paciente", color: "bg-blue-500 hover:bg-blue-600" },
-          { icon: Calendar, label: "Agendar Consulta", color: "bg-green-500 hover:bg-green-600" },
-          { icon: Brain, label: "Análise IA", color: "bg-purple-500 hover:bg-purple-600" },
-          { icon: FileText, label: "Relatório", color: "bg-orange-500 hover:bg-orange-600" },
+          {
+            icon: Users,
+            label: "Novo Paciente",
+            color: "bg-blue-500 hover:bg-blue-600",
+          },
+          {
+            icon: Calendar,
+            label: "Agendar Consulta",
+            color: "bg-green-500 hover:bg-green-600",
+          },
+          {
+            icon: Brain,
+            label: "Análise IA",
+            color: "bg-purple-500 hover:bg-purple-600",
+          },
+          {
+            icon: FileText,
+            label: "Relatório",
+            color: "bg-orange-500 hover:bg-orange-600",
+          },
         ].map((action, index) => (
           <Button
             key={action.label}

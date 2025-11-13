@@ -14,9 +14,9 @@ const loadingStages = [
   { icon: Zap, text: "Otimizando Performance...", color: "text-yellow-500" },
 ];
 
-export default function SpectacularLoadingScreen({ 
-  isLoading, 
-  loadingText = "Carregando VITAIA..." 
+export default function SpectacularLoadingScreen({
+  isLoading,
+  loadingText = "Carregando VITAIA..."
 }: SpectacularLoadingScreenProps) {
   const [currentStage, setCurrentStage] = useState(0);
   const [progress, setProgress] = useState(0);
@@ -88,7 +88,7 @@ export default function SpectacularLoadingScreen({
                   transition={{ duration: 2, repeat: Infinity }}
                   className="absolute inset-0 rounded-full bg-gradient-to-r from-green-400 to-cyan-400 blur-xl"
                 />
-                
+
                 {/* Main Circle */}
                 <div className="relative w-32 h-32 bg-gradient-to-r from-green-400 to-cyan-400 rounded-full flex items-center justify-center">
                   <motion.div
@@ -126,11 +126,14 @@ export default function SpectacularLoadingScreen({
                   animate={{ rotate: 360 }}
                   transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
                 >
-                  {loadingStages[currentStage] && (
-                    <loadingStages[currentStage].icon 
-                      className={`h-6 w-6 ${loadingStages[currentStage].color}`} 
-                    />
-                  )}
+                  {loadingStages[currentStage] && (() => {
+                    const IconComponent = loadingStages[currentStage].icon;
+                    return (
+                      <IconComponent
+                        className={`h-6 w-6 ${loadingStages[currentStage].color}`}
+                      />
+                    );
+                  })()}
                 </motion.div>
                 <span className="text-white text-lg">
                   {loadingStages[currentStage]?.text || loadingText}
